@@ -1,0 +1,117 @@
+[
+	{
+		"race": "Human",
+		"description": "Humans, an expansionist flexible race with the habit of growing their colonies and territory. They do do specialize in any specific skill and tend to just be pretty good at anything",
+		"benefits": [
+			{
+				"name": "Skill Experience",
+				"value": "+10%"
+			},
+			{
+				"name": "Damage Resistance",
+				"value": "+10%"
+			},
+			{
+				"name": "Ability Cooldown Reduction",
+				"value": "+20%"
+			}
+		],
+		"suffers_from": "Nothing!"
+	},
+	{
+		"race": "Dovian",
+		"description": "Dovian, a proud hearty race of tall dragonscaled folk who call the mountains to the southeast thier home. Their skill in Heavy Weapons and Melee Resistance is unrivaled, but their speed is effected by thier bulky form.",
+		"benefits": [
+			{
+				"name": "Heavy Weapons Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Explosion Resistance",
+				"value": "+40%"
+			},
+			{
+				"name": "Melee Resistance",
+				"value": "+15%"
+			},
+			{
+				"name": "Fire Resistance",
+				"value": "+5%"
+			},
+			{
+				"name": "Maximum Health",
+				"value": "+4"
+			}
+		],
+		"suffers_from": [
+			{
+				"name": "Movement Speed",
+				"value": "-15%"
+			}
+		]
+	},
+	{
+		"race": "Elf",
+		"description": "Elves, an elegant magical race of people who call many different regions their home. Their magical affinity makes them expert enchanters and their long lifespan allows them to perfect their combat ability, but their lightweight body structure makes them more frail.",
+		"benefits": [
+			{
+				"name": "Enchanting Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Archery Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Light Weapons Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Magic Resistance",
+				"value": "+25%"
+			},
+			{
+				"name": "Fall Damage Resistance",
+				"value": "+50%"
+			},
+			{
+				"name": "Movement Speed",
+				"value": "+10%"
+			}
+		],
+		"suffers_from": [
+			{
+				"name": "Maximum Health",
+				"value": "-4"
+			}
+		]
+	},
+	{
+		"race": "Myrdai",
+		"description": "Myrdai are a race of sea folk who call the oceans and seas their home. Their ability to breath under water makes them expert swimmers and their aquatic abilities allows them to be perfect fishermen, but their fragile scaled body structure makes them more frail.",
+		"benefits": [
+			{
+				"name": "Enchanting Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Fishing Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Light Weapons Experience",
+				"value": "+20%"
+			},
+			{
+				"name": "Water Breathing",
+				"value": "+"
+			}
+		],
+		"suffers_from": [
+			{
+				"name": "Maximum Health",
+				"value": "-4"
+			}
+		]
+	}
+]

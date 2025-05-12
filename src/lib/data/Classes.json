@@ -1,0 +1,142 @@
+[
+	{
+		"class": "Warrior",
+		"description": "Warriors are opportunistic fighters, who prefer the safety of light blades and heavy protection.",
+		"benefits": [
+			{
+				"name": "Armor",
+				"value": "+10%"
+			},
+			{
+				"name": "Melee Damage",
+				"value": "+5%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Barbarian",
+		"description": "Barbarians are relentless fighters, who prefer to decimate their foes through sheer strength and brute force.",
+		"benefits": [
+			{
+				"name": "Knockback Resistance",
+				"value": "+20%"
+			},
+			{
+				"name": "Melee Damage",
+				"value": "+10%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Ranger",
+		"description": "Rangers are stealthy assassins, who prefer not to fight close ranged at all and instead take out their foes at a safe distance.",
+		"benefits": [
+			{
+				"name": "Accuracy",
+				"value": "+2"
+			},
+			{
+				"name": "Ranged Damage",
+				"value": "+10%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Alchemist",
+		"description": "Alchemists are fantastic chemists, able to transmute materials into others, melt their enemies with potions, and assist their party with healing and buffs.",
+		"benefits": [
+			{
+				"name": "Potion Quality",
+				"value": "+25"
+			},
+			{
+				"name": "Brewing Speed",
+				"value": "+50%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Enchanter",
+		"description": "Enchanters are scholars of magic, able to imbue items with spells to enhance their strengths.",
+		"benefits": [
+			{
+				"name": "Enchanting Quality",
+				"value": "+25"
+			},
+			{
+				"name": "Enchanting Experience",
+				"value": "+20%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Blacksmith",
+		"description": "Blacksmiths are experts of metal, creating more durable tools and armor and razor sharp, well balanced blades.",
+		"benefits": [
+			{
+				"name": "Smithing Quality",
+				"value": "+25"
+			}
+		],
+		"suffers_from": [
+			{
+				"name": "Durability Taken",
+				"value": "-20%"
+			}
+		]
+	},
+	{
+		"class": "Miner",
+		"description": "Miners delve deep into the earth, looking for riches, and serve as the backbone of industry.",
+		"benefits": [
+			{
+				"name": "Mining Speed",
+				"value": "+30%"
+			},
+			{
+				"name": "Mining Drops",
+				"value": "+10%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Farmer-Fisherman",
+		"description": "Farmers live a calm, simple life providing their cities with food and ocean treasures.",
+		"benefits": [
+			{
+				"name": "Fishing Luck",
+				"value": "+3"
+			},
+			{
+				"name": "Farming Drops",
+				"value": "+30%"
+			},
+			{
+				"name": "Fishing Speed",
+				"value": "+20%"
+			}
+		],
+		"suffers_from": []
+	},
+	{
+		"class": "Terraformer",
+		"description": "Terraformers construct, shape, and maintain the world around them. Most suitable for the creative types.",
+		"benefits": [
+			{
+				"name": "Woodcutting Drops",
+				"value": "+50%"
+			},
+			{
+				"name": "Woodcutting and Digging Speed",
+				"value": "+30%"
+			}
+		],
+		"suffers_from": []
+	}
+]
