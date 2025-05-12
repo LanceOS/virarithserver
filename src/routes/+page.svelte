@@ -15,12 +15,12 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-7xl mx-auto px-4">
         <!-- This is for active players -->
         <section class="border-2 flex flex-col">
-            
+
         </section>
 
         <!-- This is going to be for server updates -->
         <section class="border-2">
-s
+            
         </section>
 
         <!-- This is going to be for links -->
