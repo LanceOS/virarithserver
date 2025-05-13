@@ -5,7 +5,7 @@
     --color-base: #1f2020;
     --color-base-content: #FAFBFA;
 
-    --color-input: #797979;
+    --color-input: #757575;
     --color-input-content: #ffffff;
 
     --color-primary: #116BEE;
@@ -45,16 +45,32 @@ h1 {
     gap: 0.25rem;
 }
 
-.btn {
+.btn-small {
     background-color: var(--color-primary);
     color: var(--color-primary-content);
     padding: 0.5rem 2rem;
+    font-weight: bold;
 
     cursor: pointer;
     transition: 200ms;
 }
 
-.btn:hover {
+.btn-small:hover {
     padding: 0.5rem 2.5rem;
+    background-color: var(--color-secondary);
+}
+
+.btn-big {
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+    padding: 1rem 3.5rem;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 200ms;
+}
+
+.btn-big:hover {
+    padding: 1rem 4rem;
     background-color: var(--color-secondary);
 }
