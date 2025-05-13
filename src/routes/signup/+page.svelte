@@ -9,14 +9,12 @@
     });
 
 
-
+    
 </script>
 
 
 <main class="min-h-screen w-full flex">
-    <section class="px-4 w-3/4 flex items-center justify-center">
-
-
+    <section class="px-4 w-3/4 flex items-center justify-center" data-aos="fade-in">
         <div class="flex flex-col gap-10 w-[25rem]">
             <h1 class="text-4xl">Create Account</h1>
 
@@ -39,8 +37,7 @@
 
             <div class="flex flex-col gap-4">
                 <button type="button" class="btn-big">Create Account</button>
-    
-                <p>No account? Sign up for a new one <button aria-label="Signup" class="text-blue-500 hover:text-blue-900 duration-200 cursor-pointer" onclick={() => goto("/signup")}>here.</button></p>
+                <p>Have an account? Sign in <button aria-label="Signup" class="text-blue-500 hover:text-blue-900 duration-200 cursor-pointer" onclick={() => goto("/signin")}>here.</button></p>
             </div>
         </div>
     </section>

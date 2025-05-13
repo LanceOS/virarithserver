@@ -56,7 +56,6 @@ h1 {
 }
 
 .btn-small:hover {
-    padding: 0.5rem 2.5rem;
     background-color: var(--color-secondary);
 }
 
@@ -71,6 +70,16 @@ h1 {
 }
 
 .btn-big:hover {
-    padding: 1rem 4rem;
     background-color: var(--color-secondary);
+}
+
+
+.btn-nav {
+    cursor: pointer;
+    transition: 200ms;
+}
+
+
+.btn-nav:hover {
+   color: #a37642; 
 }

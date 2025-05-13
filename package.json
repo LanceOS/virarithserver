@@ -61,5 +61,8 @@
 	},
 	"keywords": [
 		"svelte"
-	]
+	],
+	"dependencies": {
+		"aos": "^2.3.4"
+	}
 }
