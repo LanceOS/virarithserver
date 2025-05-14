@@ -1,5 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
+	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
+	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
 	import PBClient from '$lib/tools/Pocketbase.js';
 	import Icon from '@iconify/svelte';
 
@@ -7,38 +9,56 @@
 		email: '',
 		password: '',
 		confirmPassword: '',
-        name: ''
+		name: ''
 	});
 
 	let loading = $state(false);
-	let error = $state("");
-	
+	let error = $state('');
+	let success = $state('');
+
+	const redirect = () => {
+		success = 'Successfully signed in! Redirecting...';
+		setTimeout(() => {
+			goto('/');
+		}, 3000);
+	};
+
+	$effect(() => {
+		credentials.name;
+		credentials.email;
+		credentials.password;
+		credentials.confirmPassword;
+		error = '';
+	});
+
 	const validateForm = () => {
-		if(!credentials.email || !credentials.password || !credentials.confirmPassword || !credentials.name) {
-			error = "A Field is missing!"
+		if (
+			!credentials.email ||
+			!credentials.password ||
+			!credentials.confirmPassword ||
+			!credentials.name
+		) {
+			error = 'A Field is missing!';
 			return false;
-		}
-		else if(credentials.password !== credentials.confirmPassword) {
-			error = "Both passwords must match!"
+		} else if (credentials.password !== credentials.confirmPassword) {
+			error = 'Both passwords must match!';
 			return false;
-		}
-		else if(credentials.password.length < 8) {
-			error = "Password must be longer than 8 characters!"
-			return false
-		}
-		else {
+		} else if (credentials.password.length < 8) {
+			error = 'Password must be longer than 8 characters!';
+			return false;
+		} else {
 			return true;
 		}
-	}
-	
+	};
+
 	const createAccount = async () => {
-		error = "";
-		if(!validateForm()) {
+		error = '';
+		if (!validateForm()) {
 			return;
 		}
 		loading = true;
 
-		console.log("creating account")
+		console.log('creating account');
 
 		try {
 			await PBClient.register(credentials);
@@ -50,23 +70,29 @@
 				confirmPassword: '',
 				name: ''
 			};
-		}
-		catch(error) {
-			error = "Failed to create user or sign in"
-			throw new Error(`Failed to create user or sign in ${error}`)
-		}
-		finally {
-			loading = false
+
+			redirect();
+		} catch (error) {
+			error = 'Failed to create user or sign in';
+			throw new Error(`Failed to create user or sign in ${error}`);
+		} finally {
+			loading = false;
 		}
 	};
 </script>
 
-<main class="flex min-h-screen w-full">
-	<section class="flex w-3/4 items-center justify-center px-4" data-aos="fade-in relative">
+<main class="relative flex min-h-screen w-full overflow-hidden">
+	<section class="relative flex w-3/4 items-center justify-center px-4 relative">
+		{#if error}
+			<ErrorModal {error} />
+		{/if}
+		{#if success}
+			<SuccessModal {success} />
+		{/if}
 		<button
 			type="button"
 			aria-label="Return Home"
-			class="cursor-pointer absolute top-4 right-4"
+			class="absolute top-4 right-4 cursor-pointer"
 			onclick={() => {
 				goto('/');
 			}}><Icon icon="stash:signout-alt" class="text-5xl" /></button
@@ -130,13 +156,17 @@
 				</div>
 			</div>
 
+			<!-- Sign up and sign in buttons are disabled while loading -->
 			<div class="flex flex-col gap-4">
-				<button type="button" class="btn-big" onclick={() => createAccount()} disabled={loading}>Create Account</button>
+				<button type="button" class="btn-big" onclick={() => createAccount()} disabled={loading}
+					>Create Account</button
+				>
 				<p>
 					Have an account? Sign in <button
 						aria-label="Signup"
 						class="cursor-pointer text-blue-500 duration-200 hover:text-blue-900"
-						onclick={() => goto('/signin')} disabled={loading}>here.</button
+						onclick={() => goto('/signin')}
+						disabled={loading}>here.</button
 					>
 				</p>
 			</div>
