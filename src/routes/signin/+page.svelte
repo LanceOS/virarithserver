@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
-	import PBClient from '$lib/tools/Pocketbase.js';
 	import Icon from '@iconify/svelte';
 
 	let credentials = $state({
@@ -44,8 +43,6 @@
 		loading = true;
 
 		try {
-			await PBClient.signin(credentials);
-
 			credentials = {
 				email: '',
 				password: ''

@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
-	import PBClient from '$lib/tools/Pocketbase.js';
 	import Icon from '@iconify/svelte';
 
 	let credentials = $state({
@@ -61,9 +60,6 @@
 		console.log('creating account');
 
 		try {
-			await PBClient.register(credentials);
-			await PBClient.signin(credentials);
-
 			credentials = {
 				email: '',
 				password: '',
@@ -73,16 +69,7 @@
 
 			redirect();
 		} catch (error: any) {
-			/**
-			 * If error code from Pocketbase is "validation_not_unique" then the user already exists.
-			*/
-			if(error.code = "validation_not_unique") {
-				errorLog = "Email or Username already exists."
-			}
-			else {
-				errorLog = 'Failed to create user and sign in.';
-			}
-
+			errorLog = 'Failed to create user and sign in.';
 			throw new Error(`Failed to create user or sign in ${error}`);
 		} finally {
 			loading = false;
