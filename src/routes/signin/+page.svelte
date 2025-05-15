@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
@@ -11,13 +11,13 @@
 	});
 
 	let loading = $state(false);
-	let error = $state('');
+	let errorLog = $state('');
 	let success = $state('');
 
 	$effect(() => {
 		credentials.email;
 		credentials.password;
-		error = '';
+		errorLog = '';
 	});
 
 	const redirect = () => {
@@ -29,7 +29,7 @@
 
 	const validateForm = () => {
 		if (!credentials.email || !credentials.password) {
-			error = 'A Field is missing!';
+			errorLog = 'A Field is missing!';
 			return false;
 		} else {
 			return true;
@@ -37,7 +37,7 @@
 	};
 
 	const signInUser = async () => {
-		error = '';
+		errorLog = '';
 		if (!validateForm()) {
 			return;
 		}
@@ -52,8 +52,10 @@
 			};
 
 			redirect();
-		} catch (err) {
-			throw new Error(`Failed to sign in user" ${err}`);
+		} catch (error: any) {
+			errorLog = "Failed to authenticate."
+			console.log(error)
+			throw new Error(`Failed to sign in user" ${error}`);
 		} finally {
 			loading = false;
 		}
@@ -66,8 +68,8 @@
 	</section>
 
 	<section class="relative flex w-3/4 items-center justify-center px-4">
-		{#if error}
-			<ErrorModal {error} />
+		{#if errorLog}
+			<ErrorModal {errorLog} />
 		{/if}
 		{#if success}
 			<SuccessModal {success} />

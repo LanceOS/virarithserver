@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
@@ -13,7 +13,7 @@
 	});
 
 	let loading = $state(false);
-	let error = $state('');
+	let errorLog = $state('');
 	let success = $state('');
 
 	const redirect = () => {
@@ -28,7 +28,7 @@
 		credentials.email;
 		credentials.password;
 		credentials.confirmPassword;
-		error = '';
+		errorLog = '';
 	});
 
 	const validateForm = () => {
@@ -38,13 +38,13 @@
 			!credentials.confirmPassword ||
 			!credentials.name
 		) {
-			error = 'A Field is missing!';
+			errorLog = 'A Field is missing!';
 			return false;
 		} else if (credentials.password !== credentials.confirmPassword) {
-			error = 'Both passwords must match!';
+			errorLog = 'Both passwords must match!';
 			return false;
 		} else if (credentials.password.length < 8) {
-			error = 'Password must be longer than 8 characters!';
+			errorLog = 'Password must be longer than 8 characters!';
 			return false;
 		} else {
 			return true;
@@ -52,7 +52,7 @@
 	};
 
 	const createAccount = async () => {
-		error = '';
+		errorLog = '';
 		if (!validateForm()) {
 			return;
 		}
@@ -72,8 +72,17 @@
 			};
 
 			redirect();
-		} catch (error) {
-			error = 'Failed to create user or sign in';
+		} catch (error: any) {
+			/**
+			 * If error code from Pocketbase is "validation_not_unique" then the user already exists.
+			*/
+			if(error.code = "validation_not_unique") {
+				errorLog = "Email or Username already exists."
+			}
+			else {
+				errorLog = 'Failed to create user and sign in.';
+			}
+
 			throw new Error(`Failed to create user or sign in ${error}`);
 		} finally {
 			loading = false;
@@ -82,9 +91,9 @@
 </script>
 
 <main class="relative flex min-h-screen w-full overflow-hidden">
-	<section class="relative flex w-3/4 items-center justify-center px-4 relative">
-		{#if error}
-			<ErrorModal {error} />
+	<section class="relative flex w-3/4 items-center justify-center px-4">
+		{#if errorLog}
+			<ErrorModal {errorLog} />
 		{/if}
 		{#if success}
 			<SuccessModal {success} />

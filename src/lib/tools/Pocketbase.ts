@@ -1,10 +1,12 @@
 import type { Credentials } from "$lib/@types/Credentials.js";
-import PocketBase, { type RecordAuthResponse, type RecordModel } from 'pocketbase';
+import PocketBase, { type AuthRecord, type RecordAuthResponse, type RecordModel } from 'pocketbase';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+
 
 class PBClient {
     instance: PBClient | null = null;
+    static pb = new PocketBase('http://127.0.0.1:8090');
+
     constructor() {
         if (this.instance) return this.instance;
         this.instance = this;
@@ -17,11 +19,10 @@ class PBClient {
      */
     static async signin(credentials: Credentials): Promise<RecordAuthResponse> {
         try {
-            const authData = await pb.collection("users").authWithPassword(credentials.email, credentials.password)
-            console.log(authData)
+            const authData = await PBClient.pb.collection("users").authWithPassword(credentials.email, credentials.password)
             return authData;
         }
-        catch(error) {
+        catch (error: any) {
             console.log(error)
             throw new Error(`Failed to sign in user: ${error}`)
         }
@@ -41,25 +42,25 @@ class PBClient {
             password: credentials.password,
             passwordConfirm: credentials.confirmPassword
         }
-
-        console.log(data)
-
         try {
-            const authData = await pb.collection('users').create(data);
+            const authData = await PBClient.pb.collection('users').create(data);
             return authData;
         }
-        catch(error) {
-            throw new Error(`Failed to create user: ${error}`)
+        catch (error: any) {
+            const errorType = {
+                message: error.response.data.name.message,
+                code: error.response.data.name.messageerror.response.data.name.code
+            }
+            throw new Error(`Failed to create user: ${errorType}`)
         }
     }
 
-
     static isAuthenticated(): boolean {
-        return pb.authStore.isValid;
+        return PBClient.pb.authStore.isValid;
     }
 
     static logout(): void {
-        return pb.authStore.clear();
+        return PBClient.pb.authStore.clear();
     }
 }
 
