@@ -1,11 +1,14 @@
 import 'dotenv/config';
-import { defineConfig } from 'drizzle-kit';
+import { Config, defineConfig } from 'drizzle-kit';
+
+const databaseUrl = `postgresql://${process.env.POSTGRES_USER!}:${process.env.POSTGRES_PASSWORD!}@localhost:5432/${process.env.POSTGRES_DB!}`;
 
 export default defineConfig({
   out: './drizzle',
   schema: './src/lib/schemas',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: databaseUrl,
+    
   },
-});
+}) satisfies Config;

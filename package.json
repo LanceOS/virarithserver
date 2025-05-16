@@ -47,6 +47,7 @@
 		"@tailwindcss/vite": "^4.0.0",
 		"@types/minio": "^7.1.0",
 		"@types/pg": "^8.15.2",
+		"dotenv": "^16.5.0",
 		"drizzle-kit": "^0.31.1",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
@@ -69,10 +70,8 @@
 	],
 	"dependencies": {
 		"aos": "^2.3.4",
-		"dotenv": "^16.5.0",
 		"drizzle-orm": "^0.43.1",
 		"minio": "^8.0.5",
-		"pg": "^8.16.0",
-		"pocketbase": "^0.26.0"
+		"pg": "^8.16.0"
 	}
 }
