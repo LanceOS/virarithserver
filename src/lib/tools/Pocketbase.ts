@@ -1,7 +1,7 @@
 // import type { Credentials } from "$lib/@types/Credentials.js";
 // import PocketBase, { type AuthRecord, type RecordAuthResponse, type RecordModel } from 'pocketbase';
 
-// REMOVED POCKETBASE IN FAVOR OF LUCIA/POSTGRES/MINIO
+// // REMOVED POCKETBASE IN FAVOR OF LUCIA/POSTGRES/MINIO
 
 // class PBClient {
 //     instance: PBClient | null = null;

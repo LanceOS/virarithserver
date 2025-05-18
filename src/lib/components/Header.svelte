@@ -12,9 +12,9 @@
         </button>
         <nav class="flex items-center gap-6">
             <button type="button" aria-label="#" class="btn-nav" onclick={() => goto("/")}>Home</button>
-            <button type="button" aria-label="#" class="btn-nav" onclick={() => goto("/forum")}>Forum</button>
-            <button type="button" aria-label="#" class="btn-nav" onclick={() => goto("/signin")}>Placeholder</button>
-            <button type="button" aria-label="Sign In" onclick={() => goto("/signin")} class="btn-small">Sign In</button>
+            <button type="button" aria-label="#" class="btn-nav" onclick={() => goto("/pages/forum")}>Forum</button>
+            <button type="button" aria-label="#" class="btn-nav" onclick={() => goto("/pages/signin")}>Placeholder</button>
+            <button type="button" aria-label="Sign In" onclick={() => goto("/pages/signin")} class="btn-small">Sign In</button>
         </nav>
     </div>
 
