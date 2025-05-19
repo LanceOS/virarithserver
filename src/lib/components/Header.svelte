@@ -1,21 +1,59 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import { goto } from '$app/navigation';
+	import { authClient } from '$lib/auth-client.ts';
 
+	const session = authClient.useSession();
+	console.log($session);
 
+	async function signOut() {
+		await authClient.signOut({
+			fetchOptions: {
+				onSuccess: () => {
+					window.location.reload();
+				}
+			}
+		});
+	}
 </script>
 
-
-<header class="p-4 h-16 flex items-center">
-    <div class="max-w-7xl w-full mx-auto flex justify-between">
-        <button type="button" aria-label="Go to home page" onclick={() => goto('/')} class="cursor-pointer">
-            <img src="/images/.png" alt="" class="w-24">
-        </button>
-        <nav class="flex items-center gap-6">
-            <button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto("/")}>Home</button>
-            <button type="button" aria-label="Go to forum page" class="btn-nav" onclick={() => goto("/pages/forum")}>Forum</button>
-            <button type="button" aria-label="Go to sign in" class="btn-nav" onclick={() => goto("/pages/signin")}>Placeholder</button>
-            <button type="button" aria-label="Sign In" onclick={() => goto("/pages/signin")} class="btn-small">Sign In</button>
-        </nav>
-    </div>
-
+<header class="flex h-16 items-center p-4">
+	<div class="mx-auto flex w-full max-w-7xl justify-between">
+		<button
+			type="button"
+			aria-label="Go to home page"
+			onclick={() => goto('/')}
+			class="cursor-pointer"
+		>
+			<img src="/images/.png" alt="" class="w-24" />
+		</button>
+		<nav class="flex items-center gap-6">
+			<button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto('/')}
+				>Home</button
+			>
+			<button
+				type="button"
+				aria-label="Go to forum page"
+				class="btn-nav"
+				onclick={() => goto('/pages/forum')}>Forum</button
+			>
+			<button
+				type="button"
+				aria-label="Go to sign in"
+				class="btn-nav"
+				onclick={() => goto('/pages/signin')}>Placeholder</button
+			>
+			{#if !$session.data}
+				<button
+					type="button"
+					aria-label="Sign In"
+					onclick={() => goto('/pages/signin')}
+					class="btn-small">Sign In</button
+				>
+			{:else}
+				<button type="button" aria-label="Sign In" onclick={() => signOut()} class="btn-small"
+					>Sign Out</button
+				>
+			{/if}
+		</nav>
+	</div>
 </header>

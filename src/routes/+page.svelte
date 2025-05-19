@@ -1,17 +1,6 @@
-<script>
+<script lang="ts">
 	import { authClient } from "$lib/auth-client.ts";
     import Header from "$lib/components/Header.svelte";
-	import { onMount } from "svelte";
-
-
-    onMount(() => {
-        async function getS() {
-            const { data: session, error } = await authClient.getSession();
-            console.log(session)
-        }
-
-        getS()
-    });
 </script>
 
 <Header />

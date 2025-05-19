@@ -40,9 +40,14 @@ export const auth = betterAuth({
             }
         }
     },
-    emailAndPassword: {  
+    emailAndPassword: {
         enabled: true,
         autoSignIn: false
+    },
+    rateLimit: {
+        enabled: true,
+        window: 10, // time window in seconds
+        max: 100, // max requests in the window
     },
     basePath: "/api/auth",
 });
