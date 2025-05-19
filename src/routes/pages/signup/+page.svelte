@@ -14,10 +14,10 @@
 
 	let loading = $state(false);
 	let errorLog = $state('');
-	let success = $state('');
+	let successLog = $state('');
 
 	const redirect = () => {
-		success = 'Successfully signed in! Redirecting...';
+		successLog = 'Successfully signed in! Redirecting...';
 		setTimeout(() => {
 			goto('/');
 		}, 3000);
@@ -60,30 +60,27 @@
 
 		console.log('creating account');
 
-		try {
-			await authClient.signUp.email({
-				email: credentials.email,
-				password: credentials.password,
-				name: credentials.name,
-				image: "placeholder",
-				role: "user"
-			})
-
+		await authClient.signUp.email({
+			name: credentials.name,
+			email: credentials.email,
+			password: credentials.password,
+			image: 'placeholder',
+			role: 'user'
+		}).then(() => {
+			redirect();
+		}).catch((error: any) => {
+			console.log(error.message, error.status);
+			errorLog = 'Failed to create user and sign in.';
+			throw new Error(`Failed to create user or sign in ${error}`);
+		}).finally(() => {
 			credentials = {
 				email: '',
 				password: '',
 				confirmPassword: '',
-				name: '',
+				name: ''
 			};
-
-			redirect();
-		} catch (error: any) {
-			console.log(error.message, error.status)
-			errorLog = 'Failed to create user and sign in.';
-			throw new Error(`Failed to create user or sign in ${error}`);
-		} finally {
 			loading = false;
-		}
+		})
 	};
 </script>
 
@@ -92,8 +89,8 @@
 		{#if errorLog}
 			<ErrorModal {errorLog} />
 		{/if}
-		{#if success}
-			<SuccessModal {success} />
+		{#if successLog}
+			<SuccessModal {successLog} />
 		{/if}
 		<button
 			type="button"

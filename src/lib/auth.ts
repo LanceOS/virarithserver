@@ -3,6 +3,9 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
+import * as schema from "./schemas/authentication.ts"
+
+import 'dotenv/config'
 
 
 const databaseUrl = `postgresql://${process.env.POSTGRES_USER!}:${process.env.POSTGRES_PASSWORD!}@localhost:5432/${process.env.POSTGRES_DB!}`;
@@ -23,11 +26,17 @@ export const DrizzleDB = drizzle(pool)
 export const auth = betterAuth({
     database: drizzleAdapter(DrizzleDB, {
         provider: "pg",
+        schema: schema
     }),
+    session: {
+        expiresIn: 60 * 60 * 24 * 7,
+        updateAge: 60 * 60 * 24
+    },
     user: {
         additionalFields: {
             role: {
-                type: "string"
+                type: "string",
+                defaultValue: "user"
             }
         }
     },
@@ -35,5 +44,5 @@ export const auth = betterAuth({
         enabled: true,
         autoSignIn: false
     },
-    basePath: "/api/auth"
+    basePath: "/api/auth",
 });

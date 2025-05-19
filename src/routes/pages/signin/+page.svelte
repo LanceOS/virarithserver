@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { authClient } from '$lib/auth-client.ts';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
+
 	import Icon from '@iconify/svelte';
 
 	let credentials = $state({
@@ -11,7 +13,7 @@
 
 	let loading = $state(false);
 	let errorLog = $state('');
-	let success = $state('');
+	let successLog = $state('');
 
 	$effect(() => {
 		credentials.email;
@@ -20,7 +22,7 @@
 	});
 
 	const redirect = () => {
-		success = 'Successfully signed in! Redirecting...';
+		successLog = 'Successfully signed in! Redirecting...';
 		setTimeout(() => {
 			goto('/');
 		}, 3000);
@@ -42,20 +44,27 @@
 		}
 		loading = true;
 
-		try {
-			credentials = {
-				email: '',
-				password: ''
-			};
+		await authClient.signIn
+			.email({
+				email: credentials.email,
+				password: credentials.password
+			})
+			.then(() => {
+				redirect();
+			})
+			.catch((error) => {
+				console.log(error.message, error.status);
+				errorLog = 'Failed to sign in.';
+				throw new Error(`Failed to sign in ${error}`);
+			})
+			.finally(() => {
+				credentials = {
+					email: '',
+					password: ''
+				};
 
-			redirect();
-		} catch (error: any) {
-			errorLog = "Failed to authenticate."
-			console.log(error)
-			throw new Error(`Failed to sign in user" ${error}`);
-		} finally {
-			loading = false;
-		}
+				loading = false;
+			});
 	};
 </script>
 
@@ -68,8 +77,8 @@
 		{#if errorLog}
 			<ErrorModal {errorLog} />
 		{/if}
-		{#if success}
-			<SuccessModal {success} />
+		{#if successLog}
+			<SuccessModal {successLog} />
 		{/if}
 		<button
 			type="button"
