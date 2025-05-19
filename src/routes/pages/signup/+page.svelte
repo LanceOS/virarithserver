@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { authClient } from '$lib/auth-client.ts';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
 	import Icon from '@iconify/svelte';
@@ -60,15 +61,24 @@
 		console.log('creating account');
 
 		try {
+			await authClient.signUp.email({
+				email: credentials.email,
+				password: credentials.password,
+				name: credentials.name,
+				image: "placeholder",
+				role: "user"
+			})
+
 			credentials = {
 				email: '',
 				password: '',
 				confirmPassword: '',
-				name: ''
+				name: '',
 			};
 
 			redirect();
 		} catch (error: any) {
+			console.log(error.message, error.status)
 			errorLog = 'Failed to create user and sign in.';
 			throw new Error(`Failed to create user or sign in ${error}`);
 		} finally {

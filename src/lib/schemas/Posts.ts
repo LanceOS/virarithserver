@@ -1,9 +1,9 @@
-import { pgTable, serial, timestamp, varchar, text, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, varchar, text, boolean, uuid } from "drizzle-orm/pg-core";
 // import { users } from "./Users.ts";
 
 
 export const posts = pgTable('posts', {
-    id: serial("id").primaryKey(),
+    id: uuid().primaryKey().notNull(),
     title: varchar("title", { length: 100 }).notNull(),
     content: text("content").notNull(),
     // user_id: integer("user_id").notNull().references(() => users.id).notNull(),

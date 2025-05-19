@@ -8,7 +8,7 @@
         <img src="/images/green.png" alt="" class="absolute object-center -z-10 blur-sm inset-0">
 
         <div class="max-w-7xl w-full mx-auto px-4 flex justify-center">
-            <img src="/images/virarith4.png" alt="" class="w-[45rem]">
+            <img src="/images/.png" alt="" class="w-[45rem]">
         </div>
     </section>
 

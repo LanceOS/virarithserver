@@ -121,7 +121,7 @@
 					No account? Sign up for a new one <button
 						aria-label="Signup"
 						class="cursor-pointer text-blue-500 duration-200 hover:text-blue-900"
-						onclick={() => goto('/signup')}
+						onclick={() => goto('/pages/signup')}
 						disabled={loading}>here.</button
 					>
 				</p>

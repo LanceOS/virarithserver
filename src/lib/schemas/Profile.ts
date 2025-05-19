@@ -1,9 +1,9 @@
-import { pgTable, varchar, integer, serial, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, varchar, boolean, timestamp, uuid } from "drizzle-orm/pg-core";
 // import { users } from "./Users.ts";
 // import { relations } from "drizzle-orm";
 
 export const profile = pgTable('profile', {
-    id: serial("id").primaryKey(),
+    id: uuid().primaryKey().notNull(),
     // userId: integer("user_id").references(() => users.id).notNull(),
     bio: varchar("bio", { length: 256 }),
     isDeleted: boolean("is_deleted"),
