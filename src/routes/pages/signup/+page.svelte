@@ -58,8 +58,6 @@
 		}
 		loading = true;
 
-		console.log('creating account');
-
 		await authClient.signUp.email({
 			name: credentials.name,
 			email: credentials.email,

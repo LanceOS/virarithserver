@@ -1,11 +1,13 @@
 import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core";
-// import { users } from "./Users.ts";
+import { user } from "./authentication.ts";
+import { comment } from "./Comment.ts";
 
 export const commentReply = pgTable("comment_reply", {
     id: uuid().primaryKey().notNull(),
-    // userId: integer("user_id").notNull().references(() => users.id),
-    comment: text("comment").notNull(),
-    isDeleted: boolean("is_deleted"),
-    createdAt: timestamp("created_at").notNull(),
-    updatedAt: timestamp("updated_at")
+    userId: text("user_id").references(() => user.id).notNull(),
+    parentComment: uuid("parent_comment").references(() => comment.id).notNull(),
+    content: text("content").notNull(),
+    isDeleted: boolean("is_deleted").default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull()
 })

@@ -1,38 +1,27 @@
 <script lang="ts">
-	import { authClient } from "$lib/auth-client.ts";
-    import Header from "$lib/components/Header.svelte";
+	import ForumFeed from '$lib/components/ForumFeed.svelte';
+	import Header from '$lib/components/Header.svelte';
+	import Links from '$lib/components/Links.svelte';
+	import ServerInfo from '$lib/components/ServerInfo.svelte';
 </script>
 
 <Header />
 <main class="flex flex-col">
-    <section class="min-h-[30rem] h-fit relative overflow-hidden flex items-center">
-        <img src="/images/green.png" alt="" class="absolute object-center -z-10 blur-sm inset-0">
+    <!-- Hero -->
+	<section class="relative flex h-fit min-h-[30rem] items-center overflow-hidden">
+		<img src="/images/green.png" alt="" class="absolute inset-0 -z-10 object-center blur-sm" />
 
-        <div class="max-w-7xl w-full mx-auto px-4 flex justify-center">
-            <img src="/images/.png" alt="" class="w-[45rem]">
-        </div>
-    </section>
+		<div class="mx-auto flex w-full max-w-7xl justify-center px-4">
+			<img src="/images/.png" alt="" class="w-[45rem]" />
+		</div>
+	</section>
 
-    <div class="flex flex-warp gap-6 max-w-7xl mx-auto px-4">
-        <!-- This is for active players -->
-        <section class="border-2 flex flex-col w-full">
+    <!-- Main sections -->
+	<div class="flex-warp mx-auto flex max-w-7xl gap-6 px-4">
+        <ServerInfo />
 
-        </section>
+        <ForumFeed />
 
-        <!-- This is going to be for server questions -->
-        <section class="border-2 flex flex-col w-full">
-            
-        </section>
-
-        <!-- This is going to be for links and updates -->
-        <section class="flex flex-col gap-4 w-full">
-            <div class="border-2 flex flex-col gap-2 w-full">
-                <h3>Server Disord:</h3>
-            </div>
-
-            <div class="border-2 flex flex-col gap-2">
-
-            </div>
-        </section>
-    </div>
+        <Links />
+	</div>
 </main>

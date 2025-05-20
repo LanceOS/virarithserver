@@ -4,7 +4,7 @@ export const changeLogs = pgTable('change_logs', {
     id: uuid("id").primaryKey().notNull(),
     title: varchar("title", { length: 256 }).notNull(),
     content: text("content").notNull(),
-    isDeleted: boolean(),
-    createdAt: timestamp("created_at").notNull(),
-    updatedAt: timestamp("updated_at")
+    isDeleted: boolean("is_deleted").default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull()
 })

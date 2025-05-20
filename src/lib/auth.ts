@@ -8,7 +8,7 @@ import * as schema from "./schemas/authentication.ts"
 import 'dotenv/config'
 
 
-const databaseUrl = `postgresql://${process.env.POSTGRES_USER!}:${process.env.POSTGRES_PASSWORD!}@localhost:5432/${process.env.POSTGRES_DB!}`;
+const databaseUrl = `postgresql://${process.env.POSTGRES_USER as string}:${process.env.POSTGRES_PASSWORD as string}@localhost:5432/${process.env.POSTGRES_DB as string}`;
 
 
 const pool = new Pool({
@@ -42,10 +42,16 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
-        autoSignIn: false
+        autoSignIn: false,
+    },
+    emailVerification: {
+
+    },
+    discord: {
+        clientId: process.env.DISCORD_CLIENT_ID as string,
+        clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
     },
     rateLimit: {
-        enabled: true,
         window: 10, // time window in seconds
         max: 100, // max requests in the window
     },

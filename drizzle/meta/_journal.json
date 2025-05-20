@@ -57,6 +57,90 @@
       "when": 1747614343247,
       "tag": "0007_colorful_falcon",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1747714000874,
+      "tag": "0008_nebulous_grandmaster",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1747714040925,
+      "tag": "0009_careful_fixer",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1747714106598,
+      "tag": "0010_useful_karma",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1747714160734,
+      "tag": "0011_cloudy_captain_flint",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1747714186047,
+      "tag": "0012_sharp_mimic",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1747714206554,
+      "tag": "0013_chunky_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1747714308412,
+      "tag": "0014_familiar_nebula",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1747714326233,
+      "tag": "0015_tiny_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1747714738853,
+      "tag": "0016_abnormal_rogue",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1747767720727,
+      "tag": "0017_reflective_mercury",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1747767921628,
+      "tag": "0018_lush_lord_tyger",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1747772313893,
+      "tag": "0019_kind_iceman",
+      "breakpoints": true
     }
   ]
 }

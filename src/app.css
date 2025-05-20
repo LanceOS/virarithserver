@@ -100,3 +100,19 @@ h1 {
 .btn-nav:hover {
    color: #a37642; 
 }
+
+
+
+.btn-discord {
+    background-color: #5765F2;
+    color: var(--color-primary-content);
+    padding: 1rem 3.5rem;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 200ms;
+}
+
+.btn-discord:hover {
+    background-color: #3b48cf;
+}

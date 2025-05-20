@@ -1,13 +1,13 @@
 import { pgTable, timestamp, varchar, text, boolean, uuid } from "drizzle-orm/pg-core";
-// import { users } from "./Users.ts";
+import { user } from "./authentication.ts";
 
 
 export const posts = pgTable('posts', {
     id: uuid().primaryKey().notNull(),
     title: varchar("title", { length: 100 }).notNull(),
     content: text("content").notNull(),
-    // user_id: integer("user_id").notNull().references(() => users.id).notNull(),
-    isDeleted: boolean("is_deleted"),
-    createdAt: timestamp("created_at").notNull(),
-    updatedAt: timestamp("updated_at")
+    user_id: text("user_id").references(() => user.id).notNull(),
+    isDeleted: boolean("is_deleted").default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull()
 })
