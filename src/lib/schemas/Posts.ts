@@ -1,7 +1,6 @@
 import { pgTable, timestamp, varchar, text, boolean, uuid } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { sql, type InferInsertModel } from "drizzle-orm";
-import { topic } from "./Topic.ts";
 
 
 export const posts = pgTable('posts', {

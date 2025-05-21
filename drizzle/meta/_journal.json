@@ -141,6 +141,13 @@
       "when": 1747772313893,
       "tag": "0019_kind_iceman",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1747867268933,
+      "tag": "0020_far_ulik",
+      "breakpoints": true
     }
   ]
 }

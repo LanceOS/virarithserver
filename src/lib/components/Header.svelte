@@ -3,7 +3,6 @@
 	import { authClient } from '$lib/auth-client.ts';
 
 	const session = authClient.useSession();
-	console.log($session)
 
 	async function signOut() {
 		await authClient.signOut({
@@ -24,7 +23,7 @@
 			onclick={() => goto('/')}
 			class="cursor-pointer"
 		>
-			<img src="/images/.png" alt="" class="w-24" />
+			<img src="/images/virarith.png" alt="" class="w-24" />
 		</button>
 		<nav class="flex items-center gap-6">
 			<button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto('/')}

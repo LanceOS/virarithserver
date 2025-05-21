@@ -24,5 +24,6 @@ test("Test user post creation", async ({ request}) => {
     })
 
     expect(response.status()).toBe(200)
+    expect(response).toBeTruthy();
 })
 
