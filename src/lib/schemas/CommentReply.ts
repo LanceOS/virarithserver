@@ -9,5 +9,5 @@ export const commentReply = pgTable("comment_reply", {
     content: text("content").notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull()
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 })

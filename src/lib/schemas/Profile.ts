@@ -7,5 +7,5 @@ export const profile = pgTable('profile', {
     bio: varchar("bio", { length: 256 }),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull()
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 })

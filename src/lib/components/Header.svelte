@@ -3,7 +3,7 @@
 	import { authClient } from '$lib/auth-client.ts';
 
 	const session = authClient.useSession();
-	console.log($session);
+	console.log($session)
 
 	async function signOut() {
 		await authClient.signOut({
@@ -38,20 +38,20 @@
 			>
 			<button
 				type="button"
-				aria-label="Go to sign in"
+				aria-label="Go to log in"
 				class="btn-nav"
-				onclick={() => goto('/pages/signin')}>Placeholder</button
+				onclick={() => goto('/pages/login')}>Placeholder</button
 			>
 			{#if !$session.data}
 				<button
 					type="button"
-					aria-label="Sign In"
-					onclick={() => goto('/pages/signin')}
-					class="btn-small">Sign In</button
+					aria-label="Log In"
+					onclick={() => goto('/pages/login')}
+					class="btn-small">Log In</button
 				>
 			{:else}
-				<button type="button" aria-label="Sign In" onclick={() => signOut()} class="btn-small"
-					>Sign Out</button
+				<button type="button" aria-label="Log Out" onclick={() => signOut()} class="btn-small"
+					>Log Out</button
 				>
 			{/if}
 		</nav>

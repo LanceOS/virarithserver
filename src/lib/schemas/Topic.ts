@@ -6,5 +6,5 @@ export const topic = pgTable('topic', {
     topic: varchar("topic", { length: 32 }).notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull()
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 })

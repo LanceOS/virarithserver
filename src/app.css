@@ -2,15 +2,15 @@
 @import 'tailwindcss';
 
 :root {
-    --color-base: #1f2020;
+    --color-base: #2c2e2e;
     --color-base-content: #FAFBFA;
 
     --color-input: #757575;
     --color-input-content: #ffffff;
 
-    --color-primary: #116BEE;
+    --color-primary: #5765F2;
 
-    --color-secondary: #0B0DB0;
+    --color-secondary: #3b48cf;
 
     --color-error: #f32e2e;
 }
@@ -46,6 +46,10 @@ h3,
 h2,
 h1 {
     font-weight: bold;
+}
+
+.bg-base {
+    background-color: var(--color-base);
 }
 
 .color-error {

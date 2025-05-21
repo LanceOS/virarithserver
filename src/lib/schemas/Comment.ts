@@ -9,5 +9,5 @@ export const comment = pgTable("comment", {
     content: varchar("content", { length: 256 }).notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull()
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 })
