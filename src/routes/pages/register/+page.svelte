@@ -98,7 +98,7 @@
 				goto('/');
 			}}><Icon icon="stash:signout-alt" class="text-5xl" /></button
 		>
-		<div class="flex w-[25rem] flex-col gap-10">
+		<div class="flex w-[25rem] flex-col gap-8">
 			<div class="flex h-12 items-center justify-between">
 				<h1 class="text-4xl">Create Account</h1>
 			</div>

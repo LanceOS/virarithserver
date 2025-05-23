@@ -33,13 +33,19 @@
 				type="button"
 				aria-label="Go to forum page"
 				class="btn-nav"
-				onclick={() => goto('/pages/forum')}>Forum</button
+				onclick={() => goto('/pages/forum')}>Forums</button
 			>
 			<button
 				type="button"
 				aria-label="Go to log in"
 				class="btn-nav"
-				onclick={() => goto('/pages/login')}>Placeholder</button
+				onclick={() => goto('/pages/dynmap')}>Dynmap</button
+			>
+			<button
+				type="button"
+				aria-label="Go to log in"
+				class="btn-nav"
+				onclick={() => goto('/pages/wiki')}>Wiki</button
 			>
 			{#if !$session.data}
 				<button

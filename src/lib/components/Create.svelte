@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { authClient } from "$lib/auth-client.ts";
 
-    let counter = $state(0);
+    let counter = $state(false)
     let body = $state('');
 
     const session = authClient.useSession()
 </script>
 
-<main>
+<section class="bg-gray-500">
     <form action="#">
         <div class="h-fit flex items-center relative">
 			<textarea
@@ -28,4 +28,4 @@
 			{/if}
 		</div>
     </form>
-</main>
+</section>
