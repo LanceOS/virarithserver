@@ -1,6 +1,6 @@
 import { pgTable, timestamp, varchar, text, boolean, uuid } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
-import { relations, sql, type InferInsertModel } from "drizzle-orm";
+import { sql, type InferInsertModel } from "drizzle-orm";
 
 
 export const posts = pgTable('posts', {
@@ -15,15 +15,5 @@ export const posts = pgTable('posts', {
 })
 
 
-export const usersRelations = relations(user, ({ many }) => ({
-    posts: many(posts),
-  }));
-  
-  export const postsRelations = relations(posts, ({ one }) => ({
-    user: one(user, {
-      fields: [posts.user_id],
-      references: [user.id],
-    }),
-  }));
 
 export type NewPost = InferInsertModel<typeof posts>;

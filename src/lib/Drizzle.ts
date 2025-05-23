@@ -10,10 +10,10 @@ import * as posts from "./schemas/Posts.ts";
 import * as profile from "./schemas/Profile.ts";
 import * as reports from "./schemas/Topic.ts";
 import * as topic from "./schemas/Topic.ts"
+import * as relations from "./schemas/relations.ts"
+import * as authentication from "./schemas/authentication.ts"
 
-
-
-const databaseUrl = `postgresql://${process.env.POSTGRES_USER as string}:${process.env.POSTGRES_PASSWORD as string}@localhost:5432/${process.env.POSTGRES_DB as string}`;
+const databaseUrl = `postgresql://${process.env.POSTGRES_USER!}:${process.env.POSTGRES_PASSWORD!}@localhost:5432/${process.env.POSTGRES_DB!}`;
 
 
 const pool = new Pool({
@@ -34,9 +34,9 @@ const schemas = {
     ...posts,
     ...profile,
     ...reports,
-    ...topic
+    ...topic,
+    ...relations,
+    ...authentication
 }
-
-
 
 export const DrizzleDB = drizzle(pool, { schema: schemas })

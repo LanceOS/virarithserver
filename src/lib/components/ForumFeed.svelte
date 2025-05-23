@@ -56,9 +56,10 @@
   
 	<div class="posts-container">
 	  {#each posts as post (post.id)}
-		<article class="forum-card" role="article">
-		  <!-- Card Header -->
-		  <header class="forum-card-header">
+		<article class="forum-card">
+
+
+			<header class="forum-card-header">
 			<div class="author-info">
 			  <img 
 				src={post.avatar} 
@@ -76,7 +77,8 @@
 			<span class="category {getCategoryClass(post.category)}">{post.category}</span>
 		  </header>
   
-		  <!-- Card Content -->
+
+
 		  <div class="forum-card-content">
 			<h3 class="forum-card-title">
 			  <a href="/changelog/{post.id}" class="title-link">
@@ -86,7 +88,9 @@
 			<p class="forum-card-body">{post.content}</p>
 		  </div>
   
-		  <!-- Card Footer -->
+
+
+
 		  <footer class="forum-card-footer">
 			<div class="stats">
 			  <span class="stat-item">
@@ -294,8 +298,8 @@
 	  align-items: center;
 	  gap: 0.5rem;
 	  background: transparent;
-	  border: 1px solid var(--color-primary, #3b82f6);
-	  color: var(--color-primary, #3b82f6);
+	  border: 1px solid #946b2d;
+	  color: #946b2d;
 	  padding: 0.5rem 1rem;
 	  border-radius: 6px;
 	  font-size: 0.8rem;
@@ -305,7 +309,7 @@
 	}
   
 	.read-more-btn:hover {
-	  background: var(--color-primary, #3b82f6);
+	  background: #946b2d;
 	  color: white;
 	  transform: translateX(2px);
 	}

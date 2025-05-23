@@ -32,8 +32,8 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch(error: any) {
-        return new Response(JSON.stringify(error.message), {
+    catch(error) {
+        return new Response(JSON.stringify(error), {
             status: 404,
             statusText: "FAIL",
             headers: {

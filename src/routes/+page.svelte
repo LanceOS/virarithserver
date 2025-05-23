@@ -5,7 +5,7 @@
 </script>
 
 <Header />
-<main class="flex flex-col">
+<main class="flex flex-col pb-16">
     <!-- Hero -->
 	<section class="relative flex h-fit min-h-[20rem] items-center overflow-hidden mb-10">
 		<img src="/images/green.png" alt="" class="absolute inset-0 -z-10 object-center blur-sm" />

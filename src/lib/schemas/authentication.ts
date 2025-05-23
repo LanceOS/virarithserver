@@ -11,6 +11,7 @@ export const user = pgTable("user", {
 	role: text('role')
 });
 
+
 export const session = pgTable("session", {
 	id: text('id').primaryKey(),
 	expiresAt: timestamp('expires_at').notNull(),
