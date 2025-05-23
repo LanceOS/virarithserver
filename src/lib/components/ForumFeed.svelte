@@ -1,32 +1,8 @@
-<script>
-	// Sample data structure - you can replace this with your actual posts
-	let posts = [
-	  {
-		id: 1,
-		title: "Version 2.1.0 Released - New Dashboard Features",
-		content: "We've added a completely redesigned dashboard with real-time analytics, improved user management, and enhanced security features. This update also includes bug fixes for the notification system.",
-		author: "John Smith",
-		date: "2024-05-20",
-		category: "Release",
-		likes: 24,
-		comments: 8,
-		avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
-	  },
-	  {
-		id: 2,
-		title: "Hotfix 2.0.3 - Critical Security Patch",
-		content: "Emergency security update addressing vulnerabilities in the authentication system. All users are strongly advised to update immediately.",
-		author: "Sarah Johnson",
-		date: "2024-05-18",
-		category: "Hotfix",
-		likes: 12,
-		comments: 3,
-		avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
-	  }
-	];
+<script lang="ts">
+	
   
 	// Formatted date
-	function formatDate(dateString) {
+	function formatDate(dateString: string) {
 	  const date = new Date(dateString);
 	  return date.toLocaleDateString('en-US', { 
 		year: 'numeric', 
@@ -36,7 +12,7 @@
 	}
   
 	// Get category color class
-	function getCategoryClass(category) {
+	function getCategoryClass(category: string) {
 	  const categoryClasses = {
 		'Release': 'category-release',
 		'Hotfix': 'category-hotfix',

@@ -1,4 +1,5 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
+import { and } from 'drizzle-orm';
 
 
 
@@ -8,19 +9,30 @@ export const GET = async ({ request }): Promise<Response> => {
         const topic = url.searchParams.get('topic');
         let postData;
 
-        if(topic) {
-            postData = await DrizzleDB.query.posts.findMany({ 
-                where: (posts, { eq }) => eq(posts.topic, topic),
+        /**
+         * @params topic
+         * @returns posts filtered by is_deleted and topic
+         */
+        if (topic) {
+            postData = await DrizzleDB.query.posts.findMany({
+                where: (posts, { eq }) => and(
+                    eq(posts.topic, topic),
+                    eq(posts.isDeleted, false)
+                ),
                 with: {
                     user: true
                 }
             });
         }
+        /**
+         * @returns all posts with a user
+         */
         else {
             postData = await DrizzleDB.query.posts.findMany({
+                where: (posts, { eq }) => eq(posts.isDeleted, true),
                 with: {
                     user: true
-                } 
+                }
             });
         }
 
@@ -32,7 +44,7 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch(error) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 404,
             statusText: "FAIL",
