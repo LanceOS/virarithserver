@@ -2,6 +2,12 @@ import { PUBLIC_URL } from "$env/static/public";
 import type { NewPost } from "$lib/schemas/Posts.ts";
 
 
+interface IPostParams {
+    category?: string;
+    userId?: string;
+    page: number;
+}
+
 
 class PostClient {
     interface: PostClient | null = null;
@@ -41,9 +47,9 @@ class PostClient {
      * 
      * @returns Returns all posts from the database
      */
-    static async getAllPosts() {
+    static async getAllPosts(params: IPostParams) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_all?page=${params.page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -59,11 +65,11 @@ class PostClient {
     /**
      * 
      * @param params 
-     * @returns Returns the posts sorted by the selected topic
+     * @returns Returns the posts sorted by the selected category
      */
-    static async getPostsByTopic(params: string) {
+    static async getPostsByCategory(params: IPostParams) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve?topic=${params}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_category?category=${params.category}$page=${params.page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -81,9 +87,9 @@ class PostClient {
      * @param params 
      * @returns Returns the posts sorted by the user
      */
-    static async getPostsByUser(params: string) {
+    static async getPostsByUser(params: IPostParams) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve?userId=${params}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_user?userId=${params.userId}&page=${params.page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
