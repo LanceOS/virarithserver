@@ -1,6 +1,7 @@
 import { pgTable, varchar, boolean, timestamp, uuid, text } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { posts } from "./Posts.ts";
+import type { InferInsertModel } from "drizzle-orm";
 
 export const comment = pgTable("comment", {
     id: uuid().primaryKey().notNull(),
@@ -10,4 +11,6 @@ export const comment = pgTable("comment", {
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
-})
+});
+
+export type NewComment = InferInsertModel<typeof posts>;

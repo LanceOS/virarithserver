@@ -1,12 +1,14 @@
 <script lang="ts">
 	import ForumFeed from '$lib/components/ForumFeed.svelte';
-	import Header from '$lib/components/Header.svelte';
+	import Header from '$lib/components/landing/Header.svelte';
 	import Links from '$lib/components/Links.svelte';
+	
+	export let data;
 </script>
 
 <Header />
 <main class="flex flex-col pb-16">
-    <!-- Hero -->
+
 	<section class="relative flex h-fit min-h-[20rem] items-center overflow-hidden mb-10">
 		<img src="/images/green.png" alt="" class="absolute inset-0 -z-10 object-center blur-sm" />
 
@@ -15,9 +17,9 @@
 		</div>
 	</section>
 
-    <!-- Main sections -->
+
 	<div class="w-full mx-auto flex max-w-7xl gap-6 px-4 bg-base">
-        <ForumFeed />
+        <ForumFeed loadedPosts={data.posts}/>
 
         <Links />
 	</div>

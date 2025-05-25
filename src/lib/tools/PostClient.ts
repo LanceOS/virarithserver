@@ -24,14 +24,14 @@ class PostClient {
      */
     static async createPost(post: NewPost) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/create/create_post`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(post)
             })
-
-            return response;
+            const data = await response.json(); 
+            return data;
         }
         catch (error) {
             throw new Error(`Failed to create post: ${error}`)
@@ -45,7 +45,7 @@ class PostClient {
 
     /**
      * 
-     * @returns Returns all posts from the database
+     * @returns Fetches all posts from the database
      */
     static async getAllPosts(params: IPostParams) {
         try {
@@ -55,37 +55,42 @@ class PostClient {
                 },
             })
 
-            return response;
+            const data = await response.json(); 
+            return data;
         }
         catch (error) {
-            throw new Error(`Failed to create post: ${error}`)
+            throw new Error(`Failed to get post: ${error}`)
         }
     }
 
     /**
      * 
      * @param params 
-     * @returns Returns the posts sorted by the selected category
+     * @returns Fetches posts sorted by the selected category
      */
     static async getPostsByCategory(params: IPostParams) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_category?category=${params.category}$page=${params.page}`, {
+            if(!params.category) {
+                throw new Error("A category must be provided.")
+            }
+
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_cat?category=${params.category}&page=${params.page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
             })
-
-            return response;
+            const data = await response.json(); 
+            return data;
         }
         catch (error) {
-            throw new Error(`Failed to create post: ${error}`)
+            throw new Error(`Failed to get post: ${error}`)
         }
     }
 
     /**
      * 
      * @param params 
-     * @returns Returns the posts sorted by the user
+     * @returns Fetches post sorted by user
      */
     static async getPostsByUser(params: IPostParams) {
         try {
@@ -94,11 +99,32 @@ class PostClient {
                     "Content-Type": "application/json"
                 },
             })
-
-            return response;
+            const data = await response.json(); 
+            return data;
         }
         catch (error) {
-            throw new Error(`Failed to create post: ${error}`)
+            throw new Error(`Failed to get post: ${error}`)
+        }
+    }
+
+
+    /**
+     * 
+     * @param postId 
+     * @returns Fetches post by Id
+     */
+    static async getPostById(postId: string) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_id?postId=${postId}`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            })
+            const data = await response.json(); 
+            return data;
+        }
+        catch (error) {
+            throw new Error(`Failed to get post: ${error}`)
         }
     }
 }

@@ -1,6 +1,8 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { posts } from '$lib/schemas/Posts.ts';
 import { and, count, eq } from 'drizzle-orm';
+import { postPageLimit } from '../retrieval.config.ts';
+import { sql } from 'drizzle-orm';
 
 
 
@@ -10,7 +12,7 @@ export const GET = async ({ request }): Promise<Response> => {
         const category = url.searchParams.get('category');
 
         const pageParam = url.searchParams.get('page');
-        const postPageLimit = 25;
+
         const page = Number(pageParam)
 
         const offset = (page - 1) * postPageLimit;
@@ -32,11 +34,23 @@ export const GET = async ({ request }): Promise<Response> => {
          */
         const postData = await DrizzleDB.query.posts.findMany({
             where: (posts, { eq }) => and(
-                eq(posts.topic, category),
+                eq(posts.category, category),
                 eq(posts.isDeleted, false)
             ),
+            extras: {
+                likeCount: sql<number>`(
+                    SELECT COUNT(*) 
+                    FROM likes 
+                    WHERE likes.post_id = posts.id
+                )`.as('like_count'),
+                commentCount: sql<number>`(
+                    SELECT COUNT(*) 
+                    FROM comment 
+                    WHERE comment.post_id = posts.id
+                )`.as('comment_count')
+            },
             with: {
-                user: true
+                user: true,
             },
             limit: postPageLimit,
             offset: offset,

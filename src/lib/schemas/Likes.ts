@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql, type InferInsertModel } from "drizzle-orm";
 import { text, uuid } from "drizzle-orm/pg-core";
 import { pgTable } from "drizzle-orm/pg-core";
 import { posts } from "./Posts.ts";
@@ -15,3 +15,5 @@ export const likes = pgTable("likes", {
     commentId: uuid("comment_id").references(() => comment.id),
     commentReplyId: uuid("comment_reply_id").references(() => commentReply.id)
 })
+
+export type NewLike = InferInsertModel<typeof likes>;

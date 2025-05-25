@@ -6,6 +6,10 @@
     let createPost = $state(false);
 
     const session = authClient.useSession();
+
+	let { data }: { data: PageData } = $props();
+    const post = data.posts;
+
 </script>
 
 <main class="px-4 py-16">

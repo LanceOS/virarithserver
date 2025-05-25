@@ -6,35 +6,21 @@ import { and } from 'drizzle-orm';
 export const GET = async ({ request }): Promise<Response> => {
     try {
         const url = new URL(request.url);
-        const topic = url.searchParams.get('topic');
-        let postData;
+        const category = url.searchParams.get('category');
 
         /**
-         * @params topic
-         * @returns posts filtered by is_deleted and topic
+         * @params category
+         * @returns posts filtered by is_deleted and category
          */
-        if (topic) {
-            postData = await DrizzleDB.query.posts.findMany({
-                where: (posts, { eq }) => and(
-                    eq(posts.topic, topic),
-                    eq(posts.isDeleted, false)
-                ),
-                with: {
-                    user: true
-                }
-            });
-        }
-        /**
-         * @returns all posts with a user
-         */
-        else {
-            postData = await DrizzleDB.query.posts.findMany({
-                where: (posts, { eq }) => eq(posts.isDeleted, true),
-                with: {
-                    user: true
-                }
-            });
-        }
+        const postData = await DrizzleDB.query.posts.findMany({
+            where: (posts, { eq }) => and(
+                eq(posts.category, category),
+                eq(posts.isDeleted, false)
+            ),
+            with: {
+                user: true
+            }
+        });
 
         return new Response(JSON.stringify(postData), {
             status: 200,

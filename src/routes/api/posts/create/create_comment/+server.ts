@@ -1,35 +1,28 @@
 import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { posts, type NewPost } from '$lib/schemas/Posts.ts';
+import { comment, type NewComment } from '$lib/schemas/Comment.ts';
 
 
 export const POST = async ({ request }): Promise<Response> => {
-	
+    
     try {
         /**
          * If there is no user then throw an error
          * to block post creation
          */
-        // const session = await authClient.getSession();
-        // if(!session.data) {
-        //     throw new Error("User must be logged in to create a new post!")
-        // }
+        const session = await authClient.getSession();
+        if(!session.data) {
+            throw new Error("User must be logged in to create a new post!")
+        }
         
-        const body = await request.json();
-        
-        const postData: NewPost = {
-            title: body.title,
-            content: body.content,
-            user_id: body.user_id,
-            topic: body.topic
-        };
+        const body: NewComment = await request.json();
         
         /**
-         * Creating new post with drizzle
+         * Creating new comment with drizzle
          */
-        const [post] = await DrizzleDB.insert(posts).values(postData).returning()
+        const newComment = await DrizzleDB.insert(comment).values(body).returning()
 
-        return new Response(JSON.stringify(post), {
+        return new Response(JSON.stringify(newComment), {
             status: 200,
             statusText: "OK",
             headers: {

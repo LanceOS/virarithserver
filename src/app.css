@@ -6,17 +6,20 @@
 this color of the site, have Gemini generate new colors and replace these here
 */
 :root {
-    --color-base: #2C2720; /* Deep charcoal brown */
-    --color-base-content: #EFEBE0; /* Creamy off-white */
+    --color-base: #121212; /* Nearly Black */
+    --color-base-content: #E8E8E8; /* Light Gray */
 
-    --color-input: #4F433A; /* Muted warm brown */
-    --color-input-content: #FCFBF7; /* Soft white */
+    --color-card: #1E1E1E; /* Dark Gray */
+    --color-card-border: #ffffff0d; /* Subtle white border */
 
-    --color-primary: #8C5642; /* Rustic terracotta */
-    --color-secondary: #6B8E23; /* Olive green */
+    --color-input: #1E1E1E; /* Dark Gray */
+    --color-input-content: #F0F0F0; /* Slightly Lighter Gray */
 
-    --color-error: #b63535; /* Muted brick red */
-    --color-muted: #A0988F; /* Dusty gray-brown */
+    --color-primary: #5f73e9; /* Soft Violet (inspired by Material Design) */
+    --color-secondary: #3952e0; /* Teal (inspired by Material Design) */
+
+    --color-error: #b14458; /* Muted Rose Red */
+    --color-muted: #6B6B6B; /* Medium Gray */
 }
 
 .muted {
@@ -40,10 +43,15 @@ this color of the site, have Gemini generate new colors and replace these here
     }
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--color-base);
     color: var(--color-base-content);
     font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
 }
 
 h6,
@@ -57,6 +65,11 @@ h1 {
 
 .bg-base {
     background-color: var(--color-base);
+}
+
+.card-setup {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-card-border);
 }
 
 .color-error {
@@ -124,5 +137,49 @@ h1 {
     background-color: #3b48cf; 
 }
 
+.read-more-btn {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--color-card-border);
+    color: var(--color-base-content);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.read-more-btn:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: translateX(2px);
+}
 
 
+
+.stat-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--color-muted, #9ca3af);
+    transition: 200ms ease all;
+
+    cursor: pointer;
+}
+
+.stat-icon:active {
+    transform: scale(1.1);
+    color: var(--color-error);
+}
+
+.stat-icon {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+}
