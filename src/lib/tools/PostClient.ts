@@ -24,7 +24,7 @@ class PostClient {
      */
     static async createPost(post: NewPost) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/create/create_post`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
                 headers: {
                     "Content-Type": "application/json"
                 },

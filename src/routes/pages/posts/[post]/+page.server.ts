@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ params }) => {
         const posts = await PostClient.getPostById(post);
 
         return {
+            
             posts
         };
     } catch (error) {

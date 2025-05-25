@@ -6,7 +6,6 @@
 
 	export let data;
 	const post = data.posts;
-	console.log(post);
 
 	// Formatted date
 	function formatDate(dateString: string) {
