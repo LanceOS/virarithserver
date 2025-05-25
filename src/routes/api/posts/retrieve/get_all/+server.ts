@@ -33,8 +33,8 @@ export const GET = async ({ request }): Promise<Response> => {
                 )`.as('like_count'),
                 commentCount: sql<number>`(
                     SELECT COUNT(*) 
-                    FROM comment 
-                    WHERE comment.post_id = posts.id
+                    FROM comments
+                    WHERE comments.post_id = posts.id
                 )`.as('comment_count')
             },
             with: {

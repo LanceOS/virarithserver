@@ -169,6 +169,13 @@
       "when": 1748060855800,
       "tag": "0023_clumsy_grey_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1748211236804,
+      "tag": "0024_purple_pixie",
+      "breakpoints": true
     }
   ]
 }

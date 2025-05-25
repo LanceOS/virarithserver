@@ -3,7 +3,7 @@ import { user } from "./authentication.ts";
 import { posts } from "./Posts.ts";
 import type { InferInsertModel } from "drizzle-orm";
 
-export const comment = pgTable("comment", {
+export const comments = pgTable("comments", {
     id: uuid().primaryKey().notNull(),
     userId: text("user_id").references(() => user.id).notNull(),
     postId: uuid("post_id").references(() => posts.id).notNull(),

@@ -3,7 +3,7 @@
 import { relations } from "drizzle-orm";
 import { posts } from "./Posts.ts";
 import { user } from "./authentication.ts";
-import { comment } from "./Comment.ts";
+import { comments } from "./Comments.ts";
 import { commentReply } from "./CommentReply.ts";
 import { likes } from "./Likes.ts";
 import { changeLogs } from "./ChangeLogs.ts";
@@ -16,7 +16,7 @@ export const postsRelations = relations(posts, ({ one, many }) => ({ // Added 'm
         references: [user.id],
     }),
     // A post can have many comments
-    comments: many(comment),
+    comments: many(comments),
     // A post can have many likes
     likes: many(likes),
 }));
@@ -25,7 +25,7 @@ export const postsRelations = relations(posts, ({ one, many }) => ({ // Added 'm
 export const usersRelations = relations(user, ({ many, one }) => ({ // Added 'one'
     posts: many(posts),
     // A user can have many comments
-    comments: many(comment),
+    comments: many(comments),
     // A user can have many comment replies
     commentReplies: many(commentReply),
     // A user can give many likes
@@ -40,13 +40,13 @@ export const usersRelations = relations(user, ({ many, one }) => ({ // Added 'on
 }));
 
 
-export const commentRelations = relations(comment, ({ one, many }) => ({ // Added 'many'
+export const commentRelations = relations(comments, ({ one, many }) => ({ // Added 'many'
     user: one(user, {
-        fields: [comment.userId],
+        fields: [comments.userId],
         references: [user.id],
     }),
     post: one(posts, {
-        fields: [comment.postId],
+        fields: [comments.postId],
         references: [posts.id],
     }),
     // A comment can have many replies
@@ -63,9 +63,9 @@ export const commentReplyRelations = relations(commentReply, ({ one, many }) => 
         references: [user.id],
     }),
     // A comment reply belongs to one parent comment
-    parentComment: one(comment, {
+    parentComment: one(comments, {
         fields: [commentReply.parentComment],
-        references: [comment.id],
+        references: [comments.id],
     }),
     // A comment reply can have many likes
     likes: many(likes),
@@ -81,9 +81,9 @@ export const likesRelations = relations(likes, ({ one }) => ({
         fields: [likes.postId],
         references: [posts.id],
     }),
-    comment: one(comment, {
+    comment: one(comments, {
         fields: [likes.commentId],
-        references: [comment.id],
+        references: [comments.id],
     }),
     commentReply: one(commentReply, {
         fields: [likes.commentReplyId],

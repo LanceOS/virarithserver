@@ -1,6 +1,6 @@
 import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { comment, type NewComment } from '$lib/schemas/Comment.ts';
+import { comments, type NewComment } from '$lib/schemas/Comments.ts';
 
 
 export const POST = async ({ request }): Promise<Response> => {
@@ -20,7 +20,7 @@ export const POST = async ({ request }): Promise<Response> => {
         /**
          * Creating new comment with drizzle
          */
-        const newComment = await DrizzleDB.insert(comment).values(body).returning()
+        const newComment = await DrizzleDB.insert(comments).values(body).returning()
 
         return new Response(JSON.stringify(newComment), {
             status: 200,

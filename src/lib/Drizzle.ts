@@ -4,7 +4,7 @@ import { Pool } from 'pg';
 
 
 import * as changeLogs from "./schemas/ChangeLogs.ts";
-import * as comment from "./schemas/Comment.ts";
+import * as comments from "./schemas/Comments.ts";
 import * as commentReply from "./schemas/CommentReply.ts";
 import * as posts from "./schemas/Posts.ts";
 import * as profile from "./schemas/Profile.ts";
@@ -29,7 +29,7 @@ const pool = new Pool({
  */
 const schemas = {
     ...changeLogs,
-    ...comment,
+    ...comments,
     ...commentReply,
     ...posts,
     ...profile,
