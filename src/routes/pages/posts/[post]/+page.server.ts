@@ -1,3 +1,4 @@
+import CommentClient from '$lib/tools/CommentClient.ts';
 import PostClient from '$lib/tools/PostClient.ts';
 import type { PageServerLoad } from './$types.js';
 
@@ -11,9 +12,9 @@ export const load: PageServerLoad = async ({ params }) => {
         }
 
         const posts = await PostClient.getPostById(post);
-
+        const comments = await CommentClient.getCommentsByPost(post)
         return {
-            
+            comments,
             posts
         };
     } catch (error) {

@@ -1,8 +1,9 @@
 import { boolean, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
+import { sql } from "drizzle-orm";
 
 export const changeLogs = pgTable('change_logs', {
-    id: uuid("id").primaryKey().notNull(),
+    id: uuid().primaryKey().notNull().default(sql`gen_random_uuid()`),
     title: varchar("title", { length: 256 }).notNull(),
     userId: text("user_id").references(() => user.id).notNull(),
     content: text("content").notNull(),

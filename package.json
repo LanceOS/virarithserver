@@ -71,6 +71,7 @@
 	"dependencies": {
 		"aos": "^2.3.4",
 		"better-auth": "^1.2.8",
+		"chalk": "^5.4.1",
 		"drizzle-orm": "^0.43.1",
 		"minio": "^8.0.5",
 		"nodemailer": "^7.0.3",

@@ -10,12 +10,16 @@ export const POST = async ({ request }): Promise<Response> => {
          * If there is no user then throw an error
          * to block post creation
          */
-        const session = await authClient.getSession();
-        if(!session.data) {
-            throw new Error("User must be logged in to create a new post!")
-        }
+        // const session = await authClient.getSession();
+        // if(!session.data) {
+        //     throw new Error("User must be logged in to create a new post!")
+        // }
         
         const body: NewPost = await request.json();
+
+        if(!body) {
+            throw new Error("Failed to get data for post")
+        }
         
         /**
          * Creating new post with drizzle

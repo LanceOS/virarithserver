@@ -6,6 +6,7 @@
 
 	export let data;
 	const post = data.posts;
+	const comments = data.comments;
 
 	// Formatted date
 	function formatDate(dateString: string) {
@@ -18,13 +19,14 @@
 	}
 </script>
 
-<main class="flex flex-col gap-6 max-w-7xl mx-auto px-4 py-16">
-	<article class="p-8 flex flex-col gap-4 card-setup">
-
+<main class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-16">
+	<article class="card-setup flex flex-col gap-4 p-8">
 		<header class="flex items-center justify-between gap-4">
 			<div class="flex items-center">
 				<div class="flex flex-col">
-					<span class="text-2xl font-semibold btn-nav cursor-pointer duration-200">{post.user.name}</span>
+					<span class="btn-nav cursor-pointer text-2xl font-semibold duration-200"
+						>{post.user.name}</span
+					>
 					<time class="text-sm font-light" datetime={post.createdAt}>
 						{formatDate(post.createdAt)}
 					</time>
@@ -62,18 +64,16 @@
 		</footer>
 	</article>
 
-	{#if $session.data}
-		<section>
-
-		</section>
+	{#if $session?.data?.user}
+		<section></section>
 	{/if}
 
-	{#if post.comments}
-		<section class="p-8 flex flex-col gap-2 card-setup">
+	{#if comments}
+		<CommentFeed {comments} />
+	{:else}
+		<section class="card-setup flex flex-col gap-2 p-8">
 			<h2 class="mb-4 text-3xl text-white">Comments</h2>
 			<p class="muted">No comments yet. Be the first to leave one!</p>
 		</section>
-	{:else}
-		<CommentFeed comments={post.comments}/>
 	{/if}
 </main>
