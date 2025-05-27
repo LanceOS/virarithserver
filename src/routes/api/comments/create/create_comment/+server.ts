@@ -1,4 +1,5 @@
 
+import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { comments, type NewComment } from '$lib/schemas/Comments.ts';
 import Sentry from '$lib/tools/Sentry.ts';
@@ -16,10 +17,10 @@ export const POST = async ({ request }): Promise<Response> => {
          * If there is no user then throw an error
          * to block post creation
          */
-        // const session = await authClient.getSession();
-        // if(!session.data) {
-        //     throw new Error("User must be logged in to create a new post!")
-        // }
+        const session = await authClient.getSession();
+        if(!session.data) {
+            throw new Error("User must be logged in to create a new post!")
+        }
         
         const body: NewComment = await request.json();
 
@@ -40,7 +41,7 @@ export const POST = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch(error: any) {
+    catch(error: unknown) {
         Sentry.error(error)
         return new Response(JSON.stringify(error), {
             status: 500,

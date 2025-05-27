@@ -16,10 +16,9 @@ export const load: PageServerLoad = async ({ url }) => {
             posts
         };
     } catch (error) {
-        console.error('Error fetching posts in load function:', error);
         return {
             posts: [],
-            error: 'Failed to load posts. Please try again later.'
+            error: `Failed to load posts: ${error}`
         };
     }
 };

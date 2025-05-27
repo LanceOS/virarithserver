@@ -23,8 +23,8 @@
 	<article class="card-setup flex flex-col gap-4 p-8">
 		<header class="flex items-center justify-between gap-4">
 			<div class="flex items-center">
-				<div class="flex flex-col">
-					<span class="btn-nav cursor-pointer text-2xl font-semibold duration-200"
+				<div class="flex flex-col gap-2">
+					<span class="btn-nav text-2xl font-semibold"
 						>{post.user.name}</span
 					>
 					<time class="text-sm font-light" datetime={post.createdAt}>

@@ -116,6 +116,7 @@ h1 {
 
 .btn-nav {
     cursor: pointer;
+    width: fit-content;
     transition: 200ms;
 }
 

@@ -2,7 +2,11 @@ import CommentClient from '$lib/tools/CommentClient.ts';
 import PostClient from '$lib/tools/PostClient.ts';
 import type { PageServerLoad } from './$types.js';
 
-
+/**
+ * 
+ * @param postId
+ * @returns Returns post and comments based on the posts Id
+ */
 export const load: PageServerLoad = async ({ params }) => {
     try {
         const post = params.post

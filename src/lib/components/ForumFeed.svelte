@@ -25,8 +25,8 @@
 		  class="avatar"
 		  loading="lazy"
 		/> -->
-					<div class="flex flex-col">
-						<span class="text-lg font-semibold btn-nav cursor-pointer duration-200">{post.user.name}</span>
+					<div class="flex flex-col gap-[0.25rem]">
+						<button class="text-lg font-semibold btn-nav" onclick={() => goto(`/pages/profile/${post.user.id}`)}>{post.user.name}</button>
 						<time class="text-xs font-light" datetime={post.createdAt}>
 							{formatDate(post.createdAt)}
 						</time>

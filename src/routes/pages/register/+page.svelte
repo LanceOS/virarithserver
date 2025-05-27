@@ -3,6 +3,7 @@
 	import { authClient } from '$lib/auth-client.ts';
 	import ErrorModal from '$lib/components/Popups/ErrorModal.svelte';
 	import SuccessModal from '$lib/components/Popups/SuccessModal.svelte';
+	import ProfileClient from '$lib/tools/ProfileClient.ts';
 	import Icon from '@iconify/svelte';
 
 	let credentials = $state({
@@ -58,19 +59,26 @@
 		}
 		loading = true;
 
-		await authClient.signUp.email({
-			name: credentials.name,
-			email: credentials.email,
-			password: credentials.password,
-			image: 'placeholder',
-			role: 'user'
-		}).then(() => {
+		try {
+			const response = await authClient.signUp.email({
+				name: credentials.name,
+				email: credentials.email,
+				password: credentials.password,
+				image: 'placeholder',
+				role: 'user'
+			});
+
+			if(!response || !response.data) {
+				throw new Error("Failed to create user!")
+			}
+			console.log(response.data.user.id)
+			await ProfileClient.createNewProfile(response.data.user.id);
 			redirect();
-		}).catch((error: any) => {
-			console.log(error.message, error.status);
+		} catch (error) {
+			console.log(error, error);
 			errorLog = 'Failed to create user and sign in.';
 			throw new Error(`Failed to create user or sign in ${error}`);
-		}).finally(() => {
+		} finally {
 			credentials = {
 				email: '',
 				password: '',
@@ -78,7 +86,7 @@
 				name: ''
 			};
 			loading = false;
-		})
+		}
 	};
 </script>
 
