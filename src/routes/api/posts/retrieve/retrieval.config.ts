@@ -1,3 +1,3 @@
 
 
-export const postPageLimit = 25;
+export const postPageLimit = 15;

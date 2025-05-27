@@ -7,12 +7,12 @@
 
     const session = authClient.useSession();
 
-	let { data }: { data: PageData } = $props();
-    const post = data.posts;
+	let { data } = $props();
+    const posts = data.posts;
 
 </script>
 
-<main class="px-4 py-16">
+<main class="px-4 py-16 mx-auto max-w-7xl">
 	{#if $session}
 		<button class="btn-big" onclick={() => createPost = !createPost}>Create Post</button>
 	{/if}
@@ -20,5 +20,5 @@
 	{#if $session && createPost}
 		<Create />
 	{/if}
-	<ForumFeed />
+	<ForumFeed { posts }/>
 </main>

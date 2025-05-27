@@ -24,9 +24,7 @@
 		<header class="flex items-center justify-between gap-4">
 			<div class="flex items-center">
 				<div class="flex flex-col gap-2">
-					<span class="btn-nav text-2xl font-semibold"
-						>{post.user.name}</span
-					>
+					<span class="btn-nav text-2xl font-semibold">{post.user.name}</span>
 					<time class="text-sm font-light" datetime={post.createdAt}>
 						{formatDate(post.createdAt)}
 					</time>
@@ -69,11 +67,11 @@
 	{/if}
 
 	{#if comments}
-		<CommentFeed {comments} />
-	{:else}
 		<section class="card-setup flex flex-col gap-2 p-8">
 			<h2 class="mb-4 text-3xl text-white">Comments</h2>
 			<p class="muted">No comments yet. Be the first to leave one!</p>
 		</section>
+	{:else}
+		<CommentFeed {comments} />
 	{/if}
 </main>

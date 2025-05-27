@@ -15,50 +15,50 @@
 	}
 </script>
 
-<header class="flex h-16 items-center p-4">
-	<div class="mx-auto flex w-full max-w-7xl justify-between">
+<header
+	class="bg-base border-muted mx-auto flex h-16 w-full max-w-7xl items-center justify-between p-4"
+>
+	<button
+		type="button"
+		aria-label="Go to home page"
+		onclick={() => goto('/')}
+		class="cursor-pointer"
+	>
+		<img src="/images/virarith.png" alt="" class="w-24" />
+	</button>
+	<nav class="flex items-center gap-6">
+		<button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto('/')}>
+			Home
+		</button>
 		<button
 			type="button"
-			aria-label="Go to home page"
-			onclick={() => goto('/')}
-			class="cursor-pointer"
+			aria-label="Go to forum page"
+			class="btn-nav"
+			onclick={() => goto('/pages/forum')}>Forums</button
 		>
-			<img src="/images/virarith.png" alt="" class="w-24" />
-		</button>
-		<nav class="flex items-center gap-6">
-			<button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto('/')}
-				>Home</button
-			>
+		<button
+			type="button"
+			aria-label="Go to log in"
+			class="btn-nav"
+			onclick={() => goto('/pages/dynmap')}>Dynmap</button
+		>
+		<button
+			type="button"
+			aria-label="Go to log in"
+			class="btn-nav"
+			onclick={() => goto('/pages/wiki')}>Wiki</button
+		>
+		{#if !$session.data}
 			<button
 				type="button"
-				aria-label="Go to forum page"
-				class="btn-nav"
-				onclick={() => goto('/pages/forum')}>Forums</button
+				aria-label="Log In"
+				onclick={() => goto('/pages/login')}
+				class="btn-small">Log In</button
 			>
-			<button
-				type="button"
-				aria-label="Go to log in"
-				class="btn-nav"
-				onclick={() => goto('/pages/dynmap')}>Dynmap</button
+		{:else}
+			<button type="button" aria-label="Log Out" onclick={() => signOut()} class="btn-small"
+				>Log Out</button
 			>
-			<button
-				type="button"
-				aria-label="Go to log in"
-				class="btn-nav"
-				onclick={() => goto('/pages/wiki')}>Wiki</button
-			>
-			{#if !$session.data}
-				<button
-					type="button"
-					aria-label="Log In"
-					onclick={() => goto('/pages/login')}
-					class="btn-small">Log In</button
-				>
-			{:else}
-				<button type="button" aria-label="Log Out" onclick={() => signOut()} class="btn-small"
-					>Log Out</button
-				>
-			{/if}
-		</nav>
-	</div>
+		{/if}
+	</nav>
 </header>

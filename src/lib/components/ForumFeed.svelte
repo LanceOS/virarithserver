@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	let { loadedPosts } = $props();
+	let { posts } = $props();
+
 
 	// Formatted date
 	function formatDate(dateString: string) {
@@ -76,13 +77,11 @@
 	{/each}
 {/snippet}
 
-<section class="flex flex-col w-full">
-	<header class="mb-6 flex flex-col gap-2">
-		<h2 class="text-4xl text-white">Change Logs</h2>
-		<p class="muted text-lg">Stay updated with the latest changes and improvements</p>
-	</header>
-
+<section class="flex flex-col w-full p-8">
+	<div>
+		
+	</div>
 	<div class="flex flex-col gap-6">
-		{@render Feed(loadedPosts.posts)}
+		{@render Feed(posts.posts)}
 	</div>
 </section>
