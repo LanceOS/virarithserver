@@ -2,7 +2,6 @@
 import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { comments, type NewComment } from '$lib/schemas/Comments.ts';
-import Sentry from '$lib/tools/Sentry.ts';
 
 export const GET = async () => {
     return new Response((""), {
@@ -42,7 +41,6 @@ export const POST = async ({ request }): Promise<Response> => {
         })
     }
     catch(error: unknown) {
-        Sentry.error(error)
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "Failed to create post!",
