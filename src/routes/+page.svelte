@@ -12,8 +12,6 @@
 	let isPaginationLoading = $state(false);
 	let error = $state<string | null>(null);
 
-	const session = authClient.useSession();
-
 	let posts: any = $state();
 	let pagination: any = $state();
 

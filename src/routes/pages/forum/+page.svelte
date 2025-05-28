@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client.ts';
 	import Create from '$lib/components/Create.svelte';
-	import ForumFeed from '$lib/components/ForumFeed.svelte';
+	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
+	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
 	import Hero from '$lib/components/landing/Hero.svelte';
 	import PostClient from '$lib/tools/PostClient.ts';
@@ -17,10 +18,10 @@
 
 	let posts: any = $state();
 	let pagination: any = $state();
-
-	$effect(() => {
-		console.log(pagination);
-	});
+		
+	const scrollToTop = () => {
+		window.scrollTo(0, 0)
+	}
 
 	const increasePage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
@@ -41,6 +42,7 @@
 			console.error('Error loading next page:', err);
 		} finally {
 			isPaginationLoading = false;
+			scrollToTop()
 		}
 	};
 
@@ -62,6 +64,7 @@
 			console.error('Error loading previous page:', err);
 		} finally {
 			isPaginationLoading = false;
+			scrollToTop()
 		}
 	};
 
@@ -133,40 +136,8 @@
 				{/if}
 			</div>
 
-			<div class="flex items-center gap-4">
-				<button
-					onclick={() => decrementPage()}
-					disabled={!pagination.hasPrevious || isPaginationLoading}
-					type="button"
-					aria-label="Previous Page"
-					class={`${!pagination.hasPrevious || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-				>
-					{#if isPaginationLoading}
-						<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-					{:else}
-						<Icon icon="material-symbols:arrow-left-alt" />
-					{/if}
-				</button>
-				<p>{pagination.currentPage}</p>
-				<p>...</p>
-				{#if pagination.hasNext}
-					<p>{pagination.totalPages}</p>
-				{:else}
-					<p>...</p>
-				{/if}
-				<button
-					onclick={() => increasePage()}
-					disabled={!pagination.hasNext || isPaginationLoading}
-					type="button"
-					aria-label="Next Page"
-					class={`${!pagination.hasNext || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-				>
-					{#if isPaginationLoading}
-						<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-					{:else}
-						<Icon icon="material-symbols:arrow-right-alt" />
-					{/if}
-				</button>
+			<div class="flex items-center justify-between">
+				<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 			</div>
 
 			<div class="relative">
@@ -179,41 +150,7 @@
 				<ForumFeed {posts} />
 			</div>
 
-			<div class="flex items-center gap-4">
-				<button
-					onclick={() => decrementPage()}
-					disabled={!pagination.hasPrevious || isPaginationLoading}
-					type="button"
-					aria-label="Previous Page"
-					class={`${!pagination.hasPrevious || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-				>
-					{#if isPaginationLoading}
-						<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-					{:else}
-						<Icon icon="material-symbols:arrow-left-alt" />
-					{/if}
-				</button>
-				<p>{pagination.currentPage}</p>
-				<p>...</p>
-				{#if pagination.hasNext}
-					<p>{pagination.totalPages}</p>
-				{:else}
-					<p>...</p>
-				{/if}
-				<button
-					onclick={() => increasePage()}
-					disabled={!pagination.hasNext || isPaginationLoading}
-					type="button"
-					aria-label="Next Page"
-					class={`${!pagination.hasNext || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-				>
-					{#if isPaginationLoading}
-						<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-					{:else}
-						<Icon icon="material-symbols:arrow-right-alt" />
-					{/if}
-				</button>
-			</div>
+			<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 		</div>
 	{/if}
 </main>
