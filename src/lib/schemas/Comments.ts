@@ -13,4 +13,4 @@ export const comments = pgTable("comments", {
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 });
 
-export type NewComment = InferInsertModel<typeof comments>;
+export type CommentSchema = InferInsertModel<typeof comments>;

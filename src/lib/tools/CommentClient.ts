@@ -1,5 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
-import type { NewComment } from "$lib/schemas/Comments.ts";
+import type { CommentSchema } from "$lib/schemas/Comments.ts";
 
 
 class CommentClient {
@@ -10,7 +10,7 @@ class CommentClient {
         this.instance = this;
     }
 
-    static async createComment(params: NewComment) {
+    static async createComment(params: CommentSchema) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/comments/create/create_comment`, {
                 headers: {

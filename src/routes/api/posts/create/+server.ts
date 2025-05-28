@@ -1,6 +1,6 @@
 import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { posts, type NewPost } from '$lib/schemas/Posts.ts';
+import { posts, type PostSchema } from '$lib/schemas/Posts.ts';
 
 
 export const POST = async ({ request }): Promise<Response> => {
@@ -15,7 +15,7 @@ export const POST = async ({ request }): Promise<Response> => {
         //     throw new Error("User must be logged in to create a new post!")
         // }
         
-        const body: NewPost = await request.json();
+        const body: PostSchema = await request.json();
 
         if(!body) {
             throw new Error("Failed to get data for post")

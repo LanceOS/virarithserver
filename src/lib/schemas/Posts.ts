@@ -16,4 +16,4 @@ export const posts = pgTable('posts', {
 
 
 
-export type NewPost = InferInsertModel<typeof posts>;
+export type PostSchema = InferInsertModel<typeof posts>;

@@ -25,6 +25,10 @@
 	color: var(--color-muted);
 }
 
+.content {
+    color: var(--color-base-content);
+}
+
 @layer utilities {
 	@keyframes fade-up {
 		from {

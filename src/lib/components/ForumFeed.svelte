@@ -77,11 +77,11 @@
 	{/each}
 {/snippet}
 
-<section class="flex flex-col w-full p-8">
+<section class="flex flex-col w-full">
 	<div>
 		
 	</div>
 	<div class="flex flex-col gap-6">
-		{@render Feed(posts.posts)}
+		{@render Feed(posts)}
 	</div>
 </section>

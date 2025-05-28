@@ -4,7 +4,7 @@ import type { PageServerLoad } from "./$types.js";
 export const load: PageServerLoad = async ({ url }) => {
     try {
 
-        const posts = await PostClient.getAllPosts({ page: 1 });
+        const posts = await PostClient.getAllPosts(1);
         return {
             posts
         };

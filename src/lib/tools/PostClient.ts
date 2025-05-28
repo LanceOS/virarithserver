@@ -1,5 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
-import type { NewPost } from "$lib/schemas/Posts.ts";
+import type { PostSchema } from "$lib/schemas/Posts.ts";
 
 
 interface IPostParams {
@@ -22,7 +22,7 @@ class PostClient {
      * @param post 
      * @returns Returns the created post
      */
-    static async createPost(post: NewPost) {
+    static async createPost(post: PostSchema) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
                 headers: {
@@ -39,7 +39,7 @@ class PostClient {
     }
 
 
-    static async updatePost(post: NewPost) {
+    static async updatePost(post: PostSchema) {
         console.log(post)
     }
 
@@ -47,9 +47,9 @@ class PostClient {
      * 
      * @returns Fetches all posts from the database
      */
-    static async getAllPosts(params: IPostParams) {
+    static async getAllPosts(page: number) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_all?page=${params.page}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_all?page=${page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
