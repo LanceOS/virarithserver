@@ -1,5 +1,6 @@
+import { PUBLIC_URL } from "$env/static/public";
 import type { CommentSchema } from "$lib/schemas/Comments.ts";
-import 'dotenv/config'
+
 
 class CommentClient {
     instance: CommentClient | null = null;
@@ -11,7 +12,7 @@ class CommentClient {
 
     static async createComment(params: CommentSchema) {
         try {
-            const response = await fetch(`${process.env.PROD_URL}/api/comments/create/create_comment`, {
+            const response = await fetch(`${PUBLIC_URL}/api/comments/create/create_comment`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -28,7 +29,7 @@ class CommentClient {
 
     static async getCommentsByPost(params: string) {
         try {
-            const response = await fetch(`${process.env.PROD_URL}/api/comments/retrieve/get_by_post?postId=${params}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/comments/retrieve/get_by_post?postId=${params}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
