@@ -68,13 +68,13 @@ class PostClient {
      * @param params 
      * @returns Fetches posts sorted by the selected category
      */
-    static async getPostsByCategory(params: IPostParams) {
+    static async getPostsByCategory(category: string, page: number) {
         try {
-            if(!params.category) {
+            if(!category) {
                 throw new Error("A category must be provided.")
             }
 
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_cat?category=${params.category}&page=${params.page}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_cat?category=${category}&page=${page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },

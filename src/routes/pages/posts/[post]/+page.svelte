@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import CommentFeed from '$lib/components/CommentFeed.svelte';
+	import Icon from '@iconify/svelte';
 
 	const session = authClient.useSession();
 
@@ -20,24 +22,32 @@
 </script>
 
 <main class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-16">
+	<button
+		type="button"
+		aria-label="Return Home"
+		class="cursor-pointer self-end -mt-10"
+		onclick={() => {
+			goto('/');
+		}}><Icon icon="stash:signout-alt" class="text-5xl" /></button
+	>
 	<article class="card-setup flex flex-col gap-4 p-8">
 		<header class="flex items-center justify-between gap-4">
 			<div class="flex items-center">
-				<div class="flex flex-col gap-2">
-					<span class="btn-nav text-2xl font-semibold">{post.user.name}</span>
-					<time class="text-sm font-light" datetime={post.createdAt}>
+				<div class="flex flex-col">
+					<span class="btn-nav font-semibold sm:text-2xl">{post.user.name}</span>
+					<time class="text-xs font-light sm:text-sm" datetime={post.createdAt}>
 						{formatDate(post.createdAt)}
 					</time>
 				</div>
 			</div>
-			<span class="text-xl">{post.category}</span>
+			<span class="text-md sm:text-xl">{post.category}</span>
 		</header>
 
 		<div class="mb-2 flex flex-col gap-4">
-			<h1 class="text-4xl">
+			<h1 class="text-xl sm:text-4xl">
 				{post.title}
 			</h1>
-			<p class="text-xl">
+			<p class="text-sm sm:text-xl">
 				{post.content}
 			</p>
 		</div>
@@ -45,17 +55,17 @@
 		<footer class="flex justify-between">
 			<div class="flex items-center gap-4">
 				<button class="stat-item">
-					<svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-						<path
-							d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-						/>
-					</svg>
+					<Icon
+						icon="material-symbols:thumb-up"
+						class="text-lg duration-200 active:text-blue-700 sm:text-2xl"
+					/>
 					{post.likesCount || 0} Likes
 				</button>
 				<span class="stat-item">
-					<svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-						<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-					</svg>
+					<Icon
+						icon="material-symbols:comment-sharp"
+						class="text-lg duration-200 active:text-blue-700 sm:text-2xl"
+					/>
 					{post.commentsCount || 0} Comments
 				</span>
 			</div>
@@ -68,8 +78,8 @@
 
 	{#if comments}
 		<section class="card-setup flex flex-col gap-2 p-8">
-			<h2 class="mb-4 text-3xl text-white">Comments</h2>
-			<p class="muted">No comments yet. Be the first to leave one!</p>
+			<h2 class="mb-4 text-xl text-white sm:text-3xl">Comments</h2>
+			<p class="muted text-sm sm:text-xl">No comments yet. Be the first to leave one!</p>
 		</section>
 	{:else}
 		<CommentFeed {comments} />

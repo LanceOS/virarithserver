@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { authClient } from '$lib/auth-client.ts';
-	import ForumFeed from '$lib/components/ForumFeed.svelte';
+	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
+	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
 	import Hero from '$lib/components/landing/Hero.svelte';
 	import Links from '$lib/components/Links.svelte';
@@ -15,9 +17,9 @@
 	let posts: any = $state();
 	let pagination: any = $state();
 
-	$effect(() => {
-		console.log(pagination);
-	});
+	const scrollToTop = () => {
+		window.scrollTo(0, 0)
+	}
 
 	const increasePage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
@@ -30,7 +32,7 @@
 
 		try {
 			const nextPage = pagination.currentPage + 1;
-			const response = await PostClient.getPostsByCategory({ category: "devlogs", page: nextPage });
+			const response = await PostClient.getPostsByCategory('devlogs', nextPage);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -38,6 +40,7 @@
 			console.error('Error loading next page:', err);
 		} finally {
 			isPaginationLoading = false;
+			scrollToTop()
 		}
 	};
 
@@ -51,7 +54,7 @@
 
 		try {
 			const lastPage = pagination.currentPage - 1;
-			const response = await PostClient.getPostsByCategory({ category: "devlogs", page: lastPage });
+			const response = await PostClient.getPostsByCategory('devlogs', lastPage);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -59,6 +62,7 @@
 			console.error('Error loading previous page:', err);
 		} finally {
 			isPaginationLoading = false;
+			scrollToTop()
 		}
 	};
 
@@ -67,7 +71,7 @@
 		error = null;
 
 		try {
-			const response = await PostClient.getPostsByCategory({ category: "devlogs", page: 1 });
+			const response = await PostClient.getPostsByCategory('devlogs', 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -80,7 +84,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await PostClient.getPostsByCategory({ category: "devlogs", page: 1 });
+			const response = await PostClient.getPostsByCategory('devlogs', 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -123,45 +127,11 @@
 					{/if}
 
 					<div class="flex flex-col gap-2">
-						<h2 class="text-4xl">Devlogs</h2>
+						<h2 class="text-4xl">Announcements</h2>
 						<p class="muted">See the latest updates from Virarith</p>
 					</div>
 
-					<div class="flex items-center gap-4">
-						<button
-							onclick={() => decrementPage()}
-							disabled={!pagination.hasPrevious || isPaginationLoading}
-							type="button"
-							aria-label="Previous Page"
-							class={`${!pagination.hasPrevious || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-						>
-							{#if isPaginationLoading}
-								<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-							{:else}
-								<Icon icon="material-symbols:arrow-left-alt" />
-							{/if}
-						</button>
-						<p>{pagination.currentPage}</p>
-						<p>...</p>
-						{#if pagination.hasNext}
-							<p>{pagination.totalPages}</p>
-						{:else}
-							<p>...</p>
-						{/if}
-						<button
-							onclick={() => increasePage()}
-							disabled={!pagination.hasNext || isPaginationLoading}
-							type="button"
-							aria-label="Next Page"
-							class={`${!pagination.hasNext || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-						>
-							{#if isPaginationLoading}
-								<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-							{:else}
-								<Icon icon="material-symbols:arrow-right-alt" />
-							{/if}
-						</button>
-					</div>
+					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 
 					<div class="relative">
 						{#if isPaginationLoading}
@@ -173,44 +143,9 @@
 						<ForumFeed {posts} />
 					</div>
 
-					<div class="flex items-center gap-4">
-						<button
-							onclick={() => decrementPage()}
-							disabled={!pagination.hasPrevious || isPaginationLoading}
-							type="button"
-							aria-label="Previous Page"
-							class={`${!pagination.hasPrevious || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-						>
-							{#if isPaginationLoading}
-								<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-							{:else}
-								<Icon icon="material-symbols:arrow-left-alt" />
-							{/if}
-						</button>
-						<p>{pagination.currentPage}</p>
-						<p>...</p>
-						{#if pagination.hasNext}
-							<p>{pagination.totalPages}</p>
-						{:else}
-							<p>...</p>
-						{/if}
-						<button
-							onclick={() => increasePage()}
-							disabled={!pagination.hasNext || isPaginationLoading}
-							type="button"
-							aria-label="Next Page"
-							class={`${!pagination.hasNext || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
-						>
-							{#if isPaginationLoading}
-								<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
-							{:else}
-								<Icon icon="material-symbols:arrow-right-alt" />
-							{/if}
-						</button>
-					</div>
+					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 				</div>
 			{/if}
-			<ForumFeed {posts} />
 		</div>
 
 		<Links />

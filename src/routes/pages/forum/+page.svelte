@@ -18,10 +18,21 @@
 
 	let posts: any = $state();
 	let pagination: any = $state();
-		
+	let category = $state('all');
+	let categoryList: any = $state()
+
 	const scrollToTop = () => {
-		window.scrollTo(0, 0)
-	}
+		window.scrollTo(0, 0);
+	};
+
+
+	const fetchPosts = async (page: number) => {
+		if (category !== 'all') {
+			return await PostClient.getPostsByCategory(category, page);
+		} else {
+			return await PostClient.getAllPosts(page);
+		}
+	};
 
 	const increasePage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
@@ -34,7 +45,7 @@
 
 		try {
 			const page = pagination.currentPage + 1;
-			const response = await PostClient.getAllPosts(page);
+			const response = await fetchPosts(page);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -42,7 +53,7 @@
 			console.error('Error loading next page:', err);
 		} finally {
 			isPaginationLoading = false;
-			scrollToTop()
+			scrollToTop();
 		}
 	};
 
@@ -56,7 +67,7 @@
 
 		try {
 			const page = pagination.currentPage - 1;
-			const response = await PostClient.getAllPosts(page);
+			const response = await fetchPosts(page);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -64,7 +75,7 @@
 			console.error('Error loading previous page:', err);
 		} finally {
 			isPaginationLoading = false;
-			scrollToTop()
+			scrollToTop();
 		}
 	};
 
@@ -101,56 +112,64 @@
 <Header />
 <main class="border-muted mx-auto mb-16 max-w-7xl">
 	<Hero />
+	<div class="bg-base mx-auto flex w-full gap-8 p-12">
+		<div class="w-full">
+			{#if isInitialLoading}
+				<div class="flex min-h-64 flex-col items-center justify-center gap-4">
+					<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
+					<p class="text-muted">Loading posts...</p>
+				</div>
+			{:else if error && !posts}
+				<div class="flex min-h-64 flex-col items-center justify-center gap-4">
+					<Icon icon="material-symbols:error-outline" class="text-4xl text-red-500" />
+					<p class="text-center text-red-500">{error}</p>
+					<button
+						class="btn-big rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						onclick={retryLoading}
+					>
+						Try Again
+					</button>
+				</div>
+			{:else if posts && pagination}
+				<div class="flex flex-col gap-4">
+					{#if error}
+						<div class="mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700">
+							<p>{error}</p>
+						</div>
+					{/if}
 
-	{#if isInitialLoading}
-		<div class="flex min-h-64 flex-col items-center justify-center gap-4 p-8">
-			<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
-			<p class="text-muted">Loading posts...</p>
-		</div>
-	{:else if error && !posts}
-		<div class="flex min-h-64 flex-col items-center justify-center gap-4 p-8">
-			<Icon icon="material-symbols:error-outline" class="text-4xl text-red-500" />
-			<p class="text-center text-red-500">{error}</p>
-			<button
-				class="btn-big rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-				onclick={retryLoading}
-			>
-				Try Again
-			</button>
-		</div>
-	{:else if posts && pagination}
-		<div class="flex flex-col gap-4 p-8">
-			{#if error}
-				<div class="mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700">
-					<p>{error}</p>
+					<div class="flex items-center justify-between">
+						<h2 class="text-4xl">Virarith Forums</h2>
+						{#if $session}
+							<button class="btn-small" onclick={() => (createPost = !createPost)}>Create Post</button
+							>
+						{/if}
+
+						{#if $session && createPost}
+							<Create />
+						{/if}
+					</div>
+
+					<div class="flex items-center justify-between">
+						<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+					</div>
+
+					<div class="relative">
+						{#if isPaginationLoading}
+							<div class="flex min-h-64 flex-col items-center justify-center gap-4">
+								<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
+								<p class="text-muted">Loading posts...</p>
+							</div>
+						{/if}
+						<ForumFeed {posts} />
+					</div>
+
+					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 				</div>
 			{/if}
-
-			<div class="">
-				{#if $session}
-					<button class="btn-big" onclick={() => (createPost = !createPost)}>Create Post</button>
-				{/if}
-
-				{#if $session && createPost}
-					<Create />
-				{/if}
-			</div>
-
-			<div class="flex items-center justify-between">
-				<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
-			</div>
-
-			<div class="relative">
-				{#if isPaginationLoading}
-					<div class="flex min-h-64 flex-col items-center justify-center gap-4 p-8">
-						<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
-						<p class="text-muted">Loading posts...</p>
-					</div>
-				{/if}
-				<ForumFeed {posts} />
-			</div>
-
-			<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 		</div>
-	{/if}
+		<div class="w-1/4 flex flex-col">
+			<h4 class="text-2xl">Topics</h4>
+		</div>
+	</div>
 </main>

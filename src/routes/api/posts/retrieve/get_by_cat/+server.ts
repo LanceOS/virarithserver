@@ -68,7 +68,11 @@ export const GET = async ({ request }): Promise<Response> => {
         const [{ count: totalCount }] = await DrizzleDB
             .select({ count: count() })
             .from(posts)
-            .where(eq(posts.isDeleted, false));
+            .where(and(
+                eq(posts.category, category),
+                eq(posts.isDeleted, false)
+            ));
+        
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 

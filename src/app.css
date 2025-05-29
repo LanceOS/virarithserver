@@ -5,20 +5,20 @@
     this color of the site, have Gemini generate new colors and replace these here
     */
 :root {
-	--color-base: #121212; /* Nearly Black */
-	--color-base-content: #e8e8e8;
+	--color-base: #1a1d1f; /* Deep Charcoal Stone */
+	--color-base-content: #e3e2de; /* Brighter Mortar Gray */
 
-	--color-card: #1e1e1e; /* Dark Gray */
-	--color-card-border: #ffffff0d; /* Subtle white border */
+	--color-card: #262a2c; /* Polished Basalt */
+	--color-card-border: #ffffff14; /* Light edge for depth */
 
-	--color-input: #1e1e1e; /* Dark Gray */
-	--color-input-content: #f0f0f0; /* Slightly Lighter Gray */
+	--color-input: #2f3336; /* Weathered Cobblestone */
+	--color-input-content: #f0efec; /* Soft Light Gray */
 
-	--color-primary: #5f73e9; /* Soft Violet (inspired by Material Design) */
-	--color-secondary: #3952e0; /* Teal (inspired by Material Design) */
+	--color-primary: #6faa6f; /* Vibrant Moss Green */
+	--color-secondary: #5d7f9a; /* Cool Lapis Blue */
 
-	--color-error: #b14458; /* Muted Rose Red */
-	--color-muted: #6b6b6b; /* Medium Gray */
+	--color-error: #b05a5a; /* Brighter Redstone Dust */
+	--color-muted: #7c8186; /* Steel Gray */
 }
 
 .muted {
@@ -26,7 +26,7 @@
 }
 
 .content {
-    color: var(--color-base-content);
+	color: var(--color-base-content);
 }
 
 @layer utilities {
