@@ -1,5 +1,4 @@
-import { PUBLIC_URL } from "$env/static/public";
-import type { ProfileSchema } from "$lib/schemas/Profile.ts";
+import 'dotenv/config'
 
 
 
@@ -13,7 +12,7 @@ class ProfileClient {
 
     static async getUserProfile(userId: string) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/profile/retrieve?userId=${userId}`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/profile/retrieve?userId=${userId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -35,7 +34,7 @@ class ProfileClient {
     static async createNewProfile(userId: string) {
         try {
 
-            const response = await fetch(`${PUBLIC_URL}/api/profile/create`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/profile/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

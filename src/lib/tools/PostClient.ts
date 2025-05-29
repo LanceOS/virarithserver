@@ -1,5 +1,5 @@
-import { PUBLIC_URL } from "$env/static/public";
 import type { PostSchema } from "$lib/schemas/Posts.ts";
+import 'dotenv/config'
 
 
 interface IPostParams {
@@ -24,7 +24,7 @@ class PostClient {
      */
     static async createPost(post: PostSchema) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/posts/create`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -49,7 +49,7 @@ class PostClient {
      */
     static async getAllPosts(page: number) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_all?page=${page}`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/posts/retrieve/get_all?page=${page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -74,7 +74,7 @@ class PostClient {
                 throw new Error("A category must be provided.")
             }
 
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_cat?category=${category}&page=${page}`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/posts/retrieve/get_by_cat?category=${category}&page=${page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -94,7 +94,7 @@ class PostClient {
      */
     static async getPostsByUser(params: IPostParams) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_user?userId=${params.userId}&page=${params.page}`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/posts/retrieve/get_by_user?userId=${params.userId}&page=${params.page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -115,7 +115,7 @@ class PostClient {
      */
     static async getPostById(postId: string) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_id?postId=${postId}`, {
+            const response = await fetch(`${process.env.PROD_URL}/api/posts/retrieve/get_by_id?postId=${postId}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
