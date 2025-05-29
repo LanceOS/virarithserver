@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { authClient } from '$lib/auth-client.ts';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
@@ -112,7 +111,7 @@
 					<Icon icon="material-symbols:error-outline" class="text-4xl text-red-500" />
 					<p class="text-center text-red-500">{error}</p>
 					<button
-						class="btn-big rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+						class="btn-big rounded bg-bluge-500 px-4 py-2 text-white hover:bg-blue-600"
 						onclick={retryLoading}
 					>
 						Try Again

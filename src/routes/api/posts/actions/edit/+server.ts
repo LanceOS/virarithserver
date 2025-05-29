@@ -7,14 +7,18 @@ export const PUT = async ({ request }) => {
     try {
         const body = await request.json()
 
+        if (!body) {
+            throw new Error(`Post information was not provided ${body}`);
+        }
+
         const response = await DrizzleDB.update(posts).set({
             title: body.title,
             content: body.content
         })
-        .where(eq(posts.id, body.postId))
-        .returning()
+            .where(eq(posts.id, body.postId))
+            .returning()
 
-        if(!response) {
+        if (!response) {
             throw new Error(`Failed to update post in database ${response}`)
         }
 
@@ -27,7 +31,7 @@ export const PUT = async ({ request }) => {
             }
         })
     }
-    catch(error) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",
