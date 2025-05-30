@@ -70,6 +70,7 @@ h1 {
 	background-color: var(--color-base);
 }
 
+
 .border-muted {
 	border: 1px solid var(--color-card-border);
 }
@@ -107,6 +108,20 @@ h1 {
 	background-color: var(--color-secondary);
 }
 
+.btn-small-active {
+	background-color: var(--color-secondary);
+	color: var(--color-base-content);
+	padding: 0.5rem 2rem;
+	font-weight: bold;
+
+	cursor: pointer;
+	transition: 200ms;
+}
+
+
+
+
+
 .btn-big {
 	background-color: var(--color-primary);
 	color: var(--color-base-content);
@@ -120,6 +135,20 @@ h1 {
 .btn-big:hover {
 	background-color: var(--color-secondary);
 }
+
+.btn-big {
+	background-color: var(--color-secondary);
+	color: var(--color-base-content);
+	padding: 1rem 3.5rem;
+	font-weight: bold;
+
+	cursor: pointer;
+	transition: 200ms;
+}
+
+
+
+
 
 .btn-nav {
 	cursor: pointer;

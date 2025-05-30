@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client.ts';
+	import CategoryFilter from '$lib/components/CategoryFilter.svelte';
 	import Create from '$lib/components/Create.svelte';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
 	import Hero from '$lib/components/landing/Hero.svelte';
+	import CategoryClient from '$lib/tools/CategoryClient.ts';
 	import PostClient from '$lib/tools/PostClient.ts';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
@@ -18,25 +20,33 @@
 
 	let posts: any = $state();
 	let pagination: any = $state();
-	let category = $state('all');
-	let categoryList: any = $state()
+	let selectedCategory: string = $state("all");
+	let categoryList: any = $state();
 
 	const scrollToTop = () => {
 		window.scrollTo(0, 0);
 	};
 
+	const changeCategory = async (selected: string) => {
+		selectedCategory = selected.toLocaleLowerCase();
+		await fetchPosts(pagination.currentPage)
+		return selectedCategory;
+	};
 
 	const fetchPosts = async (page: number) => {
-		if (category !== 'all') {
-			return await PostClient.getPostsByCategory(category, page);
+		if (selectedCategory !== 'all') {
+			const response =  await PostClient.getPostsByCategory(selectedCategory, page);
+			posts = response.posts;
+			pagination = response.pagination;
 		} else {
-			return await PostClient.getAllPosts(page);
+			const response = await PostClient.getAllPosts(page);
+			posts = response.posts;
+			pagination = response.pagination;
 		}
 	};
 
 	const increasePage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
-			console.log('returning');
 			return;
 		}
 
@@ -45,9 +55,7 @@
 
 		try {
 			const page = pagination.currentPage + 1;
-			const response = await fetchPosts(page);
-			posts = response.posts;
-			pagination = response.pagination;
+			await fetchPosts(page);
 		} catch (err) {
 			error = 'Failed to load next page. Please try again.';
 			console.error('Error loading next page:', err);
@@ -67,9 +75,7 @@
 
 		try {
 			const page = pagination.currentPage - 1;
-			const response = await fetchPosts(page);
-			posts = response.posts;
-			pagination = response.pagination;
+			await fetchPosts(page);
 		} catch (err) {
 			error = 'Failed to load previous page. Please try again.';
 			console.error('Error loading previous page:', err);
@@ -97,9 +103,11 @@
 
 	onMount(async () => {
 		try {
-			const response = await PostClient.getAllPosts(1);
-			posts = response.posts;
-			pagination = response.pagination;
+			const postResponse = await PostClient.getAllPosts(1);
+			const categoryResponse = await CategoryClient.getCategories();
+			categoryList = categoryResponse;
+			posts = postResponse.posts;
+			pagination = postResponse.pagination;
 		} catch (err) {
 			error = 'Failed to load posts. Please check your connection and try again.';
 			console.error('Error loading posts:', err);
@@ -141,7 +149,8 @@
 					<div class="flex items-center justify-between">
 						<h2 class="text-4xl">Virarith Forums</h2>
 						{#if $session}
-							<button class="btn-small" onclick={() => (createPost = !createPost)}>Create Post</button
+							<button class="btn-small" onclick={() => (createPost = !createPost)}
+								>Create Post</button
 							>
 						{/if}
 
@@ -168,8 +177,11 @@
 				</div>
 			{/if}
 		</div>
-		<div class="w-1/4 flex flex-col">
+		<div class="flex w-1/4 flex-col gap-6">
 			<h4 class="text-2xl">Topics</h4>
+			{#if categoryList}
+				<CategoryFilter {categoryList} {changeCategory} {selectedCategory} />
+			{/if}
 		</div>
 	</div>
 </main>

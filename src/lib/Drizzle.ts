@@ -3,7 +3,6 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
 
-import * as changeLogs from "./schemas/ChangeLogs.ts";
 import * as comments from "./schemas/Comments.ts";
 import * as commentReply from "./schemas/CommentReply.ts";
 import * as posts from "./schemas/Posts.ts";
@@ -28,7 +27,6 @@ const pool = new Pool({
  * importing all schemas and combining them into an object
  */
 const schemas = {
-    ...changeLogs,
     ...comments,
     ...commentReply,
     ...posts,

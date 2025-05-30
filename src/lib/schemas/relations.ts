@@ -6,7 +6,6 @@ import { user } from "./authentication.ts";
 import { comments } from "./Comments.ts";
 import { commentReply } from "./CommentReply.ts";
 import { likes } from "./Likes.ts";
-import { changeLogs } from "./ChangeLogs.ts";
 import { profile } from "./Profile.ts";
 
 
@@ -30,8 +29,6 @@ export const usersRelations = relations(user, ({ many, one }) => ({ // Added 'on
     commentReplies: many(commentReply),
     // A user can give many likes
     likes: many(likes),
-    // A user can create many change logs
-    changeLogs: many(changeLogs),
     // A user has one profile
     profile: one(profile, {
         fields: [user.id],
@@ -88,14 +85,6 @@ export const likesRelations = relations(likes, ({ one }) => ({
     commentReply: one(commentReply, {
         fields: [likes.commentReplyId],
         references: [commentReply.id],
-    }),
-}));
-
-
-export const changeLogsRelations = relations(changeLogs, ({ one }) => ({
-    user: one(user, {
-        fields: [changeLogs.userId],
-        references: [user.id],
     }),
 }));
 

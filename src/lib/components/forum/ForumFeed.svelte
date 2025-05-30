@@ -49,14 +49,14 @@
 						<button class="stat-item">
 							<Icon
 								icon="material-symbols:thumb-up"
-								class="text-lg duration-200 active:text-blue-700 sm:text-2xl"
+								class="text-xl duration-200 active:text-blue-400 sm:text-xl"
 							/>
 							{post.likesCount || 0} Likes
 						</button>
 						<span class="stat-item">
 							<Icon
 								icon="material-symbols:comment-sharp"
-								class="text-lg duration-200 active:text-blue-700 sm:text-2xl"
+								class="text-xl duration-200 sm:text-xl"
 							/>
 							{post.commentsCount || 0} Comments
 						</span>
