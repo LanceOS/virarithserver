@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import CategoryFilter from '$lib/components/CategoryFilter.svelte';
-	import Create from '$lib/components/CreateComment.svelte';
 	import Filter from '$lib/components/forum/Filter.svelte';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';

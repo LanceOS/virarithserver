@@ -16,17 +16,9 @@
 </script>
 
 <header
-	class="bg-base border-muted mx-auto flex h-16 w-full max-w-7xl items-center justify-between p-4"
+	class="bg-base border-muted mx-auto flex h-16 w-full max-w-7xl justify-end p-4"
 >
-	<button
-		type="button"
-		aria-label="Go to home page"
-		onclick={() => goto('/')}
-		class="cursor-pointer"
-	>
-		<img src="/images/virarith.png" alt="" class="w-24" />
-	</button>
-	<nav class="flex items-center gap-6">
+	<nav class="flex items-center gap-6 w-fit">
 		<button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto('/')}>
 			Home
 		</button>
@@ -40,7 +32,7 @@
 			type="button"
 			aria-label="Go to log in"
 			class="btn-nav"
-			onclick={() => goto('/pages/dynmap')}>Dynmap</button
+			onclick={() => goto('/pages/dynmap')}>Map</button
 		>
 		<button
 			type="button"

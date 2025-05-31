@@ -1,5 +1,8 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client.ts";
+	import CommentFeed from "./CommentFeed.svelte";
+    
+    let { addComment, isSubmittingComment } = $props()
 
     let body = $state('');
     let isFocused = $state(false);
@@ -23,15 +26,16 @@
         }
     }
 
-    function handleSubmit(event: Event) {
+    const handleSubmit = async (event: Event) => {
 		event?.preventDefault()
+        await addComment(body) // Pass the body to addComment
         console.log('Comment submitted:', body);
         body = '';
         isFocused = false;
     }
 </script>
 
-<section class="card-setup p-6 space-y-4 animate-fade-up">
+<section class="card-setup p-6 space-y-4">
 	<p class="font-semibold">Create Comment</p>
     <form class="flex flex-col gap-4" onsubmit={handleSubmit}>
         <div class="relative">
@@ -45,12 +49,14 @@
                     focus:border-[var(--color-primary)]
                     ${isFocused || body.length > 0 ? 'min-h-32' : 'min-h-12'} 
                     ${body.length > MAX_CHARS ? 'border-[var(--color-error)] focus:border-[var(--color-error)]' : ''}
+                    ${isSubmittingComment ? 'opacity-50 cursor-not-allowed' : ''}
                 `}
                 bind:value={body}
                 onfocus={handleFocus}
                 onblur={handleBlur}
                 oninput={autoGrow}
                 maxlength={MAX_CHARS}
+                disabled={isSubmittingComment}
             >
             </textarea>
 
@@ -85,18 +91,35 @@
             <button
                 type="submit"
                 class={`
-                    font-bold text-sm
+                    font-bold text-sm flex items-center gap-2
                     transition-all duration-200 ease-in-out
                     focus:outline-none
-                    ${body.length === 0 || body.length > MAX_CHARS
+                    ${body.length === 0 || body.length > MAX_CHARS || isSubmittingComment
                         ? 'bg-[var(--color-input)] muted cursor-not-allowed opacity-50 border-muted p-2'
                         : 'btn-small hover:transform hover:scale-[1.02] active:scale-[0.98]'
                     }
                 `}
-                disabled={body.length === 0 || body.length > MAX_CHARS}
+                disabled={body.length === 0 || body.length > MAX_CHARS || isSubmittingComment}
             >
-                Post Comment
+                {#if isSubmittingComment}
+                    <div class="h-4 w-4 animate-spin rounded-full border-b-2 border-current"></div>
+                    Posting...
+                {:else}
+                    Post Comment
+                {/if}
             </button>
         </div>
     </form>
 </section>
+
+<style>
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    
+    .animate-spin {
+        animation: spin 1s linear infinite;
+    }
+</style>

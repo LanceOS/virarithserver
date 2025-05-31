@@ -11,6 +11,7 @@ import * as reports from "./schemas/Topic.ts";
 import * as topic from "./schemas/Topic.ts"
 import * as relations from "./schemas/relations.ts"
 import * as authentication from "./schemas/authentication.ts"
+import * as notifications from "./schemas/Notifications.ts"
 
 const databaseUrl = `postgresql://${process.env.POSTGRES_USER!}:${process.env.POSTGRES_PASSWORD!}@localhost:5432/${process.env.POSTGRES_DB!}`;
 
@@ -34,7 +35,8 @@ const schemas = {
     ...reports,
     ...topic,
     ...relations,
-    ...authentication
+    ...authentication,
+    ...notifications
 }
 
 export const DrizzleDB = drizzle(pool, { schema: schemas })

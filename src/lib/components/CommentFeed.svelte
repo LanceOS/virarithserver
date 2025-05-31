@@ -31,6 +31,6 @@
 	{/each}
 {/snippet}
 
-<section>
+<section class="flex flex-col gap-6">
 	{@render Comments(comments)}
 </section>

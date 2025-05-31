@@ -13,6 +13,7 @@ class CommentClient {
     static async createComment(params: CommentSchema) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/comments/create/create_comment`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -27,9 +28,9 @@ class CommentClient {
         }
     }
 
-    static async getCommentsByPost(params: string) {
+    static async getCommentsByPost(post: string) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/comments/retrieve/get_by_post?postId=${params}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/comments/retrieve/get_by_post?postId=${post}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },

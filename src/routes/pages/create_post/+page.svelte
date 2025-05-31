@@ -55,28 +55,27 @@
         }
     };
 
-    function autoGrow(event: Event) {
+    const autoGrow = (event: Event) => {
         const textarea = event.target as HTMLTextAreaElement;
         textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
     }
 
-    function handleContentFocus() {
+    const handleContentFocus = () => {
         isContentFocused = true;
     }
 
-    function handleContentBlur() {
+    const handleContentBlur = () => {
         if (content.length === 0) {
             isContentFocused = false;
         }
     }
 
-    // New focus/blur handlers for the title input
-    function handleTitleFocus() {
+    const handleTitleFocus = () => {
         isTitleFocused = true;
     }
 
-    function handleTitleBlur() {
+    const handleTitleBlur = () => {
         if (title.length === 0) {
             isTitleFocused = false;
         }
