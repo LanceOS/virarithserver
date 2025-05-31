@@ -32,7 +32,7 @@
 							</time>
 						</div>
 					</div>
-					<span class="text-sm font-medium">{post.category}</span>
+					<span class="text-sm font-medium">{post.category.toUpperCase()}</span>
 				</header>
 
 				<div class="flex flex-col gap-1">

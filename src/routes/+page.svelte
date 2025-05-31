@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client.ts';
+	import Filter from '$lib/components/forum/Filter.svelte';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
@@ -16,9 +17,24 @@
 	let posts: any = $state();
 	let pagination: any = $state();
 
+	let orderBy: string = $state('desc');
+
 	const scrollToTop = () => {
-		window.scrollTo(0, 0)
-	}
+		window.scrollTo(0, 0);
+	};
+
+	const changeOrder = async (order: string) => {
+		if (orderBy === order.toLocaleLowerCase()) return;
+		orderBy = order.toLocaleLowerCase();
+		await fetchPosts(1);
+		return;
+	};
+
+	const fetchPosts = async (page: number) => {
+		const response = await PostClient.getPostsByCategory(orderBy, 'Updates', page);
+		posts = response.posts;
+		pagination = response.pagination;
+	};
 
 	const increasePage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
@@ -31,7 +47,7 @@
 
 		try {
 			const nextPage = pagination.currentPage + 1;
-			const response = await PostClient.getPostsByCategory('devlogs', nextPage);
+			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', nextPage);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -39,7 +55,7 @@
 			console.error('Error loading next page:', err);
 		} finally {
 			isPaginationLoading = false;
-			scrollToTop()
+			scrollToTop();
 		}
 	};
 
@@ -53,7 +69,7 @@
 
 		try {
 			const lastPage = pagination.currentPage - 1;
-			const response = await PostClient.getPostsByCategory('devlogs', lastPage);
+			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', lastPage);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -61,7 +77,7 @@
 			console.error('Error loading previous page:', err);
 		} finally {
 			isPaginationLoading = false;
-			scrollToTop()
+			scrollToTop();
 		}
 	};
 
@@ -70,7 +86,7 @@
 		error = null;
 
 		try {
-			const response = await PostClient.getPostsByCategory('devlogs', 1);
+			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -83,7 +99,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await PostClient.getPostsByCategory('devlogs', 1);
+			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -111,7 +127,7 @@
 					<Icon icon="material-symbols:error-outline" class="text-4xl text-red-500" />
 					<p class="text-center text-red-500">{error}</p>
 					<button
-						class="btn-big rounded bg-bluge-500 px-4 py-2 text-white hover:bg-blue-600"
+						class="btn-big bg-bluge-500 rounded px-4 py-2 text-white hover:bg-blue-600"
 						onclick={retryLoading}
 					>
 						Try Again
@@ -130,7 +146,10 @@
 						<p class="muted">See the latest updates from Virarith</p>
 					</div>
 
-					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+					<div class="flex items-center justify-between">
+						<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+						<Filter {changeOrder} />
+					</div>
 
 					<div class="relative">
 						{#if isPaginationLoading}
@@ -146,7 +165,7 @@
 				</div>
 			{/if}
 		</div>
-		
+
 		<Links />
 	</div>
 </main>

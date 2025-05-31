@@ -25,6 +25,7 @@ class PostClient {
     static async createPost(post: PostSchema) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -47,9 +48,9 @@ class PostClient {
      * 
      * @returns Fetches all posts from the database
      */
-    static async getAllPosts(page: number) {
+    static async getAllPosts(orderBy: string, page: number) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_all?page=${page}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_all?page=${page}&orderBy=${orderBy}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -68,13 +69,13 @@ class PostClient {
      * @param params 
      * @returns Fetches posts sorted by the selected category
      */
-    static async getPostsByCategory(category: string, page: number) {
+    static async getPostsByCategory(orderBy: string, category: string, page: number) {
         try {
             if(!category) {
                 throw new Error("A category must be provided.")
             }
 
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_cat?category=${category}&page=${page}`, {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_cat?category=${category}&page=${page}&orderBy=${orderBy}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },

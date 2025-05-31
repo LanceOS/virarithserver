@@ -9,6 +9,7 @@ export const GET = async ({ request }): Promise<Response> => {
     try {
         const url = new URL(request.url);
         const pageParam = url.searchParams.get('page');
+        const orderBy = url.searchParams.get('orderBy')
 
 
         const page = Number(pageParam)
@@ -17,6 +18,15 @@ export const GET = async ({ request }): Promise<Response> => {
 
         if (isNaN(page) || page < 1) {
             throw new Error("Failed to get page paramter for pagination.")
+        }
+
+        const orderByClause = () => {
+            if(orderBy === "desc") {
+                return (posts, { desc }) => [desc(posts.createdAt)]
+            }
+            else {
+                return (posts, { asc }) => [asc(posts.createdAt)]
+            }
         }
 
         /**
@@ -42,7 +52,7 @@ export const GET = async ({ request }): Promise<Response> => {
             },
             limit: postPageLimit,
             offset: offset,
-            orderBy: (posts, { desc }) => [desc(posts.createdAt)]
+            orderBy: orderByClause()
         });
 
 

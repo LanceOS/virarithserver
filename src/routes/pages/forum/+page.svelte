@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import CategoryFilter from '$lib/components/CategoryFilter.svelte';
-	import Create from '$lib/components/Create.svelte';
+	import Create from '$lib/components/CreateComment.svelte';
+	import Filter from '$lib/components/forum/Filter.svelte';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
@@ -11,7 +13,6 @@
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 
-	let createPost = $state(false);
 	let isInitialLoading = $state(true);
 	let isPaginationLoading = $state(false);
 	let error = $state<string | null>(null);
@@ -20,26 +21,34 @@
 
 	let posts: any = $state();
 	let pagination: any = $state();
-	let selectedCategory: string = $state("all");
+	let selectedCategory: string = $state("All");
 	let categoryList: any = $state();
+	let orderBy: string = $state("desc");
 
 	const scrollToTop = () => {
 		window.scrollTo(0, 0);
 	};
 
+	const changeOrder = async (order: string) => {
+		if (orderBy === order.toLocaleLowerCase()) return;
+		orderBy = order.toLocaleLowerCase();
+		await fetchPosts(1)
+		return;
+	}
+
 	const changeCategory = async (selected: string) => {
-		selectedCategory = selected.toLocaleLowerCase();
+		selectedCategory = selected;
 		await fetchPosts(pagination.currentPage)
 		return selectedCategory;
 	};
 
 	const fetchPosts = async (page: number) => {
-		if (selectedCategory !== 'all') {
-			const response =  await PostClient.getPostsByCategory(selectedCategory, page);
+		if (selectedCategory !== 'All') {
+			const response =  await PostClient.getPostsByCategory(orderBy, selectedCategory, page);
 			posts = response.posts;
 			pagination = response.pagination;
 		} else {
-			const response = await PostClient.getAllPosts(page);
+			const response = await PostClient.getAllPosts(orderBy, page);
 			posts = response.posts;
 			pagination = response.pagination;
 		}
@@ -90,7 +99,7 @@
 		error = null;
 
 		try {
-			const response = await PostClient.getAllPosts(1);
+			const response = await PostClient.getAllPosts(orderBy, 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -103,7 +112,7 @@
 
 	onMount(async () => {
 		try {
-			const postResponse = await PostClient.getAllPosts(1);
+			const postResponse = await PostClient.getAllPosts(orderBy, 1);
 			const categoryResponse = await CategoryClient.getCategories();
 			categoryList = categoryResponse;
 			posts = postResponse.posts;
@@ -123,12 +132,12 @@
 	<div class="bg-base mx-auto flex w-full gap-8 p-12">
 		<div class="w-full">
 			{#if isInitialLoading}
-				<div class="flex min-h-64 flex-col items-center justify-center gap-4">
+				<section class="flex min-h-64 flex-col items-center justify-center gap-4">
 					<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
 					<p class="text-muted">Loading posts...</p>
-				</div>
+				</section>
 			{:else if error && !posts}
-				<div class="flex min-h-64 flex-col items-center justify-center gap-4">
+				<section class="flex min-h-64 flex-col items-center justify-center gap-4">
 					<Icon icon="material-symbols:error-outline" class="text-4xl text-red-500" />
 					<p class="text-center text-red-500">{error}</p>
 					<button
@@ -137,7 +146,7 @@
 					>
 						Try Again
 					</button>
-				</div>
+				</section>
 			{:else if posts && pagination}
 				<div class="flex flex-col gap-4">
 					{#if error}
@@ -147,20 +156,20 @@
 					{/if}
 
 					<div class="flex items-center justify-between">
-						<h2 class="text-4xl">Virarith Forums</h2>
-						{#if $session}
-							<button class="btn-small" onclick={() => (createPost = !createPost)}
+						<div class="flex flex-col gap-2">
+							<h2 class="text-4xl">Virarith Forums</h2>
+							<p class="muted">Discuss the latest and greatest happening on Virarith!</p>
+						</div>
+						{#if $session.data?.user}
+							<button class="btn-small" onclick={() => goto("/pages/create_post")}
 								>Create Post</button
 							>
-						{/if}
-
-						{#if $session && createPost}
-							<Create />
 						{/if}
 					</div>
 
 					<div class="flex items-center justify-between">
 						<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+						<Filter {changeOrder}/>
 					</div>
 
 					<div class="relative">
@@ -172,13 +181,13 @@
 						{/if}
 						<ForumFeed {posts} />
 					</div>
-
+					
 					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
 				</div>
 			{/if}
 		</div>
 		<div class="flex w-1/4 flex-col gap-6">
-			<h4 class="text-2xl">Topics</h4>
+			<h4 class="text-2xl">Categories</h4>
 			{#if categoryList}
 				<CategoryFilter {categoryList} {changeCategory} {selectedCategory} />
 			{/if}

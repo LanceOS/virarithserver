@@ -2,6 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import CommentFeed from '$lib/components/CommentFeed.svelte';
+	import CreateComment from '$lib/components/CreateComment.svelte';
+	import Header from '$lib/components/landing/Header.svelte';
 	import Icon from '@iconify/svelte';
 
 	const session = authClient.useSession();
@@ -21,29 +23,22 @@
 	}
 </script>
 
-<main class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-16">
-	<button
-		type="button"
-		aria-label="Return Home"
-		class="cursor-pointer self-end -mt-10"
-		onclick={() => {
-			goto('/');
-		}}><Icon icon="stash:signout-alt" class="text-5xl" /></button
-	>
-	<article class="card-setup flex flex-col gap-4 p-8">
+<Header />
+<main class="mx-auto flex max-w-7xl flex-col gap-6 p-4 sm:p-12 border-muted">
+	<article class="card-setup flex flex-col gap-6 p-8">
 		<header class="flex items-center justify-between gap-4">
 			<div class="flex items-center">
 				<div class="flex flex-col">
-					<span class="btn-nav font-semibold sm:text-2xl">{post.user.name}</span>
+					<span class="btn-nav font-semibold sm:text-xl">{post.user.name}</span>
 					<time class="text-xs font-light sm:text-sm" datetime={post.createdAt}>
 						{formatDate(post.createdAt)}
 					</time>
 				</div>
 			</div>
-			<span class="text-md sm:text-xl">{post.category}</span>
+			<span class="text-md sm:text-xl">{post.category.toUpperCase()}</span>
 		</header>
 
-		<div class="mb-2 flex flex-col gap-4">
+		<div class="mb-2 flex flex-col gap-2">
 			<h1 class="text-xl sm:text-4xl">
 				{post.title}
 			</h1>
@@ -72,8 +67,8 @@
 		</footer>
 	</article>
 
-	{#if $session?.data?.user}
-		<section></section>
+	{#if $session.data?.user && comments.length < 100}
+		<CreateComment />
 	{/if}
 
 	{#if comments}

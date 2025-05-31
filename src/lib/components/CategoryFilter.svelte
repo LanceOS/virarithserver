@@ -11,7 +11,7 @@
 		<button
 			type="button"
 			aria-label="Select Topic"
-			class={category.topic.toLowerCase() === selectedCategory
+			class={category.topic === selectedCategory
 				? 'border-muted cursor-pointer p-2 btn-small-active text-white'
 				: 'border-muted cursor-pointer p-2'}
 			onclick={() => changeCategory(category.topic)}>{category.topic}</button

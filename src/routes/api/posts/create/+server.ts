@@ -17,6 +17,8 @@ export const POST = async ({ request }): Promise<Response> => {
         
         const body: PostSchema = await request.json();
 
+        console.log(body)
+
         if(!body) {
             throw new Error("Failed to get data for post")
         }
