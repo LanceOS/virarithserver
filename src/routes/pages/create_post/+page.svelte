@@ -18,7 +18,7 @@
     let isContentFocused = $state(false);
     let isTitleFocused = $state(false);
 
-    const MAX_CONTENT_CHARS = 600;
+    const MAX_CONTENT_CHARS = 1200;
     const MAX_TITLE_CHARS = 100;
     const handleSubmit = async (event: Event) => {
         event.preventDefault();

@@ -3,16 +3,21 @@
 	import { authClient } from '$lib/auth-client.ts';
 
 	const { comments } = $props();
-	
-	const session = authClient.useSession();
 </script>
 
-{#snippet Comments(data)}
-	{#each data as comment (comment.id)}
-		<div class="p-6 card-setup flex flex-col gap-2">
-			<button class="text-md font-semibold w-fit btn-nav" onclick={() => goto(`/pages/profile/${comment.user.id}`)}>{comment.user.name}</button>
+<section class="flex flex-col gap-4">
+	<h4 class="text-xl">Comments</h4>
+	{#each comments as comment (comment.id)}
+		<div class="card-setup flex flex-col gap-2 p-6">
+			<button
+				class="text-md btn-nav w-fit font-semibold"
+				onclick={() => goto(`/pages/profile/${comment.user.id}`)}>{comment.user.name}</button
+			>
 
-			<p class="text-lg">{comment.content}</p>
+			<p>
+				{@html comment.content}
+			</p>
+
 
 			<div class="flex justify-between">
 				<div class="flex items-center gap-4">
@@ -27,10 +32,5 @@
 				</div>
 			</div>
 		</div>
-
 	{/each}
-{/snippet}
-
-<section class="flex flex-col gap-6">
-	{@render Comments(comments)}
 </section>

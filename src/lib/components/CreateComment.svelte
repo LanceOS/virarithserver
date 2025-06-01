@@ -6,7 +6,7 @@
 
     let body = $state('');
     let isFocused = $state(false);
-    const MAX_CHARS = 400;
+    const MAX_CHARS = 800;
 
     const session = authClient.useSession();
 
@@ -35,7 +35,7 @@
     }
 </script>
 
-<section class="card-setup p-6 space-y-4">
+<section class="card-setup p-6 space-y-4 -mb-12">
 	<p class="font-semibold">Create Comment</p>
     <form class="flex flex-col gap-4" onsubmit={handleSubmit}>
         <div class="relative">

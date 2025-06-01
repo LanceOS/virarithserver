@@ -27,7 +27,7 @@ export const GET = async ({ request }): Promise<Response> => {
             with: {
                 user: true,
             },
-            orderBy: (comments, { asc }) => [asc(comments.createdAt)]
+            orderBy: (comments, { desc }) => [desc(comments.createdAt)]
         })
 
         return new Response(JSON.stringify(comments), {
