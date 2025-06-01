@@ -54,7 +54,7 @@
             comments = [ newComment, ...comments]
 
             if (post) {
-                post.commentCount = (post.commentCount || 0) + 1;
+                post.commentCount = post.commentCount + 1;
             }
         } catch (error) {
             console.error('Failed to create comment:', error);
@@ -116,7 +116,7 @@
                             icon="material-symbols:thumb-up"
                             class="text-base duration-200 active:text-blue-700 sm:text-xl"
                         />
-                        {post.likesCount || 0} Likes
+                        {post.likeCount || 0} Likes
                     </button>
                     <span class="stat-item text-xs sm:text-sm">
                         <Icon

@@ -16,4 +16,4 @@ export const likes = pgTable("likes", {
     commentReplyId: uuid("comment_reply_id").references(() => commentReply.id)
 })
 
-export type NewLike = InferInsertModel<typeof likes>;
+export type LikeSchema = InferInsertModel<typeof likes>;

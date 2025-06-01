@@ -21,7 +21,7 @@
 		successLog = 'Successfully signed in! Redirecting...';
 		setTimeout(() => {
 			goto('/');
-		}, 3000);
+		}, 2000);
 	};
 
 	$effect(() => {

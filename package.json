@@ -51,6 +51,7 @@
 	],
 	"dependencies": {
 		"@sveltejs/kit": "^2.21.1",
+		"@tanstack/svelte-query": "^5.79.0",
 		"aos": "^2.3.4",
 		"better-auth": "^1.2.8",
 		"chalk": "^5.4.1",
