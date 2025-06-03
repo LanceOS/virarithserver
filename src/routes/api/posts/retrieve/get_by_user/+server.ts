@@ -2,15 +2,22 @@ import { DrizzleDB } from '$lib/Drizzle.ts';
 import { posts } from '$lib/schemas/Posts.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
+import { auth } from '$lib/auth.ts';
+
 
 
 
 export const GET = async ({ request }): Promise<Response> => {
     try {
         const url = new URL(request.url);
-        const userId = url.searchParams.get('userId');
-
+        const userIdParam = url.searchParams.get('userId');
         const pageParam = url.searchParams.get('page');
+
+        const session = await auth.api.getSession({
+            headers: request.headers
+        });
+        const userId: string | null = session?.user.id || null;
+
 
         const page = Number(pageParam)
 
@@ -21,7 +28,7 @@ export const GET = async ({ request }): Promise<Response> => {
             throw new Error("Failed to get page paramter for pagination.")
         }
 
-        if (!userId) {
+        if (!userIdParam) {
             throw new Error("A user must be passed to fetch by users")
         }
 
@@ -33,20 +40,25 @@ export const GET = async ({ request }): Promise<Response> => {
          */
         const postData = await DrizzleDB.query.posts.findMany({
             where: (posts, { eq }) => and(
-                eq(posts.userId, userId),
+                eq(posts.userId, userIdParam),
                 eq(posts.isDeleted, false)
             ),
             extras: {
                 likeCount: sql<number>`(
-                    SELECT COUNT(*) 
+                    SELECT COUNT(*)::int 
                     FROM likes 
                     WHERE likes.post_id = posts.id
                 )`.as('like_count'),
                 commentCount: sql<number>`(
-                    SELECT COUNT(*) 
-                    FROM comments 
+                    SELECT COUNT(*)::int 
+                    FROM comments
                     WHERE comments.post_id = posts.id
-                )`.as('comment_count')
+                )`.as('comment_count'),
+                isLiked: sql<boolean>`EXISTS (
+                    SELECT 1 FROM likes 
+                    WHERE likes.post_id = posts.id 
+                    AND likes.user_id = ${userId}
+                )`.as('is_liked')
             },
             with: {
                 user: true,

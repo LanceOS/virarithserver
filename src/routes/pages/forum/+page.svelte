@@ -24,6 +24,10 @@
 	let categoryList: any = $state();
 	let orderBy: string = $state("desc");
 
+	$effect(() => {
+		console.log(posts);
+	});
+
 	const scrollToTop = () => {
 		window.scrollTo(0, 0);
 	};

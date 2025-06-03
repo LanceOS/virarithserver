@@ -3,6 +3,8 @@ import { posts } from '$lib/schemas/Posts.ts';
 import { and, count, eq } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { sql } from 'drizzle-orm';
+import { auth } from '$lib/auth.ts';
+
 
 
 
@@ -12,6 +14,12 @@ export const GET = async ({ request }): Promise<Response> => {
         const category = url.searchParams.get('category');
         const pageParam = url.searchParams.get('page');
         const orderBy = url.searchParams.get('orderBy');
+
+        const session = await auth.api.getSession({
+            headers: request.headers
+        });
+        const userId: string | null = session?.user.id || null;
+
 
         const page = Number(pageParam)
 
@@ -23,12 +31,12 @@ export const GET = async ({ request }): Promise<Response> => {
             throw new Error("Failed to get page paramter for pagination.")
         }
 
-        if(!category) {
+        if (!category) {
             throw new Error("A category must be passed to fetch by categorys")
         }
 
         const orderByClause = () => {
-            if(orderBy === "desc") {
+            if (orderBy === "desc") {
                 return (posts, { desc }) => [desc(posts.createdAt)]
             }
             else {
@@ -49,15 +57,20 @@ export const GET = async ({ request }): Promise<Response> => {
             ),
             extras: {
                 likeCount: sql<number>`(
-                    SELECT COUNT(*) 
+                    SELECT COUNT(*)::int 
                     FROM likes 
                     WHERE likes.post_id = posts.id
                 )`.as('like_count'),
                 commentCount: sql<number>`(
-                    SELECT COUNT(*) 
-                    FROM comments 
+                    SELECT COUNT(*)::int 
+                    FROM comments
                     WHERE comments.post_id = posts.id
-                )`.as('comment_count')
+                )`.as('comment_count'),
+                isLiked: sql<boolean>`EXISTS (
+                    SELECT 1 FROM likes 
+                    WHERE likes.post_id = posts.id 
+                    AND likes.user_id = ${userId}
+                )`.as('is_liked')
             },
             with: {
                 user: true,
@@ -82,7 +95,7 @@ export const GET = async ({ request }): Promise<Response> => {
                 eq(posts.category, category),
                 eq(posts.isDeleted, false)
             ));
-        
+
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 

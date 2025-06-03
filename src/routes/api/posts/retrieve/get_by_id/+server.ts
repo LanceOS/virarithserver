@@ -1,3 +1,4 @@
+import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { and, sql } from 'drizzle-orm';
 
@@ -6,6 +7,13 @@ export const GET = async ({ request }): Promise<Response> => {
     try {
         const url = new URL(request.url)
         const postId = url.searchParams.get("postId");
+
+        const session = await auth.api.getSession({
+            headers: request.headers
+        });
+        const userId: string | null = session?.user.id || null;
+
+
 
         if (!postId) {
             throw new Error("Must pass a postId to fetch specific post")
@@ -22,15 +30,20 @@ export const GET = async ({ request }): Promise<Response> => {
             ),
             extras: {
                 likeCount: sql<number>`(
-                    SELECT COUNT(*) 
+                    SELECT COUNT(*)::int 
                     FROM likes 
                     WHERE likes.post_id = posts.id
                 )`.as('like_count'),
                 commentCount: sql<number>`(
-                    SELECT COUNT(*) 
-                    FROM comments 
+                    SELECT COUNT(*)::int 
+                    FROM comments
                     WHERE comments.post_id = posts.id
-                )`.as('comment_count')
+                )`.as('comment_count'),
+                isLiked: sql<boolean>`EXISTS (
+                    SELECT 1 FROM likes 
+                    WHERE likes.post_id = posts.id 
+                    AND likes.user_id = ${userId}
+                )`.as('is_liked')
             },
             with: {
                 user: true,
