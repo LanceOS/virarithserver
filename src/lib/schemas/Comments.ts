@@ -8,6 +8,7 @@ export const comments = pgTable("comments", {
     userId: text("user_id").references(() => user.id).notNull(),
     postId: uuid("post_id").references(() => posts.id).notNull(),
     content: varchar("content", { length: 256 }).notNull(),
+    type: text("type").default("comment").notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())

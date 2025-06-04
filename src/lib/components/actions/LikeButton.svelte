@@ -21,11 +21,12 @@
 		sendingLike = true;
 		let wasLiked: boolean = object.isLiked;
 
+		// I need to define if it is a postId, commentId, or commentReplyId
 		try {
 			if (wasLiked) {
-				await LikeClient.unlikeObject({ userId: user.id, "": object.id });
+				await LikeClient.unlikeObject({ userId: user.id, objectId: object.id });
 			} else {
-				await LikeClient.likeObject({ userId: user.id, "": object.id });
+				await LikeClient.likeObject({ userId: user.id, objectId: object.id });
 			}
 
 			object = {

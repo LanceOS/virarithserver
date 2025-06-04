@@ -8,20 +8,16 @@ import { commentReply } from "./CommentReply.ts";
 import { likes } from "./Likes.ts";
 import { profile } from "./Profile.ts";
 
-
-export const postsRelations = relations(posts, ({ one, many }) => ({ // Added 'many'
+export const postsRelations = relations(posts, ({ one, many }) => ({
     user: one(user, {
         fields: [posts.userId],
         references: [user.id],
     }),
     // A post can have many comments
     comments: many(comments),
-    // A post can have many likes
-    likes: many(likes),
 }));
 
-
-export const usersRelations = relations(user, ({ many, one }) => ({ // Added 'one'
+export const usersRelations = relations(user, ({ many, one }) => ({
     posts: many(posts),
     // A user can have many comments
     comments: many(comments),
@@ -36,8 +32,7 @@ export const usersRelations = relations(user, ({ many, one }) => ({ // Added 'on
     }),
 }));
 
-
-export const commentRelations = relations(comments, ({ one, many }) => ({ // Added 'many'
+export const commentRelations = relations(comments, ({ one, many }) => ({
     user: one(user, {
         fields: [comments.userId],
         references: [user.id],
@@ -48,12 +43,9 @@ export const commentRelations = relations(comments, ({ one, many }) => ({ // Add
     }),
     // A comment can have many replies
     replies: many(commentReply),
-    // A comment can have many likes
-    likes: many(likes),
 }));
 
-
-export const commentReplyRelations = relations(commentReply, ({ one, many }) => ({ // Added 'many'
+export const commentReplyRelations = relations(commentReply, ({ one, many }) => ({
     // A comment reply belongs to one user
     user: one(user, {
         fields: [commentReply.userId],
@@ -64,30 +56,15 @@ export const commentReplyRelations = relations(commentReply, ({ one, many }) => 
         fields: [commentReply.parentComment],
         references: [comments.id],
     }),
-    // A comment reply can have many likes
-    likes: many(likes),
 }));
 
-
+// likes relation now only has user relation
 export const likesRelations = relations(likes, ({ one }) => ({
     user: one(user, {
         fields: [likes.userId],
         references: [user.id],
     }),
-    post: one(posts, {
-        fields: [likes.postId],
-        references: [posts.id],
-    }),
-    comment: one(comments, {
-        fields: [likes.commentId],
-        references: [comments.id],
-    }),
-    commentReply: one(commentReply, {
-        fields: [likes.commentReplyId],
-        references: [commentReply.id],
-    }),
 }));
-
 
 export const profileRelations = relations(profile, ({ one }) => ({
     user: one(user, {

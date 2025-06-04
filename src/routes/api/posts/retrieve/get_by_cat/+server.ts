@@ -68,7 +68,8 @@ export const GET = async ({ request }): Promise<Response> => {
                 )`.as('comment_count'),
                 isLiked: sql<boolean>`EXISTS (
                     SELECT 1 FROM likes 
-                    WHERE likes.post_id = posts.id 
+                    WHERE likes.object_id = posts.id
+                    AND likes.object_type = 'post' 
                     AND likes.user_id = ${userId}
                 )`.as('is_liked')
             },

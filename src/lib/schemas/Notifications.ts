@@ -12,6 +12,7 @@ export const notifications = pgTable('notifications', {
     userId: text("user_id").references(() => user.id),
     commentId: uuid("comment_id").references(() => comments.id),
     commentReplyId: uuid("comment_reply_id").references(() => commentReply.id),
+    type: text("type").default("notification").notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())

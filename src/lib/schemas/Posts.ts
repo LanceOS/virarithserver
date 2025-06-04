@@ -9,6 +9,7 @@ export const posts = pgTable('posts', {
     content: text("content").notNull(),
     userId: text("user_id").references(() => user.id).notNull(),
     category: varchar("category", { length: 32 }).notNull(),
+    type: text("type").default("post").notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())

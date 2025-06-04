@@ -9,6 +9,7 @@ export const commentReply = pgTable("comment_reply", {
     userId: text("user_id").references(() => user.id).notNull(),
     postId: uuid("post_id").references(() => posts.id).notNull(),
     parentComment: uuid("parent_comment").references(() => comments.id).notNull(),
+    type: text("type").default("commentReply").notNull(),
     content: text("content").notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
