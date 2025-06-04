@@ -4,9 +4,11 @@
     import Header from '$lib/components/landing/Header.svelte';
     import CategoryClient from '$lib/tools/CategoryClient.ts';
     import PostClient from '$lib/tools/PostClient.ts';
+    import { page } from '$app/stores';
     import { onMount } from 'svelte';
 
     const session = authClient.useSession();
+    const postId = $page.params.post;
 
     let title: string = $state('');
     let content: string = $state('');
@@ -92,6 +94,7 @@
 
         try {
             const response = await CategoryClient.getCategories();
+            const postResponse = await PostClient.getPostById(postId);
             let filteredCategories: string[] = [];
 
             for (let i = 0; i < response.length; i++) {
@@ -116,8 +119,7 @@
 <main class="bg-base border-muted mx-auto max-w-7xl px-6 py-8">
     <div class="">
         <div class="mb-8">
-            <h1 class="content mb-2 text-3xl font-bold">Create New Post</h1>
-            <p class="muted">Share your thoughts or ask questions about Virarith.</p>
+            <h1 class="content mb-2 text-3xl font-bold">Edit Post</h1>
         </div>
 
         {#if error}

@@ -6,23 +6,23 @@ import { and, sql } from 'drizzle-orm';
 export const GET = async ({ request }): Promise<Response> => {
     try {
         const url = new URL(request.url)
-        const postId = url.searchParams.get("postId");
+        const userIdParam = url.searchParams.get("userId")
 
         const session = await auth.api.getSession({
             headers: request.headers
         });
         const userId: string | null = session?.user.id || null;
 
-        if (!postId) {
+        if (!userIdParam) {
             throw new Error("Must pass a postId to fetch specific post")
         }
 
         /**
-         * @params postId
-         * @returns Grabs a specific comments based on postId
+         * @params userId
+         * @returns Grabs a specific comments based on userId
          */
         const comments = await DrizzleDB.query.comments.findMany({
-            where: (comments, { eq }) => and(eq(comments.isDeleted, false), eq(comments.postId, postId)),
+            where: (comments, { eq }) => and(eq(comments.isDeleted, false), eq(comments.userId, userIdParam)),
             extras: {
                 likeCount: sql<number>`(
                     SELECT COUNT(*)::int 

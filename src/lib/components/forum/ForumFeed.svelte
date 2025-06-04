@@ -2,17 +2,9 @@
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import Icon from '@iconify/svelte';
-	import ErrorModal from '../Popups/ErrorModal.svelte';
-	import type { PostSchema } from '$lib/schemas/Posts.ts';
-	import LikeClient from '$lib/tools/LikeClient.ts';
-
-	const session = authClient.useSession();
-
+	import LikeButton from '../actions/LikeButton.svelte';
+	
 	let { posts } = $props();
-
-
-	let errorLog = $state('');
-	let sendingLike = $state(false);
 
 	function formatDate(dateString: string) {
 		const date = new Date(dateString);
@@ -23,55 +15,9 @@
 		});
 	}
 
-	const likePost = async (id: string) => {
-		if (!$session.data?.user) {
-			setError();
-			return;
-		}
-
-		const user = $session.data.user;
-		sendingLike = true;
-
-		const postToUpdate = posts.find((post: PostSchema) => post.id === id);
-		const wasLiked = postToUpdate.isLiked;
-
-		try {
-			if (wasLiked) {
-				await LikeClient.unlikeObject({ userId: user.id, postId: postToUpdate.id });
-			} else {
-				await LikeClient.likeObject({ userId: user.id, postId: postToUpdate.id });
-			}
-
-			posts = posts.map((post: any) => {
-				if (post.id === id) {
-					return {
-						...post,
-						isLiked: !wasLiked,
-						likeCount: wasLiked ? post.likeCount - 1 : post.likeCount + 1
-					};
-				}
-				return post;
-			});
-		} catch (error) {
-			errorLog = "Failed to like post"
-		} finally {
-			sendingLike = false;
-		}
-	};
-
-	const setError = () => {
-		errorLog = 'Must log in to like.';
-		sendingLike = true;
-		setTimeout(() => {
-			errorLog = '';
-			sendingLike = false;
-		}, 2000);
-	};
+	
 </script>
 
-{#if errorLog}
-	<ErrorModal {errorLog} />
-{/if}
 <section class="flex w-full flex-col gap-4">
 	{#each posts as post (post.id)}
 		<article class="card-setup flex flex-col gap-4 p-4">
@@ -107,13 +53,7 @@
 
 			<footer class="flex items-center justify-between text-sm">
 				<div class="flex items-center gap-4">
-					<button class="stat-item" onclick={() => likePost(post.id)} disabled={sendingLike}>
-						<Icon
-							icon="material-symbols:thumb-up"
-							class={`text-xl duration-200 sm:text-xl ${post.isLiked ? 'text-green-400' : ''}`}
-						/>
-						{post.likeCount || 0} Likes
-					</button>
+					<LikeButton object={post} />
 					<span class="stat-item">
 						<Icon icon="material-symbols:comment-sharp" class="text-xl duration-200 sm:text-xl" />
 						{post.commentCount || 0} Comments

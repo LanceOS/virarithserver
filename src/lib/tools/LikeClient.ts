@@ -48,10 +48,6 @@ class LikeClient {
     static async getLikes(data: LikeSchema) {
 
     }
-
-    static async masterFunction(data: any) {
-        
-    }
 }
 
 

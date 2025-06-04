@@ -1,6 +1,6 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client.ts";
-	import CommentFeed from "./CommentFeed.svelte";
+    import CommentFeed from "./CommentFeed.svelte";
     
     let { addComment, isSubmittingComment } = $props()
 
@@ -35,9 +35,9 @@
     }
 </script>
 
-<section class="card-setup p-6 space-y-4 -mb-12">
-	<p class="font-semibold">Create Comment</p>
-    <form class="flex flex-col gap-4" onsubmit={handleSubmit}>
+<section class="space-y-4">
+	<p class="font-semibold text-xl">Create Comment</p>
+    <form class="card-setup p-6 space-y-4" onsubmit={handleSubmit}>
         <div class="relative">
             <textarea
                 placeholder="What's on your mind?"
