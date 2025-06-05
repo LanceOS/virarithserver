@@ -6,8 +6,8 @@ export const POST = async ({ request }) => {
     try {
         const body: LikeSchema = await request.json();
 
-        if(!body.postId && !body.commentId && !body.commentReplyId) {
-            throw new Error(`Must include of an ID of the object to like ${body}`)
+        if(!body.objectId || !body.objectType) {
+            throw new Error("Failed to data to like object")
         }
 
         const response = await DrizzleDB.insert(likes).values(body).returning();

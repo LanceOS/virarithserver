@@ -27,11 +27,13 @@ export const GET = async ({ request }): Promise<Response> => {
                 likeCount: sql<number>`(
                     SELECT COUNT(*)::int 
                     FROM likes 
-                    WHERE likes.comment_id = comments.id
+                    WHERE likes.object_id = comments.id
+                    AND likes.object_type = comments.type
                 )`.as('like_count'),
                 isLiked: sql<boolean>`EXISTS (
                     SELECT 1 FROM likes 
-                    WHERE likes.comment_id = comments.id 
+                    WHERE likes.object_id = comments.id
+                    AND likes.object_type = comments.type 
                     AND likes.user_id = ${userId}
                 )`.as('is_liked')
             },

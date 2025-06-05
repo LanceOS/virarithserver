@@ -7,23 +7,13 @@ export const DELETE = async ({ request }) => {
     try {
         const body: LikeSchema = await request.json();
 
-        const removalSort = () => {
-            if(body.postId) {
-                return (eq(likes.postId, body.postId), eq(likes.userId, body.userId))
-            }
-            else if (body.commentId) {
-                return (eq(likes.commentId, body.commentId), eq(likes.userId, body.userId))
-            }
-            else if (body.commentReplyId) {
-                return (eq(likes.commentReplyId, body.commentReplyId), eq(likes.userId, body.userId))
-            }
-            else {
-                throw new Error(`Couldn't determine which object to unlike.`)
-            }
+        if(!body.objectId || !body.objectType) {
+            throw new Error("Failed to data to like object")
         }
 
 
-        const response = await DrizzleDB.delete(likes).where(removalSort())
+
+        const response = await DrizzleDB.delete(likes).where(eq(likes.objectId, body.objectId))
 
         return new Response(JSON.stringify(response), {
             status: 200,
