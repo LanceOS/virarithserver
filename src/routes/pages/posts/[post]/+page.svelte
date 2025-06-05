@@ -17,12 +17,9 @@
 	let post: any = $state();
 	let comments: any = $state();
 	let isLoadingPost: boolean = $state(true);
-	let isLoadingComments: boolean = $state(true);
 	let isSubmittingComment: boolean = $state(false);
 
-	let sendingLike = $state(false);
-	let errorLog = $state('');
-
+	let hasActions = $state(false);
 	let openPostActions = $state(false);
 	let actionsRef = $state();
 
@@ -78,19 +75,20 @@
 
 	onMount(async () => {
 		try {
-			const commentResponse = await CommentClient.getCommentsByPost(postId);
 			const postResponse = await PostClient.getPostById(postId);
 			post = postResponse;
-			comments = commentResponse;
-			isLoadingPost = false;
-			isLoadingComments = false;
+
+			if ($session.data?.user.id === post.userId) {
+				hasActions = true;
+			}
 		} catch (error) {
 			console.error('Failed to load post:', error);
 			isLoadingPost = false; // Important: set to false even on error
+		} finally {
+			isLoadingPost = false;
 		}
 	});
 </script>
-
 
 <Header />
 <main class="border-muted mx-auto flex max-w-7xl flex-col gap-8 p-3 sm:p-8">
@@ -112,30 +110,32 @@
 				</div>
 				<div class="flex gap-2">
 					<span class="text-sm sm:text-lg">{post.category.toUpperCase()}</span>
-					<button class="stat-item" onclick={() => (openPostActions = !openPostActions)}>
-						<Icon icon="ic:outline-more-vert" class="text-xl duration-200 sm:text-xl" />
-					</button>
+					{#if hasActions}
+						<button class="stat-item" onclick={() => (openPostActions = !openPostActions)}>
+							<Icon icon="ic:outline-more-vert" class="text-xl duration-200 sm:text-xl" />
+						</button>
+					{/if}
 				</div>
 
 				{#if openPostActions}
 					<div
 						bind:this={actionsRef}
-						class="absolute top-full right-0 z-50 w-48 overflow-hidden bg-base"
+						class="bg-base absolute top-full right-0 z-50 w-48 overflow-hidden"
 					>
 						<div class="">
 							<button
 								onclick={() => goto(`/pages/edit_post/${post.id}`)}
-								class="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors duration-150 hover:bg-gray-500 cursor-pointer"
+								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors duration-150 hover:bg-gray-500"
 							>
 								<Icon icon="mdi:text-box-edit-outline" />
 								<span class="text-sm font-medium">Edit Post</span>
 							</button>
 
-							<div class="border-t border-muted"></div>
+							<div class="border-muted border-t"></div>
 
 							<button
 								onclick={handleDelete}
-								class="flex w-full items-center gap-3 px-4 py-3 text-left text-red-600 transition-colors duration-150 hover:bg-red-200 cursor-pointer"
+								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-red-600 transition-colors duration-150 hover:bg-red-200"
 							>
 								<Icon icon="mdi:trash-can-outline" />
 								<span class="text-sm font-medium">Delete Post</span>
@@ -156,7 +156,7 @@
 
 			<footer class="flex justify-between">
 				<div class="flex items-center gap-2">
-					<LikeButton object={post}/>
+					<LikeButton object={post} />
 					<span class="stat-item text-xs sm:text-sm">
 						<Icon
 							icon="material-symbols:comment-sharp"
@@ -180,23 +180,11 @@
 		</section>
 	{/if}
 
-	{#if $session.data?.user && comments && comments.length < 100}
+	{#if $session.data?.user && post.commentCount < 100}
 		<CreateComment {addComment} {isSubmittingComment} />
 	{/if}
 
-	{#if isLoadingComments}
-		<section class="flex min-h-32 flex-col items-center justify-center gap-2">
-			<div class="h-8 w-8 animate-spin rounded-full border-b-2 border-current"></div>
-			<p class="text-muted">Loading comments...</p>
-		</section>
-	{:else if comments && comments.length > 0}
-		<CommentFeed {comments} />
-	{:else if comments && comments.length === 0}
-		<section class="card-setup flex flex-col gap-1 p-6">
-			<h2 class="mb-2 text-lg text-white sm:text-2xl">Comments</h2>
-			<p class="muted text-sm sm:text-base">No comments yet. Be the first to leave one!</p>
-		</section>
-	{/if}
+	<CommentFeed />
 
 	{#if isSubmittingComment}
 		<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">

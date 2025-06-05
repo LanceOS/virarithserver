@@ -4,7 +4,7 @@
 	import Icon from '@iconify/svelte';
 
 	const session = authClient.useSession();
-	
+
 	let isMobileMenuOpen = $state(false);
 
 	async function signOut() {
@@ -31,8 +31,10 @@
 	};
 </script>
 
-<header class="bg-base border-muted mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4">
-	<nav class="hidden md:flex items-center gap-6">
+<header
+	class="bg-base border-muted mx-auto flex h-16 w-full max-w-7xl items-center justify-end px-4"
+>
+	<nav class="hidden items-center gap-6 md:flex">
 		<button type="button" aria-label="Go to home page" class="btn-nav" onclick={() => goto('/')}>
 			Home
 		</button>
@@ -71,23 +73,23 @@
 	<button
 		type="button"
 		aria-label="Toggle mobile menu"
-		class="md:hidden p-2 border-muted transition-colors btn-nav"
+		class="border-muted btn-nav p-2 transition-colors md:!hidden"
 		onclick={toggleMobileMenu}
 	>
 		{#if isMobileMenuOpen}
-			<Icon icon="material-symbols:close" class="w-6 h-6" />
+			<Icon icon="material-symbols:close" class="h-6 w-6" />
 		{:else}
-			<Icon icon="material-symbols:menu" class="w-6 h-6" />
+			<Icon icon="material-symbols:menu" class="h-6 w-6" />
 		{/if}
 	</button>
 
 	{#if isMobileMenuOpen}
-		<div class="absolute top-16 left-0 right-0 bg-base border-muted border-t md:hidden z-50">
-			<nav class="flex flex-col px-4 py-8 gap-6">
-				<button 
-					type="button" 
-					aria-label="Go to home page" 
-					class="btn-nav text-left border-muted py-2 px-4 transition-colors" 
+		<div class="bg-base border-muted absolute top-16 right-0 left-0 z-50 border-t md:hidden">
+			<nav class="flex flex-col gap-6 px-4 py-8">
+				<button
+					type="button"
+					aria-label="Go to home page"
+					class="btn-nav border-muted px-4 py-2 text-left transition-colors"
 					onclick={() => handleNavigation('/')}
 				>
 					Home
@@ -95,7 +97,7 @@
 				<button
 					type="button"
 					aria-label="Go to forum page"
-					class="btn-nav text-left border-muted py-2 px-4 transition-colors"
+					class="btn-nav border-muted px-4 py-2 text-left transition-colors"
 					onclick={() => handleNavigation('/pages/forum')}
 				>
 					Forums
@@ -103,7 +105,7 @@
 				<button
 					type="button"
 					aria-label="Go to map page"
-					class="btn-nav text-left border-muted py-2 px-4 transition-colors"
+					class="btn-nav border-muted px-4 py-2 text-left transition-colors"
 					onclick={() => handleNavigation('/pages/dynmap')}
 				>
 					Map
@@ -111,7 +113,7 @@
 				<button
 					type="button"
 					aria-label="Go to wiki page"
-					class="btn-nav text-left border-muted py-2 px-4 transition-colors"
+					class="btn-nav border-muted px-4 py-2 text-left transition-colors"
 					onclick={() => handleNavigation('/pages/wiki')}
 				>
 					Wiki
@@ -127,10 +129,13 @@
 							Log In
 						</button>
 					{:else}
-						<button 
-							type="button" 
-							aria-label="Log Out" 
-							onclick={() => { signOut(); closeMobileMenu(); }} 
+						<button
+							type="button"
+							aria-label="Log Out"
+							onclick={() => {
+								signOut();
+								closeMobileMenu();
+							}}
 							class="btn-small w-full"
 						>
 							Log Out
