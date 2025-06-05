@@ -48,7 +48,8 @@ export const POST = async ({ request }): Promise<Response> => {
             title: cleanTitle,
             content: cleanContent,
             userId: body.userId,
-            category: body.category
+            category: body.category,
+            type: "post"
         }
         
         /**

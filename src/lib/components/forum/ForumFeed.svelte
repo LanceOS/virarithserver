@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { authClient } from '$lib/auth-client.ts';
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
 	

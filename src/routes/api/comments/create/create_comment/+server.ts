@@ -45,7 +45,8 @@ export const POST = async ({ request }): Promise<Response> => {
         const cleanBody = {
             content: cleanContent,
             userId: body.userId,
-            postId: body.postId
+            postId: body.postId,
+            type: "comment"
         }
 
         /**

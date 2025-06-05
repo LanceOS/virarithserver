@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { comments } from "./Comments.ts";
-import { sql } from "drizzle-orm";
+import { sql, type InferInsertModel } from "drizzle-orm";
 import { posts } from "./Posts.ts";
 
 export const commentReply = pgTable("comment_reply", {
@@ -15,3 +15,5 @@ export const commentReply = pgTable("comment_reply", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 })
+
+export type CommentReplySchema = InferInsertModel<typeof commentReply>;

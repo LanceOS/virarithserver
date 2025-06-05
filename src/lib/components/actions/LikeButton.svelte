@@ -24,9 +24,9 @@
 		// I need to define if it is a postId, commentId, or commentReplyId
 		try {
 			if (wasLiked) {
-				await LikeClient.unlikeObject({ userId: user.id, objectId: object.id });
+				await LikeClient.unlikeObject({ userId: user.id, objectId: object.id, objectType: object.type });
 			} else {
-				await LikeClient.likeObject({ userId: user.id, objectId: object.id });
+				await LikeClient.likeObject({ userId: user.id, objectId: object.id, objectType: object.type });
 			}
 
 			object = {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 
-	let { pagination, decrementPage, increasePage, isPaginationLoading } = $props();
+	let { pagination, decrementPage, incrementPage, isPaginationLoading } = $props();
 </script>
 
 {#snippet Pagination()}
@@ -26,7 +26,7 @@
 		<p>...</p>
 	{/if}
 	<button
-		onclick={() => increasePage()}
+		onclick={() => incrementPage()}
 		disabled={!pagination.hasNext || isPaginationLoading}
 		type="button"
 		aria-label="Next Page"

@@ -20,7 +20,7 @@
 
 	let posts: any = $state();
 	let pagination: any = $state();
-	let selectedCategory: string = $state("All");
+	let selectedCategory: string = $state("all");
 	let categoryList: any = $state();
 	let orderBy: string = $state("desc");
 
@@ -46,8 +46,8 @@
 	};
 
 	const fetchPosts = async (page: number) => {
-		if (selectedCategory !== 'All') {
-			const response =  await PostClient.getPostsByCategory(orderBy, selectedCategory, page);
+		if (selectedCategory !== 'all') {
+			const response =  await PostClient.getPostsByCategory(orderBy, selectedCategory.toLocaleLowerCase(), page);
 			posts = response.posts;
 			pagination = response.pagination;
 		} else {
@@ -57,7 +57,7 @@
 		}
 	};
 
-	const increasePage = async () => {
+	const incrementPage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
 			return;
 		}
@@ -171,7 +171,7 @@
 					</div>
 
 					<div class="flex items-center justify-between">
-						<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+						<Pagination {pagination} {decrementPage} {incrementPage} {isPaginationLoading} />
 						<Filter {changeOrder}/>
 					</div>
 
@@ -185,7 +185,7 @@
 						<ForumFeed {posts} />
 					</div>
 					
-					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+					<Pagination {pagination} {decrementPage} {incrementPage} {isPaginationLoading} />
 				</div>
 			{/if}
 		</div>
