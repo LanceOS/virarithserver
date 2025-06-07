@@ -1,14 +1,49 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client.ts";
-    import CommentFeed from "./CommentFeed.svelte";
+    import { page } from '$app/state';
+	import CommentClient from "$lib/tools/CommentClient.ts";
     
-    let { addComment, isSubmittingComment } = $props()
+    const session = authClient.useSession();
+	const postId = page.params.post;
+
+    const { handleAddComment } = $props()
 
     let body = $state('');
     let isFocused = $state(false);
+	let isSubmittingComment: boolean = $state(false);
+
     const MAX_CHARS = 800;
 
-    const session = authClient.useSession();
+
+    	/**
+	 * @param body
+	 * @returns Adds new comment to database and then refetches comments
+	 */
+	const addComment = async (body: string) => {
+		if (!$session.data?.user || !postId) {
+			return;
+		}
+
+		const user = $session.data.user;
+
+		isSubmittingComment = true;
+
+		const data = {
+			userId: user.id,
+			postId: postId,
+			content: body
+		};
+
+		try {
+			const response = await CommentClient.createComment(data);
+			const newComment = { ...response[0], user: user };
+            handleAddComment(newComment)
+        } catch (error) {
+			console.error('Failed to create comment:', error);
+		} finally {
+			isSubmittingComment = false;
+		}
+	};
 
     function autoGrow(event: Event) {
         const textarea = event.target as HTMLTextAreaElement;
@@ -28,8 +63,7 @@
 
     const handleSubmit = async (event: Event) => {
 		event?.preventDefault()
-        await addComment(body) // Pass the body to addComment
-        console.log('Comment submitted:', body);
+        await addComment(body)
         body = '';
         isFocused = false;
     }

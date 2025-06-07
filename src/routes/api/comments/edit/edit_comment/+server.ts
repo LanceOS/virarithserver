@@ -1,8 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { posts } from '$lib/schemas/Posts.ts';
 import { and, eq } from 'drizzle-orm';
-
+import { comments } from '$lib/schemas/Comments.ts'
 
 export const PUT = async ({ request }) => {
     try {
@@ -15,18 +14,16 @@ export const PUT = async ({ request }) => {
         if (!body) {
             throw new Error(`Post information was not provided ${body}`);
         }
-        if(!session?.user) {
+        if (!session?.user) {
             throw new Error(`User must be logged in to edit post ${session?.user}`)
         }
 
-        const response = await DrizzleDB.update(posts).set({
-            title: body.title,
+        const response = await DrizzleDB.update(comments).set({
             content: body.content,
-            category: body.category,
             isEdited: true
         })
-            .where(and(eq(posts.id, body.postId), eq(posts.userId, session.user.id)))
-            .returning({ id: posts.id })
+        .where(and(eq(comments.id, body.id), eq(comments.userId, session.user.id)))
+        .returning({ id: comments.id })
 
         if (!response) {
             throw new Error(`Failed to update post in database ${response}`)

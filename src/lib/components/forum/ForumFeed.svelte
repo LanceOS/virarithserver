@@ -20,7 +20,7 @@
 		{#each posts as post (post.id)}
 			<article class="card-setup flex flex-col gap-4 p-4">
 				<header class="flex items-center justify-between gap-2">
-					<div class="flex items-center gap-2">
+					<div class="flex items-center gap-4">
 						<div class="flex flex-col leading-tight">
 							<button
 								class="btn-nav text-base font-semibold"
@@ -32,6 +32,9 @@
 								{formatDate(post.createdAt)}
 							</time>
 						</div>
+						{#if post.isEdited}
+						<p class="text-xs">(edited)</p>
+						{/if}
 					</div>
 					<span class="text-sm font-medium">{post.category.toUpperCase()}</span>
 				</header>

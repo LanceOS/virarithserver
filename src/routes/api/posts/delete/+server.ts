@@ -1,9 +1,8 @@
-import { auth } from '$lib/auth.ts'
 import { DrizzleDB } from '$lib/Drizzle.ts'
 import { commentReply } from '$lib/schemas/CommentReply.ts'
 import { comments } from '$lib/schemas/Comments.ts'
-import { and } from 'drizzle-orm'
-import { eq } from 'drizzle-orm'
+import { posts, type PostSchema } from '$lib/schemas/Posts.ts'
+import { and, eq } from 'drizzle-orm'
 
 /**
  * 
@@ -14,29 +13,19 @@ import { eq } from 'drizzle-orm'
  */
 export const PUT = async ({ request }) => {
     try {
-        const body = await request.json()
-        const session = await auth.api.getSession({
-            headers: request.headers
-        })
+        const body: PostSchema = await request.json()
 
-        if (!session?.user.id) {
-            throw new Error("User must be logged in to delete comment");
-        }
-        if (!body.postId || !body.id) {
-            throw new Error(`Missing required body data: ${body}`)
+        if (!body.id || !body.userId || !body) {
+            throw new Error("Failed to pass post for deletion")
         }
 
         await DrizzleDB.transaction(async (tx) => {
-            await tx.update(comments).set({ isDeleted: true })
-                .where(and(eq(comments.postId, body.postId!),
-                    eq(comments.userId, session?.user.id),
-                    eq(comments.id, body.id)))
-                .execute();
-            await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.parentComment, body.id!)).execute();
+            await tx.update(posts).set({ isDeleted: true }).where(and(eq(posts.id, body.id!), eq(posts.userId, body.userId))).execute();
+            await tx.update(comments).set({ isDeleted: true }).where(eq(comments.postId, body.id!)).execute();
+            await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.postId, body.id!)).execute();
         })
 
-
-        return new Response(JSON.stringify("Success"), {
+        return new Response(JSON.stringify({ success: true, postId: body.id }), {
             status: 200,
             statusText: "OK",
             headers: {

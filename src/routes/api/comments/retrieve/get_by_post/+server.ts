@@ -35,7 +35,13 @@ export const GET = async ({ request }): Promise<Response> => {
                     WHERE likes.object_id = comments.id
                     AND likes.object_type = comments.type 
                     AND likes.user_id = ${userId}
-                )`.as('is_liked')
+                )`.as('is_liked'),
+                replyCount: sql<number>`(
+                    SELECT COUNT(*)::int 
+                    FROM comment_reply 
+                    WHERE comment_reply.parent_comment = comments.id
+                    AND comment_reply.post_id = ${postId}
+                )`.as('reply_count'),
             },
             with: {
                 user: true,

@@ -28,6 +28,42 @@ class CommentClient {
         }
     }
 
+    static async updateComment(comment: CommentSchema) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/comments/edit/edit_comment`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(comment)
+            })
+
+            const data = await response.json()
+            return data;
+        }
+        catch(error: unknown) {
+            throw new Error(`Failed to update comment ${error}`)
+        }
+    }
+
+    static async deleteComment(comment: CommentSchema) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/comments/delete`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(comment)
+            })
+
+            const data = await response.json()
+            return data;
+        }
+        catch(error: unknown) {
+            throw new Error(`Failed to delete comment ${error}`)
+        }
+    }
+
     static async getCommentsByPost(post: string) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/comments/retrieve/get_by_post?postId=${post}`, {

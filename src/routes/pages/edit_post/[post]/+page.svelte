@@ -12,7 +12,7 @@
 
     let title: string = $state('');
     let content: string = $state('');
-    let categoryList: any = $state([]);
+    let categoryList: string[] = $state([]);
     let selectedCategory: string | null = $state('');
     let isSubmitting: boolean = $state(false);
     let error: string = $state('');
@@ -36,6 +36,7 @@
         isSubmitting = true;
 
         const postData = {
+            postId: postId,
             title: title,
             content: content,
             category: selectedCategory,
@@ -43,7 +44,7 @@
         };
 
         try {
-            const response = await PostClient.createPost(postData);
+            const response = await PostClient.updatePost(postData);
             return response;
         } catch (error: any) {
             if (!error) {
@@ -96,11 +97,14 @@
             const response = await CategoryClient.getCategories();
             const postResponse = await PostClient.getPostById(postId);
             let filteredCategories: string[] = [];
+            title = postResponse.title;
+            content = postResponse.content;
+            selectedCategory = postResponse.category
 
             for (let i = 0; i < response.length; i++) {
                 const topic = response[i].topic;
 
-                if (topic === 'Updates' || topic === 'Announcements' || topic === 'All') {
+                if (topic === 'updates' || topic === 'announcements' || topic === 'all') {
                     continue;
                 }
 
@@ -255,7 +259,7 @@
                         Publishing...
                     </span>
                 {:else}
-                    Create Post
+                    Update Post
                 {/if}
             </button>
         </form>

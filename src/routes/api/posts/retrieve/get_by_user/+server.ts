@@ -53,6 +53,7 @@ export const GET = async ({ request }): Promise<Response> => {
                     SELECT COUNT(*)::int 
                     FROM comments
                     WHERE comments.post_id = posts.id
+                    AND comments.is_deleted = false
                 )`.as('comment_count'),
                 isLiked: sql<boolean>`EXISTS (
                     SELECT 1 FROM likes 

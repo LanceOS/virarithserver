@@ -1,4 +1,3 @@
-import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { posts, type PostSchema } from '$lib/schemas/Posts.ts';
 import { marked } from 'marked';
@@ -7,14 +6,7 @@ import sanitizeHtml from 'sanitize-html';
 export const POST = async ({ request }): Promise<Response> => {
 	
     try {
-        /**
-         * If there is no user then throw an error
-         * to block post creation
-         */
-        // const session = await authClient.getSession();
-        // if(!session.data) {
-        //     throw new Error("User must be logged in to create a new post!")
-        // }
+
         
         const body: PostSchema = await request.json();
         if(!body) {

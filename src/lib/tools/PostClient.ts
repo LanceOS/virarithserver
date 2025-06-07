@@ -41,7 +41,40 @@ class PostClient {
 
 
     static async updatePost(post: PostSchema) {
-        console.log(post)
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/edit`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(post)
+            })
+
+            const data = await response.json()
+            return data;
+        }
+        catch(error: unknown) {
+            throw new Error(`Failed to update post ${error}`)
+        }
+    }
+
+
+    static async deletePost(post: PostSchema) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/delete`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(post)
+            })
+
+            const data = await response.json()
+            return data;
+        }
+        catch(error: unknown) {
+            throw new Error(`Failed to delete post ${error}`)
+        }
     }
 
     /**

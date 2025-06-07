@@ -1,7 +1,7 @@
 <script lang="ts">
 	import LikeClient from '$lib/tools/LikeClient.ts';
 	import Icon from '@iconify/svelte';
-	import ErrorModal from '../Popups/ErrorModal.svelte';
+	import ErrorModal from '../popups/ErrorModal.svelte';
 	import { authClient } from '$lib/auth-client.ts';
 
 	const session = authClient.useSession();
