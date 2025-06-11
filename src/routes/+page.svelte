@@ -36,7 +36,7 @@
 		pagination = response.pagination;
 	};
 
-	const increasePage = async () => {
+	const incrementPage = async () => {
 		if (pagination.currentPage >= pagination.totalPages) {
 			console.log('returning');
 			return;
@@ -119,7 +119,7 @@
 		<div class="flex w-full flex-col gap-8">
 			{#if isInitialLoading}
 				<div class="flex min-h-64 flex-col items-center justify-center gap-4 p-8">
-					<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
+					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
 					<p class="text-muted">Loading posts...</p>
 				</div>
 			{:else if error && !posts}
@@ -147,7 +147,7 @@
 					</div>
 
 					<div class="flex items-center justify-between">
-						<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+						<Pagination {pagination} {decrementPage} {incrementPage} {isPaginationLoading} />
 						<Filter {changeOrder} />
 					</div>
 
@@ -161,7 +161,7 @@
 						<ForumFeed {posts} />
 					</div>
 
-					<Pagination {pagination} {decrementPage} {increasePage} {isPaginationLoading} />
+					<Pagination {pagination} {decrementPage} {incrementPage} {isPaginationLoading} />
 				</div>
 			{/if}
 		</div>

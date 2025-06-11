@@ -78,7 +78,7 @@
 	<h4 class="text-xl">Comments</h4>
 	{#if isLoadingComments}
 		<section class="flex min-h-32 flex-col items-center justify-center gap-2">
-			<div class="h-8 w-8 animate-spin rounded-full border-b-2 border-current"></div>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
 			<p class="text-muted">Loading comments...</p>
 		</section>
 	{:else if comments && comments.length > 0}
@@ -150,15 +150,3 @@
 	{/if}
 </section>
 
-<style>
-	/* Spinning animation for loading spinner */
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.animate-spin {
-		animation: spin 1s linear infinite;
-	}
-</style>

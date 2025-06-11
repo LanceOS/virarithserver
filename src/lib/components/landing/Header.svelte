@@ -54,7 +54,7 @@
             <button
                 type="button"
                 aria-label="Log In"
-                class="btn-small"
+                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
                 onclick={() => goto('/pages/login')}
             >
                 Log In
@@ -63,7 +63,7 @@
             <button
                 type="button"
                 aria-label="View notifications"
-                class="btn-small p-2"
+                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
                 onclick={() => goto('/pages/notifications')}
             >
                 <Icon icon="material-symbols:notifications-outline" class="h-6 w-6" />
@@ -71,15 +71,15 @@
             <button
                 type="button"
                 aria-label="View profile"
-                class="btn-small p-2"
-                onclick={() => goto('/pages/profile')}
+                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
+                onclick={() => goto(`/pages/profile/${$session.data?.user.id}`)}
             >
                 <Icon icon="material-symbols:person-outline" class="h-6 w-6" />
             </button>
             <button
                 type="button"
                 aria-label="Log Out"
-                class="btn-small"
+                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
                 onclick={handleSignOut}
             >
                 Log Out
@@ -118,7 +118,7 @@
                         <button
                             type="button"
                             aria-label="Log In"
-                            class="btn-small w-full"
+                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
                             onclick={() => handleNavigation('/pages/login')}
                         >
                             Log In
@@ -127,7 +127,7 @@
                         <button
                             type="button"
                             aria-label="View notifications"
-                            class="btn-small w-full"
+                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
                             onclick={() => handleNavigation('/pages/notifications')}
                         >
                             Notifications
@@ -135,15 +135,15 @@
                         <button
                             type="button"
                             aria-label="View profile"
-                            class="btn-small w-full"
-                            onclick={() => handleNavigation('/pages/profile')}
+                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
+                            onclick={() => handleNavigation(`/pages/profile/${$session.data?.user.id}`)}
                         >
                             Profile
                         </button>
                         <button
                             type="button"
                             aria-label="Log Out"
-                            class="btn-small w-full"
+                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
                             onclick={() => {
                                 handleSignOut();
                                 closeMobileMenu();

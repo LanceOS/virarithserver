@@ -91,7 +91,7 @@
 <main class="border-muted mx-auto flex max-w-7xl flex-col gap-8 p-3 sm:p-8 pb-12">
 	{#if isLoadingPost}
 		<section class="flex min-h-64 flex-col items-center justify-center gap-2">
-			<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
 			<p class="text-muted">Loading post...</p>
 		</section>
 	{:else if post}
@@ -189,15 +189,3 @@
 	{/if}
 </main>
 
-<style>
-	/* Spinning animation for loading spinner */
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.animate-spin {
-		animation: spin 1s linear infinite;
-	}
-</style>

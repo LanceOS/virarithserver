@@ -130,7 +130,7 @@
 		<div class="w-full lg:w-3/4">
 			{#if isInitialLoading}
 				<section class="flex min-h-64 flex-col items-center justify-center gap-4">
-					<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
+					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
 					<p class="text-muted text-sm sm:text-base">Loading posts...</p>
 				</section>
 			{:else if error && !posts}
@@ -190,7 +190,7 @@
 					<div class="relative">
 						{#if isPaginationLoading}
 							<div class="flex min-h-64 flex-col items-center justify-center gap-4">
-								<div class="h-12 w-12 animate-spin rounded-full border-b-2 border-current"></div>
+								<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
 								<p class="text-muted text-sm sm:text-base">Loading posts...</p>
 							</div>
 						{/if}
