@@ -1,5 +1,8 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
+import { serializeComment } from '$lib/serializers/CommentSerializer.ts';
+import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
+import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import { and, sql } from 'drizzle-orm';
 
 
@@ -29,11 +32,8 @@ export const GET = async ({ request }): Promise<Response> => {
                     FROM likes 
                     WHERE likes.comment_id = comments.id
                 )`.as('like_count'),
-                isLiked: sql<boolean>`EXISTS (
-                    SELECT 1 FROM likes 
-                    WHERE likes.comment_id = comments.id 
-                    AND likes.user_id = ${userId}
-                )`.as('is_liked')
+                isLiked: isLikedSubquery(userId).as('is_liked'),
+                replyCount: replyCountSubquery(null)
             },
             with: {
                 user: true,
@@ -41,7 +41,12 @@ export const GET = async ({ request }): Promise<Response> => {
             orderBy: (comments, { desc }) => [desc(comments.createdAt)]
         })
 
-        return new Response(JSON.stringify(comments), {
+        /**
+         * @returns Serializes comments
+         */
+        const serializeData = comments.map(serializeComment)
+
+        return new Response(JSON.stringify(serializeData), {
             status: 200,
             statusText: "OK",
             headers: {

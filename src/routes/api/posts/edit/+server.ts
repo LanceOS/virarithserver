@@ -25,8 +25,8 @@ export const PUT = async ({ request }) => {
             category: body.category,
             isEdited: true
         })
-            .where(and(eq(posts.id, body.postId), eq(posts.userId, session.user.id)))
-            .returning({ id: posts.id })
+        .where(and(eq(posts.id, body.postId), eq(posts.userId, session.user.id)))
+        .returning({ id: posts.id })
 
         if (!response) {
             throw new Error(`Failed to update post in database ${response}`)

@@ -59,14 +59,14 @@ class PostClient {
     }
 
 
-    static async deletePost(post: PostSchema) {
+    static async deletePost(postId: string) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/posts/delete`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(post)
+                body: postId
             })
 
             const data = await response.json()

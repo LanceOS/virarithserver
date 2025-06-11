@@ -1,7 +1,8 @@
+import { auth } from '$lib/auth.ts'
 import { DrizzleDB } from '$lib/Drizzle.ts'
 import { commentReply } from '$lib/schemas/CommentReply.ts'
 import { comments } from '$lib/schemas/Comments.ts'
-import { posts, type PostSchema } from '$lib/schemas/Posts.ts'
+import { posts } from '$lib/schemas/Posts.ts'
 import { and, eq } from 'drizzle-orm'
 
 /**
@@ -13,19 +14,29 @@ import { and, eq } from 'drizzle-orm'
  */
 export const PUT = async ({ request }) => {
     try {
-        const body: PostSchema = await request.json()
+        const postId: string = await request.json()
 
-        if (!body.id || !body.userId || !body) {
+        if (!postId) {
             throw new Error("Failed to pass post for deletion")
         }
 
+        const session = await auth.api.getSession({
+            headers: request.headers
+        });
+        const userId: string | null = session?.user.id || null;
+
+        if(!userId) {
+            throw new Error("User must be logged in to delete post.")
+        }
+
+
         await DrizzleDB.transaction(async (tx) => {
-            await tx.update(posts).set({ isDeleted: true }).where(and(eq(posts.id, body.id!), eq(posts.userId, body.userId))).execute();
-            await tx.update(comments).set({ isDeleted: true }).where(eq(comments.postId, body.id!)).execute();
-            await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.postId, body.id!)).execute();
+            await tx.update(posts).set({ isDeleted: true }).where(and(eq(posts.id, postId), eq(posts.userId, userId))).execute();
+            await tx.update(comments).set({ isDeleted: true }).where(eq(comments.postId, postId)).execute();
+            await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.postId, postId)).execute();
         })
 
-        return new Response(JSON.stringify({ success: true, postId: body.id }), {
+        return new Response(JSON.stringify({ success: true, postId: postId }), {
             status: 200,
             statusText: "OK",
             headers: {

@@ -51,7 +51,6 @@
 	],
 	"dependencies": {
 		"@sveltejs/kit": "^2.21.1",
-		"@tanstack/svelte-query": "^5.79.0",
 		"aos": "^2.3.4",
 		"better-auth": "^1.2.8",
 		"chalk": "^5.4.1",
@@ -61,6 +60,7 @@
 		"nodemailer": "^7.0.3",
 		"pg": "^8.16.0",
 		"playwright": "^1.52.0",
-		"sanitize-html": "^2.17.0"
+		"sanitize-html": "^2.17.0",
+		"uuid": "^11.1.0"
 	}
 }

@@ -3,6 +3,8 @@ import { posts } from '$lib/schemas/Posts.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
+import { serializePost } from '$lib/serializers/PostSerializer.ts';
+import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 
 
 
@@ -55,12 +57,7 @@ export const GET = async ({ request }): Promise<Response> => {
                     WHERE comments.post_id = posts.id
                     AND comments.is_deleted = false
                 )`.as('comment_count'),
-                isLiked: sql<boolean>`EXISTS (
-                    SELECT 1 FROM likes 
-                    WHERE likes.object_id = posts.id
-                    AND likes.object_type = posts.type 
-                    AND likes.user_id = ${userId}
-                )`.as('is_liked')
+                isLiked: isLikedSubquery(userId).as('is_liked')
             },
             with: {
                 user: true,
@@ -81,9 +78,14 @@ export const GET = async ({ request }): Promise<Response> => {
             .where(eq(posts.isDeleted, false));
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
+        
+        /**
+         * @returns Serializes post data
+         */
+        const serializedData = postData.map(serializePost)
 
         return new Response(JSON.stringify({
-            posts: postData,
+            posts: serializedData,
             pagination: {
                 currentPage: page,
                 totalPages: totalPages,

@@ -1,5 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
+import { serializePost } from '$lib/serializers/PostSerializer.ts';
+import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import { and, sql } from 'drizzle-orm';
 
 
@@ -40,19 +42,23 @@ export const GET = async ({ request }): Promise<Response> => {
                     WHERE comments.post_id = posts.id
                     AND comments.is_deleted = false
                 )`.as('comment_count'),
-                isLiked: sql<boolean>`EXISTS (
-                    SELECT 1 FROM likes 
-                    WHERE likes.object_id = posts.id
-                    AND likes.object_type = posts.type 
-                    AND likes.user_id = ${userId}
-                )`.as('is_liked')
+                isLiked: isLikedSubquery(userId).as('is_liked')
             },
             with: {
                 user: true,
             },
         })
 
-        return new Response(JSON.stringify(post), {
+        if(!post) {
+            throw new Error("Failed to find post")
+        }
+           
+        /**
+         * @returns Serializes post data
+         */
+        const serializedData = serializePost(post)
+
+        return new Response(JSON.stringify(serializedData), {
             status: 200,
             statusText: "OK",
             headers: {
