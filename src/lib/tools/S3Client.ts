@@ -1,55 +1,42 @@
-import * as Minio from 'minio'
-import * as Fs from 'fs'
-import { uuid } from 'drizzle-orm/pg-core';
 
 
 
 class S3Client {
     instance: S3Client | null = null;
 
-    // TODO: Move to .env later
-    static bucketName = "virarithbucket"
-
-    credentials() {
-        if (this.instance) return this.instance;
-        this.instance = this;
+    constructor() {
+        if(this.instance) return this.instance;
+        this.instance = null;
     }
 
-    static minioClient = new Minio.Client({
-        endPoint: "play.min.io",
-        port: 9000,
-        useSSL: true,
-        accessKey: process.env.BUCKET_ACCESS_KEY,
-        secretKey: process.env.BUCKET_SECRET_KEY
-    });
+    static async uploadImages(files: File[], fetchFn: typeof fetch): Promise<string[]> {
+        try {
 
-    static async uploadToBucket(file: any) {
-        const fileStream = Fs.createReadStream(file)
-        Fs.stat(file, function (err, stats) {
-            if (err) {
-                return console.log(err)
-            }
-            this.minioClient.putObject(this.bucketName, uuid(), fileStream, stats.size, function (err: string, objInfo: object) {
-                if (err) {
-                    return console.log(err) // err should be null
+            console.log("Files in upload images S3Client", files)
+            const uploadPromises = files.map(async (file): Promise<string> => {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetchFn('/api/objects/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Upload failed: ${errorText}`);
                 }
-                console.log('Success', objInfo)
-            })
-        })
-    }
-
-    static async getFromBucket(fileId: string) {
-        let size = 0;
-        const dataStream = await this.minioClient.getObject(this.bucketName, fileId)
-        dataStream.on('data', function (chunk) {
-            size += chunk.length
-        })
-        dataStream.on('end', function () {
-            console.log('End. Total size = ' + size)
-        })
-        dataStream.on('error', function (err) {
-            console.log(err)
-        })
+                
+                return await response.text();
+            });
+            
+            const fileIds = await Promise.all(uploadPromises);
+            return fileIds;
+        }
+        catch(error) {
+            console.error('S3Client upload error:', error);
+            throw new Error(`Upload failed: ${error.message}`);
+        }
     }
 }
 
