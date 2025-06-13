@@ -45,7 +45,7 @@ class S3Client {
                 
                 successfullIds.push(response)
             }
-
+            console.log(successfullIds)
             return successfullIds
         }
         catch (error) {

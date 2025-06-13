@@ -5,10 +5,10 @@ import { sql, type InferInsertModel } from "drizzle-orm";
 
 export const posts = pgTable('posts', {
     id: uuid().primaryKey().notNull().default(sql`gen_random_uuid()`),
-    title: varchar("title", { length: 100 }).notNull(),
+    title: varchar("title", { length: 200 }).notNull(),
     content: text("content").notNull(),
     userId: text("user_id").references(() => user.id).notNull(),
-    category: varchar("category", { length: 32 }).notNull(),
+    category: varchar("category", { length: 64 }).notNull(),
     type: text("type").default("post").notNull(),
     isEdited: boolean("is_edited").default(false),
     isDeleted: boolean("is_deleted").default(false),

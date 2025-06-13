@@ -24,8 +24,6 @@ class PostClient {
      */
     static async createPost(post: PostSchema) {
         try {
-            console.log("in try")
-
             const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
                 method: "POST",
                 headers: {

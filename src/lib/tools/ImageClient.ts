@@ -7,14 +7,9 @@ import { bucketName, minioClient } from "$lib/server/MinIO.ts";
 import { and } from "drizzle-orm";
 import { pipeline } from 'stream/promises';
 import { Writable } from 'stream';
+import type { ImageWithBuffer } from "$lib/@types/IImage.ts";
 
-interface ImageWithBuffer {
-    id: string;
-    url: string;
-    bucketObjectId: string;
-    objectId: string;
-    objectType: string;
-}
+
 
 class ImageClient {
     instance: ImageClient | null = null;
@@ -24,6 +19,15 @@ class ImageClient {
         this.instance = this;
     }
 
+    /**
+     * @description When images are uploaded to the object storage bucket the ID of that image is stored
+     * within the Image table in drizzle along with the object id and type. (object id and type refers to the Post/Comment/CommentReply objects and their types).
+     * This is used to create a connection between the user's created post and image.
+     * 
+     * Uses {@link DrizzleDB} to query the {@link ImageSchema} table
+     * @param postedObject Array of {@link PostSchema}, {@link CommentSchema}, or {@link CommentReplySchema}
+     * @returns Image objects that exist within drizzle.
+     */
     static async getDrizzleImageObjects(postedObject: PostSchema[] | CommentSchema[] | CommentReplySchema[]): Promise<ImageSchema[]> {
         const objects = []
         for (let i = 0; i < postedObject.length; i++) {
@@ -34,23 +38,40 @@ class ImageClient {
             objects.push(...image)
         }
 
-        await Promise.all(objects)
         return objects;
     };
 
-    static async getS3Objects(drizzleImageObjects: ImageSchema[]): Promise<ImageWithBuffer[]> {
-        const imagePromises = drizzleImageObjects.map(async (imageObj: ImageSchema): Promise<ImageWithBuffer> => {
+    /**
+     * Retrieves images from S3 object storage and converts them to base64 data URLs.
+     * 
+     * First queries the database for image metadata using {@link getDrizzleImageObjects}, 
+     * then fetches the actual image files from S3 storage and converts them to base64 
+     * format for client consumption.
+     * 
+     * Uses {@link getDrizzleImageObjects} to query the {@link ImageSchema} table
+     * Uses {@link ImageWithBuffer} for the return type structure
+     * 
+     * @param {PostSchema[]|CommentSchema[]|CommentReplySchema[]} postedObject 
+     *        Array of posts, comments, or comment replies to fetch images for
+     * @returns {Promise<ImageWithBuffer[]>} Promise resolving to image objects with base64 data URLs
+     * 
+     * @see minioClient.getObject - S3 object retrieval
+     * @requires minio - For S3 object storage access
+     */
+    static async getS3Objects(postedObject: PostSchema[] | CommentSchema[] | CommentReplySchema[]): Promise<ImageWithBuffer[]> {
+        const drizzleImageObjects = this.getDrizzleImageObjects(postedObject);
+        const imagePromises = (await drizzleImageObjects).map(async (imageObj: ImageSchema): Promise<ImageWithBuffer> => {
             const chunks: Buffer[] = [];
-            
+
             const collectChunks = new Writable({
                 write(chunk: Buffer, encoding, callback) {
                     chunks.push(chunk);
                     callback();
                 }
             });
-    
+
             const dataStream = await minioClient.getObject(bucketName, imageObj.bucketObjectId);
-            
+
             await pipeline(dataStream, collectChunks);
 
             const bufferedImage = Buffer.concat(chunks)
@@ -65,7 +86,7 @@ class ImageClient {
                 bucketObjectId: imageObj.bucketObjectId
             };
         });
-    
+
         return Promise.all(imagePromises);
     }
 }

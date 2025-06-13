@@ -25,7 +25,7 @@
 	const MAX_CONTENT_CHARS = 1200;
 	const MAX_TITLE_CHARS = 100;
 	const MAX_FILE_SIZE = 3 * 1024 * 1024;
-	const MAX_FILES = 5;
+	const MAX_FILES = 3;
 	const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
 	const handleFileChange = (event: InputEvent) => {
@@ -82,7 +82,6 @@
 
 		fileInput.files = dt.files;
 
-
 		imagePreviews.splice(index, 1);
 		imagePreviews = [...imagePreviews];
 	};
@@ -91,7 +90,7 @@
 		imagePreviews = [];
 		const fileInput = document.getElementById('file') as HTMLInputElement;
 		if (fileInput) {
-			fileInput.value = ''; 
+			fileInput.value = '';
 
 			if (fileInput.files) {
 				fileInput.files = new DataTransfer().files;
@@ -139,9 +138,12 @@
 			let filteredCategories: string[] = [];
 
 			for (let i = 0; i < response.length; i++) {
-				const topic = response[i].topic;
-
-				if (topic === 'Updates' || topic === 'Announcements' || topic === 'All') {
+				const topic = response[i].topic.trim().toLowerCase();
+				if (
+					topic.toLowerCase() === 'updates' ||
+					topic.toLowerCase() === 'announcements' ||
+					topic.toLowerCase() === 'all'
+				) {
 					continue;
 				}
 

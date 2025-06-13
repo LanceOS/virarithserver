@@ -3,9 +3,8 @@ import { posts } from '$lib/schemas/Posts.ts';
 import { count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
-import { serializePost } from '$lib/serializers/PostSerializer.ts';
+import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
-import type { ImageSchema } from '$lib/schemas/Images.ts';
 import ImageClient from '$lib/tools/ImageClient.ts';
 
 
@@ -59,37 +58,23 @@ export const GET = async ({ request }): Promise<Response> => {
             orderBy: orderBySort(orderBy)
         });
 
-        const drizzleImageObjects: ImageSchema[] = await ImageClient.getDrizzleImageObjects(postData);
-
-        const images = await ImageClient.getS3Objects(drizzleImageObjects);
         /**
          * Getting the total number of posts from the database.
          * This is so that way the number of pages for pagination can
          * be calculated.
-         */
-        const [{ count: totalCount }] = await DrizzleDB
-            .select({ count: count() })
-            .from(posts)
-            .where(eq(posts.isDeleted, false));
-
-        const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
-
-        /**
-         * @returns Serializes post data
-         */
-        const serializedPostData = postData.map(post => {
-            const serialized = serializePost(post);
-            const imagesForCurrentPost = images.filter(img => img.objectId === post.id && img.objectType === post.type)
-            .filter(img => img !== null);
-
-            return {
-                ...serialized,
-                images: imagesForCurrentPost
-            }
-        })
+        */
+       const [{ count: totalCount }] = await DrizzleDB
+       .select({ count: count() })
+       .from(posts)
+       .where(eq(posts.isDeleted, false));
+       
+       const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
+       
+        const images = await ImageClient.getS3Objects(postData);
+        const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images)
 
         return new Response(JSON.stringify({
-            posts: serializedPostData,
+            posts: conformedPostData,
             pagination: {
                 currentPage: page,
                 totalPages: totalPages,

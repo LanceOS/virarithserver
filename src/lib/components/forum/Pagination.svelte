@@ -13,7 +13,7 @@
 		class={`${!pagination.hasPrevious || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
 	>
 		{#if isPaginationLoading}
-			<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-sm" />
 		{:else}
 			<Icon icon="material-symbols:arrow-left-alt" />
 		{/if}
@@ -33,7 +33,7 @@
 		class={`${!pagination.hasNext || isPaginationLoading ? 'muted border-muted opacity-50' : 'content border'} cursor-pointer p-2 text-xl transition-opacity`}
 	>
 		{#if isPaginationLoading}
-			<div class="h-5 w-5 animate-spin rounded-full border-b-2 border-current"></div>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-sm" />
 		{:else}
 			<Icon icon="material-symbols:arrow-right-alt" />
 		{/if}
@@ -41,5 +41,5 @@
 {/snippet}
 
 <div class="flex items-center gap-4">
-    {@render Pagination()}
+	{@render Pagination()}
 </div>

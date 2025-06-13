@@ -7,7 +7,7 @@ export const comments = pgTable("comments", {
     id: uuid().primaryKey().notNull().default(sql`gen_random_uuid()`),
     userId: text("user_id").references(() => user.id).notNull(),
     postId: uuid("post_id").references(() => posts.id).notNull(),
-    content: varchar("content", { length: 256 }).notNull(),
+    content: text("content").notNull(),
     type: text("type").default("comment").notNull(),
     isEdited: boolean("is_edited").default(false),
     isDeleted: boolean("is_deleted").default(false),

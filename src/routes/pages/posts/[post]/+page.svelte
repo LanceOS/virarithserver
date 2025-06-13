@@ -12,11 +12,13 @@
 	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 	import { page } from '$app/state';
+	import ImagePreview from '$lib/components/posts/ImagePreview.svelte';
+	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
 
-	let post: any = $state();
+	let post: PostWithImage | undefined = $state();
 	let comments: any = $state();
 	let isLoadingPost: boolean = $state(true);
 	let isLoadingComments: boolean = $state(false);
@@ -39,7 +41,7 @@
 		openPostActions = false;
 
 		try {
-			await PostClient.deletePost(post);
+			await PostClient.deletePost(postId);
 
 			goto('/pages/forum');
 		} catch (error) {
@@ -56,7 +58,7 @@
 	};
 
 	const handleAddComment = (comment: CommentSchema) => {
-		comments = [comment, ...comments]
+		comments = [comment, ...comments];
 		if (post) {
 			post.commentCount = post.commentCount + 1;
 		}
@@ -70,8 +72,8 @@
 			post = postResponse;
 			const commentResponse = await CommentClient.getCommentsByPost(postId);
 			comments = commentResponse;
-			console.log(comments)
-			if ($session.data?.user.id === post.userId) {
+			console.log(comments);
+			if ($session.data?.user.id === post?.user.id) {
 				hasActions = true;
 			}
 		} catch (error) {
@@ -88,10 +90,10 @@
 	<ErrorModal {errorLog} />
 {/if}
 <Header />
-<main class="border-muted mx-auto flex max-w-7xl flex-col gap-8 p-3 sm:p-8 pb-12">
+<main class="border-muted mx-auto flex max-w-7xl flex-col gap-8 p-3 pb-12 sm:p-8">
 	{#if isLoadingPost}
 		<section class="flex min-h-64 flex-col items-center justify-center gap-2">
-			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
 			<p class="text-muted">Loading post...</p>
 		</section>
 	{:else if post}
@@ -100,8 +102,8 @@
 				<div class="flex items-center gap-4">
 					<div class="flex flex-col">
 						<span class="btn-nav font-semibold sm:text-lg">{post.user.name}</span>
-						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt}>
-							{formatDate(post.createdAt)}
+						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt.toISOString()}>
+							{formatDate(post.createdAt.toISOString())}
 						</time>
 					</div>
 					{#if post.isEdited}
@@ -124,7 +126,7 @@
 					>
 						<div class="">
 							<button
-								onclick={() => goto(`/pages/edit_post/${post.id}`)}
+								onclick={() => goto(`/pages/edit_post/${post?.id}`)}
 								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors duration-150 hover:bg-gray-500"
 							>
 								<Icon icon="mdi:text-box-edit-outline" />
@@ -154,6 +156,12 @@
 				</p>
 			</div>
 
+			{#if post.images}
+				<div class="-mt-2">
+					<ImagePreview imagePreviews={post.images} />
+				</div>
+			{/if}
+
 			<footer class="flex justify-between">
 				<div class="flex items-center gap-2">
 					<LikeButton object={post} />
@@ -180,7 +188,7 @@
 		</section>
 	{/if}
 
-	{#if $session.data?.user}
+	{#if $session.data?.user && post}
 		<CreateComment {handleAddComment} />
 	{/if}
 
@@ -188,4 +196,3 @@
 		<CommentFeed {comments} {isLoadingComments} {handleCommentDelete} />
 	{/if}
 </main>
-
