@@ -4,14 +4,12 @@ import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
 export const POST = async ({ request }): Promise<Response> => {
-	
-    try {
 
-        
+    try {
         const body: PostSchema = await request.json();
-        if(!body) {
-            throw new Error("Failed to get data for post")
-        }
+        if (!body) {
+            throw new Error("Failed to get data for post");
+        };
 
         const rawHtmlTitle = await marked(body.title);
         const rawHtmlContent = await marked(body.content);
@@ -42,12 +40,12 @@ export const POST = async ({ request }): Promise<Response> => {
             userId: body.userId,
             category: body.category,
             type: "post"
-        }
-        
+        };
+
         /**
          * Creating new post with drizzle
          */
-        const newPost = await DrizzleDB.insert(posts).values(cleanBody).returning()
+        const newPost = await DrizzleDB.insert(posts).values(cleanBody).returning();
 
         return new Response(JSON.stringify(newPost), {
             status: 200,
@@ -57,7 +55,7 @@ export const POST = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch(error) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 404,
             statusText: "Failed to create post!",

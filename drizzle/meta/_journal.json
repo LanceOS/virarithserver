@@ -239,6 +239,20 @@
       "when": 1749252771569,
       "tag": "0033_colossal_retro_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1749668536214,
+      "tag": "0034_glamorous_madelyne_pryor",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1749681016614,
+      "tag": "0035_lethal_microbe",
+      "breakpoints": true
     }
   ]
 }

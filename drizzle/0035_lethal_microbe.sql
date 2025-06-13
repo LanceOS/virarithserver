@@ -1,0 +1,1 @@
+ALTER TABLE "images" ADD COLUMN "bucket_object_id" text NOT NULL;

@@ -24,6 +24,8 @@ class PostClient {
      */
     static async createPost(post: PostSchema) {
         try {
+            console.log("in try")
+
             const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
                 method: "POST",
                 headers: {
@@ -31,7 +33,7 @@ class PostClient {
                 },
                 body: JSON.stringify(post)
             })
-            const data = await response.json(); 
+            const data = await response.json();
             return data;
         }
         catch (error) {

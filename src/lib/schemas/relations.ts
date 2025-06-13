@@ -7,6 +7,7 @@ import { comments } from "./Comments.ts";
 import { commentReply } from "./CommentReply.ts";
 import { likes } from "./Likes.ts";
 import { profile } from "./Profile.ts";
+import { images } from "./Images.ts";
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
     user: one(user, {
@@ -69,6 +70,14 @@ export const likesRelations = relations(likes, ({ one }) => ({
 export const profileRelations = relations(profile, ({ one }) => ({
     user: one(user, {
         fields: [profile.userId],
+        references: [user.id],
+    }),
+}));
+
+
+export const imagesRelations = relations(images, ({ one }) => ({
+    user: one(user, {
+        fields: [images.userId],
         references: [user.id],
     }),
 }));

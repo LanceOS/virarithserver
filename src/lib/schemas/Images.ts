@@ -6,6 +6,7 @@ import { user } from "./authentication.ts";
 
 export const images = pgTable("images", {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    bucketObjectId: text("bucket_object_id").notNull(),
     userId: text("user_id").references(() => user.id).notNull(),
     objectId: uuid("object_id").notNull(),
     objectType: text("object_type").notNull()

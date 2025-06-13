@@ -5,6 +5,8 @@ import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
 import { serializePost } from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
+import type { ImageSchema } from '$lib/schemas/Images.ts';
+import ImageClient from '$lib/tools/ImageClient.ts';
 
 
 
@@ -57,7 +59,9 @@ export const GET = async ({ request }): Promise<Response> => {
             orderBy: orderBySort(orderBy)
         });
 
+        const drizzleImageObjects: ImageSchema[] = await ImageClient.getDrizzleImageObjects(postData);
 
+        const images = await ImageClient.getS3Objects(drizzleImageObjects);
         /**
          * Getting the total number of posts from the database.
          * This is so that way the number of pages for pagination can
@@ -73,10 +77,19 @@ export const GET = async ({ request }): Promise<Response> => {
         /**
          * @returns Serializes post data
          */
-        const serializedData = postData.map(serializePost)
+        const serializedPostData = postData.map(post => {
+            const serialized = serializePost(post);
+            const imagesForCurrentPost = images.filter(img => img.objectId === post.id && img.objectType === post.type)
+            .filter(img => img !== null);
+
+            return {
+                ...serialized,
+                images: imagesForCurrentPost
+            }
+        })
 
         return new Response(JSON.stringify({
-            posts: serializedData,
+            posts: serializedPostData,
             pagination: {
                 currentPage: page,
                 totalPages: totalPages,

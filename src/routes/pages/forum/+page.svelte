@@ -24,6 +24,10 @@
 	let selectedCategory: string = $state('all');
 	let orderBy: string = $state('desc');
 
+		$effect(() => {
+			console.log(posts)
+		})
+
 	const changeOrder = async (order: string) => {
 		if (orderBy === order.toLocaleLowerCase()) return;
 		orderBy = order.toLocaleLowerCase();

@@ -1,3 +1,6 @@
+import type { CommentReplySchema } from "$lib/schemas/CommentReply.ts";
+import type { CommentSchema } from "$lib/schemas/Comments.ts";
+import type { PostSchema } from "$lib/schemas/Posts.ts";
 
 
 
@@ -5,35 +8,47 @@ class S3Client {
     instance: S3Client | null = null;
 
     constructor() {
-        if(this.instance) return this.instance;
+        if (this.instance) return this.instance;
         this.instance = null;
     }
 
-    static async uploadImages(files: File[], fetchFn: typeof fetch): Promise<string[]> {
+    /**
+     * 
+     * @param files 
+     * @param object 
+     * @param fetchFn 
+     * @returns Returns the list of newly created file id's that exist in Postgres and MinIO
+     */
+    static async uploadImages(files: File[], object: PostSchema | CommentSchema | CommentReplySchema, fetchFn: typeof fetch): Promise<string[]> {
         try {
 
-            console.log("Files in upload images S3Client", files)
-            const uploadPromises = files.map(async (file): Promise<string> => {
+            const successfullIds = [];
+            for await (const file of files) {
                 const formData = new FormData();
+
                 formData.append('file', file);
-                
+
+                if (!object?.id || !object?.type) {
+                    throw new Error(`Missing object fields: ${object.id}, ${object.type}`)
+                }
+
+                const objectId = object.id;
+                const objectType = object.type;
+
+                formData.append('objectId', objectId);
+                formData.append('objectType', objectType);
+
                 const response = await fetchFn('/api/objects/upload', {
                     method: 'POST',
                     body: formData
-                });
+                }).then(response => response.json())
                 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Upload failed: ${errorText}`);
-                }
-                
-                return await response.text();
-            });
-            
-            const fileIds = await Promise.all(uploadPromises);
-            return fileIds;
+                successfullIds.push(response)
+            }
+
+            return successfullIds
         }
-        catch(error) {
+        catch (error) {
             console.error('S3Client upload error:', error);
             throw new Error(`Upload failed: ${error.message}`);
         }

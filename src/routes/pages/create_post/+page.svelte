@@ -68,37 +68,33 @@
 	};
 
 	const removeImage = (index: number) => {
-		// Get the file input element
 		const fileInput = document.getElementById('file') as HTMLInputElement;
 		if (!fileInput || !fileInput.files) return;
 
 		// Create a new DataTransfer object
 		const dt = new DataTransfer();
 
-		// Add all files *except* the one at the specified index
 		Array.from(fileInput.files).forEach((file, i) => {
 			if (i !== index) {
 				dt.items.add(file);
 			}
 		});
 
-		// Update the file input's files property with the new DataTransfer object
 		fileInput.files = dt.files;
 
-		// Update your imagePreviews state to reflect the change
+
 		imagePreviews.splice(index, 1);
-		imagePreviews = [...imagePreviews]; // Trigger Svelte reactivity
+		imagePreviews = [...imagePreviews];
 	};
 
 	const removeAllImages = () => {
 		imagePreviews = [];
 		const fileInput = document.getElementById('file') as HTMLInputElement;
 		if (fileInput) {
-			fileInput.value = ''; // Clears the selected files from the input
-			// Also explicitly set files property for robustness, though value='' often clears it
+			fileInput.value = ''; 
+
 			if (fileInput.files) {
-				// Check if files property exists
-				fileInput.files = new DataTransfer().files; // Set to an empty FileList
+				fileInput.files = new DataTransfer().files;
 			}
 		}
 	};
@@ -272,7 +268,7 @@
 					<select
 						id="category"
 						bind:value={selectedCategory}
-						name="cateogry"
+						name="category"
 						required
 						class="input border-muted w-full cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
 					>

@@ -56,14 +56,14 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="border-muted">
+<div class="">
 	{#if imagePreviews.length > 0}
-		<div class="mb-4 p-4">
+		<div class="">
 			<div class="mb-4 flex items-center justify-between">
-				<span class="content text-sm font-medium">
-					Image Previews ({imagePreviews.length}/{maxFiles})
-				</span>
 				{#if removeAllImages}
+					<span class="content text-sm font-medium">
+						Image Previews ({imagePreviews.length}/{maxFiles})
+					</span>
 					<button
 						type="button"
 						onclick={removeAllImages}
@@ -81,7 +81,7 @@
 					<div class="relative aspect-video overflow-hidden">
 						<img
 							src={currentImage?.url}
-							alt="Preview {currentImage?.file.name}"
+							alt="Preview {currentImage?.file ? currentImage?.file.name : 'Image'}"
 							class="h-full w-full object-cover"
 						/>
 					</div>
@@ -125,23 +125,25 @@
 					{/if}
 
 					<!-- Image Info -->
-					<div
-						class="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4"
-					>
-						<div class="text-white">
-							<div class="truncate text-sm font-medium" title={currentImage?.file.name}>
-								{currentImage?.file.name}
-							</div>
-							<div class="text-xs opacity-90">
-								{(currentImage?.file.size / 1024 / 1024).toFixed(2)} MB
-							</div>
-							{#if imagePreviews.length > 1}
-								<div class="mt-1 text-xs opacity-75">
-									{currentPage} of {totalImages}
+					{#if currentImage.file}
+						<div
+							class="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4"
+						>
+							<div class="text-white">
+								<div class="truncate text-sm font-medium" title={currentImage?.file.name}>
+									{currentImage?.file.name}
 								</div>
-							{/if}
+								<div class="text-xs opacity-90">
+									{(currentImage?.file.size / 1024 / 1024).toFixed(2)} MB
+								</div>
+								{#if imagePreviews.length > 1}
+									<div class="mt-1 text-xs opacity-75">
+										{currentPage} of {totalImages}
+									</div>
+								{/if}
+							</div>
 						</div>
-					</div>
+					{/if}
 				</div>
 			</div>
 
@@ -152,9 +154,9 @@
 						<button
 							type="button"
 							onclick={() => goToImage(index)}
-							class="relative flex-shrink-0 overflow-hidden rounded border-2 transition-all duration-200 {index ===
+							class="relative flex-shrink-0 rounded cursor-pointer overflow-hidden border-2 transition-all duration-200 {index ===
 							currentIndex
-								? 'border-blue-500 ring-2 ring-blue-200'
+								? 'border-blue-500'
 								: 'border-gray-300 hover:border-gray-400'}"
 							aria-label="Go to image {index + 1}"
 						>

@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
+	import ImagePreview from '../posts/ImagePreview.svelte';
 
 	let { posts } = $props();
 
@@ -33,7 +34,7 @@
 							</time>
 						</div>
 						{#if post.isEdited}
-						<p class="text-xs">(edited)</p>
+							<p class="text-xs">(edited)</p>
 						{/if}
 					</div>
 					<span class="text-sm font-medium">{post.category.toUpperCase()}</span>
@@ -51,6 +52,13 @@
 						{@html post.content.length > 50 ? post.content.slice(0, 150) + '…' : post.content}
 					</p>
 				</button>
+
+				{#if post.images}
+				<div class="-mt-2">
+					<ImagePreview imagePreviews={post.images} />
+				</div>
+				{/if}
+				
 
 				<footer class="flex items-center justify-between text-sm">
 					<div class="flex items-center gap-4">
