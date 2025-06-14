@@ -4,8 +4,9 @@ import { and, count, eq } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { sql } from 'drizzle-orm';
 import { auth } from '$lib/auth.ts';
-import { serializePost } from '$lib/serializers/PostSerializer.ts';
+import PostSerializer, { serializePost } from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
+import ImageClient from '$lib/tools/ImageClient.ts';
 
 
 
@@ -70,9 +71,6 @@ export const GET = async ({ request }): Promise<Response> => {
             orderBy: orderBySort(orderBy)
         });
 
-
-
-
         /**
          * Getting the total number of posts from the database.
          * This is so that way the number of pages for pagination can
@@ -89,13 +87,12 @@ export const GET = async ({ request }): Promise<Response> => {
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 
-        /**
-         * @returns Serializes post data
-         */
-        const serializedData = postData.map(serializePost)
+
+        const images = await ImageClient.getS3Objects(postData);
+        const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images)
 
         return new Response(JSON.stringify({
-            posts: serializedData,
+            posts: conformedPostData,
             pagination: {
                 currentPage: page,
                 totalPages: totalPages,

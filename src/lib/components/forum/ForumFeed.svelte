@@ -19,7 +19,7 @@
 <section class="flex w-full flex-col gap-4">
 	{#if posts}
 		{#each posts as post (post.id)}
-			<article class="card-setup flex flex-col gap-4 p-4">
+			<article class="card-setup flex flex-col gap-6 p-4">
 				<header class="flex items-center justify-between gap-2">
 					<div class="flex items-center gap-4">
 						<div class="flex flex-col leading-tight">
@@ -41,15 +41,15 @@
 				</header>
 
 				<button
-					class="flex cursor-pointer flex-col gap-1 text-left"
+					class="flex cursor-pointer flex-col gap-4 text-left"
 					onclick={() => goto(`/pages/posts/${post.id}`)}
 					type="button"
 				>
-					<h3 class="text-xl leading-snug font-semibold">
+					<h3 class="text-xl leading-snug font-semibold break-words">
 						{@html post.title}
 					</h3>
-					<p class="text-sm leading-snug">
-						{@html post.content.length > 50 ? post.content.slice(0, 150) + '…' : post.content}
+					<p class="text-sm leading-snug break-words">
+						{@html post.content.length > 50 ? post.content.slice(0, 256) + '…' : post.content}
 					</p>
 				</button>
 

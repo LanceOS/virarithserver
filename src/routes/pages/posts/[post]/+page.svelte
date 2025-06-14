@@ -72,12 +72,11 @@
 			post = postResponse;
 			const commentResponse = await CommentClient.getCommentsByPost(postId);
 			comments = commentResponse;
-			console.log(comments);
 			if ($session.data?.user.id === post?.user.id) {
 				hasActions = true;
 			}
 		} catch (error) {
-			console.error('Failed to load post:', error);
+			console.error('Failed to load post:', error.messasge);
 			isLoadingPost = false;
 		} finally {
 			isLoadingPost = false;
@@ -102,8 +101,8 @@
 				<div class="flex items-center gap-4">
 					<div class="flex flex-col">
 						<span class="btn-nav font-semibold sm:text-lg">{post.user.name}</span>
-						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt.toISOString()}>
-							{formatDate(post.createdAt.toISOString())}
+						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt}>
+							{formatDate(post.createdAt)}
 						</time>
 					</div>
 					{#if post.isEdited}

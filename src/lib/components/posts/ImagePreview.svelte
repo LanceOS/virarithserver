@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte';
 
 	const { imagePreviews, removeAllImages, removeImage, maxFiles } = $props<{
-		imagePreviews: Array<ImageWithBuffer>;
+		imagePreviews: Array<ImageWithBuffer> | { file: File; url: string; }[];
 		maxFiles?: number;
 		removeAllImages?: () => void;
 		removeImage?: (index: number) => void;

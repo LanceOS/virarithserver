@@ -31,7 +31,7 @@
 	};
 
 	const fetchPosts = async (page: number) => {
-		const response = await PostClient.getPostsByCategory(orderBy, 'Updates', page);
+		const response = await PostClient.getPostsByCategory(orderBy, 'updates', page);
 		posts = response.posts;
 		pagination = response.pagination;
 	};
@@ -47,7 +47,7 @@
 
 		try {
 			const nextPage = pagination.currentPage + 1;
-			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', nextPage);
+			const response = await PostClient.getPostsByCategory(orderBy, 'updates', nextPage);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -69,7 +69,7 @@
 
 		try {
 			const lastPage = pagination.currentPage - 1;
-			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', lastPage);
+			const response = await PostClient.getPostsByCategory(orderBy, 'updates', lastPage);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -86,7 +86,7 @@
 		error = null;
 
 		try {
-			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', 1);
+			const response = await PostClient.getPostsByCategory(orderBy, 'updates', 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {
@@ -99,7 +99,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await PostClient.getPostsByCategory(orderBy, 'Updates', 1);
+			const response = await PostClient.getPostsByCategory(orderBy, 'updates', 1);
 			posts = response.posts;
 			pagination = response.pagination;
 		} catch (err) {

@@ -1,7 +1,7 @@
 import type { UserSchema } from "$lib/schemas/authentication.ts";
 
 
-interface RawComment {
+interface NewComment {
     id: string;
     createdAt: Date;
     updatedAt: Date | null;
@@ -18,7 +18,7 @@ interface RawComment {
 }
 
 
-export const serializeComment = (comment: RawComment) => {
+export const serializeComment = (comment: NewComment) => {
     return {
         id: comment.id,
         content: comment.content,
@@ -33,5 +33,5 @@ export const serializeComment = (comment: RawComment) => {
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
         user: comment.user
-    }
+    } satisfies NewComment;
 }

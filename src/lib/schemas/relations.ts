@@ -26,6 +26,8 @@ export const usersRelations = relations(user, ({ many, one }) => ({
     commentReplies: many(commentReply),
     // A user can give many likes
     likes: many(likes),
+    // A user can have many images
+    images: many(images),
     // A user has one profile
     profile: one(profile, {
         fields: [user.id],

@@ -1,4 +1,4 @@
-import { pgTable, varchar, boolean, timestamp, uuid, text } from "drizzle-orm/pg-core";
+import { pgTable, boolean, timestamp, uuid, text } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { posts } from "./Posts.ts";
 import { sql, type InferInsertModel } from "drizzle-orm";

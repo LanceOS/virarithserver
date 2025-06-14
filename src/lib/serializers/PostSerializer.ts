@@ -1,5 +1,5 @@
 import type { ImageWithBuffer } from "$lib/@types/IImage.ts";
-import type { PostWithImage, RawPost } from "$lib/@types/IPostSerializer.ts";
+import type { PostWithImage, NewPost } from "$lib/@types/IPostSerializer.ts";
 
 
 class PostSerializer {
@@ -10,7 +10,7 @@ class PostSerializer {
         this.interface = this;
     }
 
-    static serializePost = (post: RawPost) => {
+    static serializePost = (post: NewPost) => {
         return {
             id: post.id,
             title: post.title,
@@ -25,26 +25,29 @@ class PostSerializer {
             createdAt: post.createdAt,
             updatedAt: post.updatedAt,
             user: post.user
-        }
+        } satisfies NewPost
     }
 
     /**
-     * @param postData 
-     * @param images 
-     * @returns A completed post object that includes images
+     * @param postData Single post or array of posts to serialize with images
+     * @param images Array of images to align with the posts
+     * @returns A completed post object or array that includes aligned images
      */
-    static serializedPostDataAndAlignImages = (postData: RawPost[], images: ImageWithBuffer[]) => {
+    static serializedPostDataAndAlignImages = (postData: NewPost[] | NewPost, images: ImageWithBuffer[]): PostWithImage[] | PostWithImage => {
+        const objectArray = Array.isArray(postData) ? postData : [postData];
+        const isInputArray = Array.isArray(postData);
 
-        return postData.map((post): PostWithImage => {
-            const serialized = this.serializePost(post);
-            const imagesForCurrentPost = images.filter(img => img.objectId === serialized.id && img.objectType === serialized.type)
+        const result = objectArray.map((post): PostWithImage => {
+            const imagesForCurrentPost = images.filter(img => img.objectId === post.id && img.objectType === post.type)
                 .filter(img => img !== null);
     
             return {
-                ...serialized,
+                ...post,
                 images: imagesForCurrentPost
             }
-        })
+        });
+
+        return isInputArray ? result : result[0];
     }
 }
 

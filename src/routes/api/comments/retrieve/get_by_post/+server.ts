@@ -2,7 +2,7 @@ import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { serializeComment } from '$lib/serializers/CommentSerializer.ts';
 import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
-import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
+import { isLikedSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { and, sql } from 'drizzle-orm';
 
 
@@ -19,7 +19,6 @@ export const GET = async ({ request }): Promise<Response> => {
         if (!postId) {
             throw new Error("Must pass a postId to fetch specific post")
         }
-
         /**
          * @params postId
          * @returns Grabs a specific comments based on postId
@@ -53,6 +52,7 @@ export const GET = async ({ request }): Promise<Response> => {
         })
     }
     catch (error: unknown) {
+        console.error(error)
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",

@@ -26,9 +26,6 @@ export const actions: Actions = {
         userId: session.user.id
       }
 
-      console.log(post)
-
-
       const postData = await PostClient.createPost(post);
       
       if(postData.name && postData.name.toLowerCase() === 'error') {
