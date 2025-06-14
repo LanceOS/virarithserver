@@ -29,17 +29,17 @@ export const actions: Actions = {
       const postData = await PostClient.createPost(post);
       
       if(postData.name && postData.name.toLowerCase() === 'error') {
-        console.log("Failed varchar")
         console.log(postData)
       }
 
       let validFiles: File[] = [];
-      let imageIds: string[] = []
+      let imageIds: string[] = [];
 
-      if(files) {
+
+      if(files.length > 0) {
         const object = postData[0];
+          console.log(files)
           validFiles = files.filter(file => file instanceof File && file.size > 0);
-          console.log(validFiles, object)
           imageIds = await S3Client.uploadImages(validFiles, object, fetch);
           console.log("Successful ids", imageIds)
       }

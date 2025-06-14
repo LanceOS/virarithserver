@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import Header from '$lib/components/landing/Header.svelte';
@@ -11,7 +10,6 @@
 
 	let title: string = $state('');
 	let content: string = $state('');
-	let files: File[] = $state([]);
 	let imagePreviews: { file: File; url: string }[] = $state([]);
 
 	let categoryList: any = $state([]);
@@ -24,13 +22,16 @@
 
 	const MAX_CONTENT_CHARS = 1200;
 	const MAX_TITLE_CHARS = 100;
-	const MAX_FILE_SIZE = 3 * 1024 * 1024;
+	const MAX_FILE_SIZE = 9 * 1024 * 1024;
 	const MAX_FILES = 3;
 	const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
-	const handleFileChange = (event: InputEvent) => {
+	const handleFileChange = (event: Event) => {
+		event.preventDefault();
 		const inputElement = event.target as HTMLInputElement;
 		if (!inputElement || !inputElement.files) return;
+
+		console.log('New file being added to input', inputElement);
 
 		const dataTransfer = new DataTransfer();
 
@@ -71,7 +72,6 @@
 		const fileInput = document.getElementById('file') as HTMLInputElement;
 		if (!fileInput || !fileInput.files) return;
 
-		// Create a new DataTransfer object
 		const dt = new DataTransfer();
 
 		Array.from(fileInput.files).forEach((file, i) => {
@@ -156,7 +156,7 @@
 			console.error('Error loading categories:', err);
 		}
 
-		return () => {
+		() => {
 			imagePreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
 		};
 	});
@@ -294,8 +294,12 @@
 						multiple
 						accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
 						onchange={handleFileChange}
-						disabled={imagePreviews.length >= MAX_FILES}
-						class="input border-muted w-full cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						readonly={imagePreviews.length >= MAX_FILES}
+						class={`input border-muted w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none ${
+							imagePreviews.length >= MAX_FILES
+								? 'pointer-events-none cursor-not-allowed opacity-50'
+								: 'cursor-pointer'
+						}`}
 					/>
 					{#if imagePreviews.length >= MAX_FILES}
 						<p class="mt-1 text-xs text-gray-500">Maximum number of images reached</p>

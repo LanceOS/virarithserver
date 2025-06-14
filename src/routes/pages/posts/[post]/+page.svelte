@@ -29,9 +29,9 @@
 
 	let errorLog = $state('');
 
-	function formatDate(dateString: string) {
-		const date = new Date(dateString);
-		return date.toLocaleDateString('en-US', {
+	function formatDate(date: Date | string) {
+		const dateObj = typeof date === 'string' ? new Date(date) : date;
+		return dateObj.toLocaleDateString('en-US', {
 			year: 'numeric',
 			month: 'short',
 			day: 'numeric'
@@ -103,8 +103,8 @@
 				<div class="flex items-center gap-4">
 					<div class="flex flex-col">
 						<span class="btn-nav font-semibold sm:text-lg">{post.user.name}</span>
-						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt.toLocaleDateString()}>
-							{formatDate(post.createdAt.toLocaleDateString())}
+						<time class="text-xs font-light sm:text-sm" datetime={formatDate(post.createdAt)}>
+							{formatDate(post.createdAt)}
 						</time>
 					</div>
 					{#if post.isEdited}
