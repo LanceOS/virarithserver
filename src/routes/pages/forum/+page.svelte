@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import { authClient } from '$lib/auth-client.ts';
 	import CategoryFilter from '$lib/components/CategoryFilter.svelte';
 	import Filter from '$lib/components/forum/Filter.svelte';
@@ -18,8 +19,8 @@
 
 	const session = authClient.useSession();
 
-	let posts: any = $state();
-	let pagination: any = $state();
+	let posts: PostWithImage[] | undefined = $state();
+	let pagination: IPagination | undefined = $state();
 	let categoryList: any = $state();
 	let selectedCategory: string = $state('all');
 	let orderBy: string = $state('desc');
@@ -33,7 +34,7 @@
 
 	const changeCategory = async (selected: string) => {
 		selectedCategory = selected;
-		await fetchPosts(pagination.currentPage);
+		await fetchPosts(pagination?.currentPage!);
 		return selectedCategory;
 	};
 
@@ -54,7 +55,7 @@
 	};
 
 	const incrementPage = async () => {
-		if (pagination.currentPage >= pagination.totalPages) {
+		if (pagination?.currentPage! >= pagination?.totalPages!) {
 			return;
 		}
 
@@ -62,7 +63,7 @@
 		error = null;
 
 		try {
-			const page = pagination.currentPage + 1;
+			const page = pagination?.currentPage! + 1;
 			await fetchPosts(page);
 		} catch (err) {
 			error = 'Failed to load next page. Please try again.';
@@ -73,7 +74,7 @@
 	};
 
 	const decrementPage = async () => {
-		if (pagination.currentPage <= 1) {
+		if (pagination?.currentPage! <= 1) {
 			return;
 		}
 
@@ -81,7 +82,7 @@
 		error = null;
 
 		try {
-			const page = pagination.currentPage - 1;
+			const page = pagination?.currentPage! - 1;
 			await fetchPosts(page);
 		} catch (err) {
 			error = 'Failed to load previous page. Please try again.';

@@ -10,16 +10,16 @@
 	import PostClient from '$lib/tools/PostClient.ts';
 	import LikeButton from '$lib/components/actions/LikeButton.svelte';
 	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
-	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 	import { page } from '$app/state';
 	import ImagePreview from '$lib/components/posts/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
+	import type { NewComment } from '$lib/@types/ICommentSerializer.ts';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
 
 	let post: PostWithImage | undefined = $state();
-	let comments: any = $state();
+	let comments: NewComment[] | undefined = $state();
 	let isLoadingPost: boolean = $state(true);
 	let isLoadingComments: boolean = $state(false);
 
@@ -51,13 +51,15 @@
 	};
 
 	const handleCommentDelete = (commentId: string) => {
-		comments = comments.filter((comment: CommentSchema) => comment.id !== commentId);
+		if(!comments) return;
+		comments = comments.filter((comment: NewComment) => comment.id !== commentId);
 		if (post) {
 			post.commentCount = post.commentCount - 1;
 		}
 	};
 
-	const handleAddComment = (comment: CommentSchema) => {
+	const handleAddComment = (comment: NewComment) => {
+		if(!comments) return;
 		comments = [comment, ...comments];
 		if (post) {
 			post.commentCount = post.commentCount + 1;
@@ -75,8 +77,8 @@
 			if ($session.data?.user.id === post?.user.id) {
 				hasActions = true;
 			}
-		} catch (error) {
-			console.error('Failed to load post:', error.messasge);
+		} catch (error: any) {
+			console.error('Failed to load post:', error.error);
 			isLoadingPost = false;
 		} finally {
 			isLoadingPost = false;
@@ -101,8 +103,8 @@
 				<div class="flex items-center gap-4">
 					<div class="flex flex-col">
 						<span class="btn-nav font-semibold sm:text-lg">{post.user.name}</span>
-						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt}>
-							{formatDate(post.createdAt)}
+						<time class="text-xs font-light sm:text-sm" datetime={post.createdAt.toLocaleDateString()}>
+							{formatDate(post.createdAt.toLocaleDateString())}
 						</time>
 					</div>
 					{#if post.isEdited}

@@ -17,6 +17,13 @@ export interface NewPost {
     user: UserSchema
 }
 
+export interface IPagination {
+    currentPage: number;
+    totalPages: number;
+    hasNext: number;
+    hasPrevious: number;
+}
+
 export interface PostWithImage extends NewPost {
     images: ImageWithBuffer[]
 }

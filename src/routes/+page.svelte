@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import { authClient } from '$lib/auth-client.ts';
 	import Filter from '$lib/components/forum/Filter.svelte';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
@@ -14,8 +15,8 @@
 	let isPaginationLoading = $state(false);
 	let error = $state<string | null>(null);
 
-	let posts: any = $state();
-	let pagination: any = $state();
+	let posts: PostWithImage | undefined = $state();
+	let pagination: IPagination | undefined = $state();
 
 	let orderBy: string = $state('desc');
 
@@ -37,7 +38,7 @@
 	};
 
 	const incrementPage = async () => {
-		if (pagination.currentPage >= pagination.totalPages) {
+		if (pagination?.currentPage! >= pagination?.totalPages!) {
 			console.log('returning');
 			return;
 		}
@@ -46,7 +47,7 @@
 		error = null;
 
 		try {
-			const nextPage = pagination.currentPage + 1;
+			const nextPage = pagination?.currentPage! + 1;
 			const response = await PostClient.getPostsByCategory(orderBy, 'updates', nextPage);
 			posts = response.posts;
 			pagination = response.pagination;
@@ -60,7 +61,7 @@
 	};
 
 	const decrementPage = async () => {
-		if (pagination.currentPage <= 1) {
+		if (pagination?.currentPage! <= 1) {
 			return;
 		}
 
@@ -68,7 +69,7 @@
 		error = null;
 
 		try {
-			const lastPage = pagination.currentPage - 1;
+			const lastPage = pagination?.currentPage! - 1;
 			const response = await PostClient.getPostsByCategory(orderBy, 'updates', lastPage);
 			posts = response.posts;
 			pagination = response.pagination;
