@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
-	import ImagePreview from '../posts/ImagePreview.svelte';
+	import ImagePreview from '../forms/ImagePreview.svelte';
 
 	let { posts } = $props();
 

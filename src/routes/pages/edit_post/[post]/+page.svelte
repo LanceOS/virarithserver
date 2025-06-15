@@ -2,16 +2,19 @@
     import { goto } from '$app/navigation';
     import { authClient } from '$lib/auth-client.ts';
     import Header from '$lib/components/landing/Header.svelte';
+    import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
     import CategoryClient from '$lib/tools/CategoryClient.ts';
     import PostClient from '$lib/tools/PostClient.ts';
-    import { page } from '$app/stores';
+    import { page } from '$app/state';
     import { onMount } from 'svelte';
+	import type { ImageWithBuffer } from '$lib/@types/IImage.ts';
 
     const session = authClient.useSession();
-    const postId = $page.params.post;
+    const postId = page.params.post;
 
     let title: string = $state('');
     let content: string = $state('');
+    let imagePreviews: { file: File; url: string }[] = $state([]);
     let categoryList: string[] = $state([]);
     let selectedCategory: string | null = $state('');
     let isSubmitting: boolean = $state(false);
@@ -22,39 +25,77 @@
 
     const MAX_CONTENT_CHARS = 1200;
     const MAX_TITLE_CHARS = 100;
-    const handleSubmit = async (event: Event) => {
+    const MAX_FILE_SIZE = 9 * 1024 * 1024;
+    const MAX_FILES = 3;
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+
+    const handleFileChange = (event: Event) => {
         event.preventDefault();
-        if (!selectedCategory) {
-            console.log('Failed to get selected category');
-            return;
-        }
-        if (!$session.data?.user.id) {
-            goto('/pages/login');
-            return;
-        }
+        const inputElement = event.target as HTMLInputElement;
+        if (!inputElement || !inputElement.files) return;
 
-        isSubmitting = true;
+        const dataTransfer = new DataTransfer();
 
-        const postData = {
-            postId: postId,
-            title: title,
-            content: content,
-            category: selectedCategory,
-            userId: $session.data.user.id
-        };
+        imagePreviews.forEach((preview) => {
+            dataTransfer.items.add(preview.file);
+        });
 
-        try {
-            const response = await PostClient.updatePost(postData);
-            return response;
-        } catch (error: any) {
-            if (!error) {
-                console.error('Failed to get error and submit post');
+        Array.from(inputElement.files).forEach((file) => {
+            if (ALLOWED_TYPES.includes(file.type) && file.size <= MAX_FILE_SIZE) {
+                const isDuplicate = imagePreviews.some(
+                    (preview) => preview.file.name === file.name && preview.file.size === file.size
+                );
+                if (!isDuplicate && dataTransfer.items.length < MAX_FILES) {
+                    dataTransfer.items.add(file);
+                }
+            } else {
+                console.warn(`File ${file.name} is invalid (type or size).`);
             }
-            error = error.message;
-            return 'Error';
-        } finally {
-            isSubmitting = false;
-            goto('/pages/forum');
+        });
+
+        inputElement.files = dataTransfer.files;
+
+        imagePreviews = [];
+        Array.from(inputElement.files).forEach((file, index) => {
+            if (index < MAX_FILES) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target) {
+                        imagePreviews = [...imagePreviews, { url: e.target.result as string, file: file }];
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    };
+
+    const removeImage = (index: number) => {
+        const fileInput = document.getElementById('file') as HTMLInputElement;
+        if (!fileInput || !fileInput.files) return;
+
+        const dt = new DataTransfer();
+
+        Array.from(fileInput.files).forEach((file, i) => {
+            if (i !== index) {
+                dt.items.add(file);
+            }
+        });
+
+        fileInput.files = dt.files;
+
+        imagePreviews.splice(index, 1);
+        imagePreviews = [...imagePreviews];
+    };
+
+    const removeAllImages = () => {
+        imagePreviews = [];
+        const fileInput = document.getElementById('file') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.value = '';
+
+            if (fileInput.files) {
+                fileInput.files = new DataTransfer().files;
+            }
         }
     };
 
@@ -84,6 +125,14 @@
         }
     }
 
+    // Function to strip HTML tags from text
+    const stripHtmlTags = (html: string): string => {
+        if (!html) return '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        return tempDiv.textContent || tempDiv.innerText || '';
+    };
+
     /**
      * @return Grabbing all available topics from the database. Removing topics that include "update", "announcement",
      * and "all", as those are specifically reserved for admins only.
@@ -97,9 +146,15 @@
             const response = await CategoryClient.getCategories();
             const postResponse = await PostClient.getPostById(postId);
             let filteredCategories: string[] = [];
-            title = postResponse.title;
-            content = postResponse.content;
-            selectedCategory = postResponse.category
+            title = stripHtmlTags(postResponse.title);
+            content = stripHtmlTags(postResponse.content);
+            selectedCategory = postResponse.category;
+            if (postResponse.images && postResponse.images.length > 0) {
+                imagePreviews = postResponse.images.map((img: ImageWithBuffer, index: number) => ({
+                    url: img.url,
+                    file: new File([], `existing-image-${index}`, { type: 'image/*' })
+                }));
+            }
 
             for (let i = 0; i < response.length; i++) {
                 const topic = response[i].topic;
@@ -116,6 +171,9 @@
             error = 'Failed to load categories. Please check your connection and try again.';
             console.error('Error loading categories:', err);
         }
+        () => {
+            imagePreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
+        };
     });
 </script>
 
@@ -124,6 +182,7 @@
     <div class="">
         <div class="mb-8">
             <h1 class="content mb-2 text-3xl font-bold">Edit Post</h1>
+            <p class="muted">Update your post content and images.</p>
         </div>
 
         {#if error}
@@ -132,7 +191,7 @@
             </div>
         {/if}
 
-        <form onsubmit={handleSubmit} class="space-y-8">
+        <form method="POST" action="?/submitData" enctype="multipart/form-data" class="space-y-8">
             <div class="relative">
                 <label for="title" class="content text-md mb-2 block font-medium">
                     Post Title <span class="color-error">*</span></label
@@ -211,6 +270,10 @@
                 {/if}
             </div>
 
+            {#if imagePreviews}
+                <ImagePreview {imagePreviews} {removeAllImages} {removeImage} maxFiles={MAX_FILES} />
+            {/if}
+
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                     <label for="category" class="content text-md mb-2 block font-medium">
@@ -219,13 +282,38 @@
                     <select
                         id="category"
                         bind:value={selectedCategory}
-                        class="input border-muted w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
+                        class="input border-muted w-full cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
                     >
                         <option value="">Select a category</option>
                         {#each categoryList as cat}
                             <option value={cat}>{cat}</option>
                         {/each}
                     </select>
+                </div>
+                <div>
+                    <label for="file" class="content text-md mb-2 block font-medium">
+                        Images
+                        <span class="muted text-xs font-normal"
+                            >(max {MAX_FILES} images, 3MB each, JPEG/PNG/GIF/WebP)</span
+                        >
+                    </label>
+                    <input
+                        type="file"
+                        name="file"
+                        id="file"
+                        multiple
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                        onchange={handleFileChange}
+                        readonly={imagePreviews.length >= MAX_FILES}
+                        class={`input border-muted w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none ${
+                            imagePreviews.length >= MAX_FILES
+                                ? 'pointer-events-none cursor-not-allowed opacity-50'
+                                : 'cursor-pointer'
+                        }`}
+                    />
+                    {#if imagePreviews.length >= MAX_FILES}
+                        <p class="mt-1 text-xs text-gray-500">Maximum number of images reached</p>
+                    {/if}
                 </div>
             </div>
 
@@ -256,7 +344,7 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                             ></path>
                         </svg>
-                        Publishing...
+                        Updating...
                     </span>
                 {:else}
                     Update Post

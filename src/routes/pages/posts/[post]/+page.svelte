@@ -11,7 +11,7 @@
 	import LikeButton from '$lib/components/actions/LikeButton.svelte';
 	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
 	import { page } from '$app/state';
-	import ImagePreview from '$lib/components/posts/ImagePreview.svelte';
+	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import type { NewComment } from '$lib/@types/ICommentSerializer.ts';
 
@@ -37,6 +37,7 @@
 			day: 'numeric'
 		});
 	}
+	
 	const deletePost = async () => {
 		openPostActions = false;
 

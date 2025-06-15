@@ -61,6 +61,7 @@
 		"pg": "^8.16.0",
 		"playwright": "^1.52.0",
 		"sanitize-html": "^2.17.0",
+		"svg-captcha": "^1.4.0",
 		"uuid": "^11.1.0"
 	}
 }

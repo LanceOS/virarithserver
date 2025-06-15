@@ -1,3 +1,5 @@
+
+
 import PostClient from '$lib/tools/PostClient.ts';
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
@@ -26,9 +28,7 @@ export const actions: Actions = {
         userId: session.user.id
       }
 
-      console.log(post)
-
-      const postData = await PostClient.createPost(post);
+      const postData = await PostClient.updatePost(post);
       
       if(postData.name && postData.name.toLowerCase() === 'error') {
         console.log(postData)
