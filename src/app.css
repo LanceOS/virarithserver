@@ -16,6 +16,7 @@
 
 	--color-primary: #6faa6f; /* Vibrant Moss Green */
 	--color-secondary: #5d7f9a; /* Cool Lapis Blue */
+	--color-secondary-dark: #476b88;
 
 	--color-error: #b14e4e; /* Brighter Redstone Dust */
 	--color-muted: #7c8186; /* Steel Gray */
@@ -146,7 +147,7 @@ h1 {
 	background-color: var(--color-secondary);
 }
 
-.btn-big {
+.btn-big-active {
 	background-color: var(--color-secondary);
 	color: var(--color-base-content);
 	padding: 1rem 3.5rem;
@@ -156,6 +157,9 @@ h1 {
 	transition: 200ms;
 }
 
+.btn-big-active:hover {
+	background-color: var(--color-secondary-dark);
+}
 
 
 

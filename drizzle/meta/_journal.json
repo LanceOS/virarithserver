@@ -281,6 +281,13 @@
       "when": 1750123093209,
       "tag": "0039_illegal_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1750190380596,
+      "tag": "0040_sparkling_tempest",
+      "breakpoints": true
     }
   ]
 }
