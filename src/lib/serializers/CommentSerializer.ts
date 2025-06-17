@@ -1,6 +1,14 @@
 import type { NewComment } from "$lib/@types/ICommentSerializer.ts";
 
-
+/**
+ * @function serializeComment
+ * @description Serializes a `NewComment` object into a standardized format.
+ * This function ensures that the output conforms to the `NewComment` type,
+ * providing a consistent structure for comment data.
+ *
+ * @param comment - The `NewComment` object to be serialized.
+ * @returns A new object with the properties of the `NewComment` in a consistent order and format.
+ */
 export const serializeComment = (comment: NewComment) => {
     return {
         id: comment.id,
