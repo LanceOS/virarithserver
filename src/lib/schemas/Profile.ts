@@ -1,4 +1,4 @@
-import { pgTable, varchar, boolean, timestamp, uuid, text } from "drizzle-orm/pg-core";
+import { pgTable, varchar, boolean, timestamp, uuid, text, index } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { sql, type InferInsertModel } from "drizzle-orm";
 
@@ -9,7 +9,10 @@ export const profile = pgTable('profile', {
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
-})
+}, (table) => [
+    index("profile_create_at_index").on(table.createdAt).concurrently(),
+    index("profile_user_id_index").on(table.userId).concurrently()
+])
 
 
 export type ProfileSchema = InferInsertModel<typeof profile>;

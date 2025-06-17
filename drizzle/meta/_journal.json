@@ -260,6 +260,13 @@
       "when": 1749844129214,
       "tag": "0036_parallel_next_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1750119637262,
+      "tag": "0037_equal_sersi",
+      "breakpoints": true
     }
   ]
 }
