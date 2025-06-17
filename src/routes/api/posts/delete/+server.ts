@@ -2,7 +2,10 @@ import { auth } from '$lib/auth.ts'
 import { DrizzleDB } from '$lib/Drizzle.ts'
 import { commentReply } from '$lib/schemas/CommentReply.ts'
 import { comments } from '$lib/schemas/Comments.ts'
-import { posts } from '$lib/schemas/Posts.ts'
+import { images } from '$lib/schemas/Images.ts'
+import { posts, type PostSchema } from '$lib/schemas/Posts.ts'
+import ImageClient from '$lib/tools/ImageClient.ts'
+import S3Client from '$lib/tools/S3Client.ts'
 import { and, eq } from 'drizzle-orm'
 
 /**
@@ -14,9 +17,9 @@ import { and, eq } from 'drizzle-orm'
  */
 export const PUT = async ({ request }) => {
     try {
-        const postId: string = await request.json()
+        const post: PostSchema = await request.json()
 
-        if (!postId) {
+        if (!post.id || !post.type) {
             throw new Error("Failed to pass post for deletion")
         }
 
@@ -31,12 +34,18 @@ export const PUT = async ({ request }) => {
 
 
         await DrizzleDB.transaction(async (tx) => {
-            await tx.update(posts).set({ isDeleted: true }).where(and(eq(posts.id, postId), eq(posts.userId, userId))).execute();
-            await tx.update(comments).set({ isDeleted: true }).where(eq(comments.postId, postId)).execute();
-            await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.postId, postId)).execute();
+            await tx.update(posts).set({ isDeleted: true }).where(and(eq(posts.id, post.id!), eq(posts.userId, userId))).execute();
+            await tx.update(comments).set({ isDeleted: true }).where(eq(comments.postId, post.id!)).execute();
+            await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.postId, post.id!)).execute();
+            await tx.delete(images).where(and(eq(images.objectId, post.id!), eq(images.objectType, post.type!), eq(images.userId, userId)))
         })
 
-        return new Response(JSON.stringify({ success: true, postId: postId }), {
+        const drizzleImagesForPosts  = await ImageClient.getDrizzleImageObjects(post)
+        await S3Client.deleteImages(drizzleImagesForPosts)
+
+
+
+        return new Response(JSON.stringify({ success: true, postId: post.id }), {
             status: 200,
             statusText: "OK",
             headers: {

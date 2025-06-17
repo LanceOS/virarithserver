@@ -1,10 +1,10 @@
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import type { CommentReplySchema } from "$lib/schemas/CommentReply.ts";
 import type { CommentSchema } from "$lib/schemas/Comments.ts";
-import type { ImageSchema } from "$lib/schemas/Images.ts";
+import { images, type ImageSchema } from "$lib/schemas/Images.ts";
 import type { PostSchema } from "$lib/schemas/Posts.ts";
 import { bucketName, minioClient } from "$lib/server/MinIO.ts";
-import { and } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { pipeline } from 'stream/promises';
 import { Writable } from 'stream';
 import type { ImageWithBuffer } from "$lib/@types/IImage.ts";
@@ -31,7 +31,7 @@ class ImageClient {
      */
     static async getDrizzleImageObjects(postedObject: PostedObject | PostedObjectArray): Promise<ImageSchema[]> {
         const objectArray = Array.isArray(postedObject) ? postedObject : [postedObject];
-        
+
         const objects = []
         for (let i = 0; i < objectArray.length; i++) {
             const image = await DrizzleDB.query.images.findMany({
@@ -90,6 +90,48 @@ class ImageClient {
         });
 
         return Promise.all(imagePromises);
+    }
+
+    /**
+     * Removes image records from the Drizzle ORM `images` table based on provided object details.
+     * This function iterates through an array of objects and constructs a `DELETE` query
+     * for each object to remove the corresponding entry from the database.
+     *
+     * @param objects An array of objects, where each object represents an image record to be deleted.
+     * Each object must contain `userId`, `objectId`, `objectType`, and `bucketObjectId` properties.
+     * The `id` property is also used if available for the `images.id` column.
+     * @returns A `Promise` that resolves to `true` if all specified image records are successfully
+     * removed from the Drizzle database.
+     * @throws {Error} If the `objects` array is null or undefined, or if any database deletion operation fails.
+     * Errors encountered during the database operation will be logged to the console.
+     */
+    static async removeDrizzleS3Objects(objects: {
+        userId: string;
+        objectId: string;
+        objectType: string;
+        bucketObjectId: string;
+        id?: string | undefined;
+    }[]): Promise<boolean> {
+        try {
+            if (!objects) {
+                throw new Error("Failed to get objects for image removal. 'objects' array is null or undefined.");
+            }
+            for (let i = 0; i < objects.length; i++) {
+                await DrizzleDB.delete(images)
+                    .where(and(
+                        eq(images.id, objects[i].id!),
+                        eq(images.objectId, objects[i].objectId),
+                        eq(images.objectType, objects[i].objectType),
+                        eq(images.userId, objects[i].userId)
+                    ));
+            }
+
+            return true;
+
+        } catch (error) {
+            console.error("Error in removeDrizzleS3Objects:", error);
+            throw new Error(`Failed to remove Drizzle S3 objects: ${error instanceof Error ? error.message : 'An unknown error occurred'}`);
+        }
     }
 }
 

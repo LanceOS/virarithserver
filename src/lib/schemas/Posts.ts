@@ -1,4 +1,4 @@
-import { pgTable, timestamp, varchar, text, boolean, uuid } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, varchar, text, boolean, uuid, index } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { sql, type InferInsertModel } from "drizzle-orm";
 
@@ -14,7 +14,11 @@ export const posts = pgTable('posts', {
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
-})
+}, (table) => [
+    index("post_created_at_desc_index").on(table.createdAt.desc()).concurrently(),
+    index("post_user_id_created_at_desc_index").on(table.userId, table.createdAt.desc()).concurrently(),
+    index("post_category_created_at_desc_index").on(table.category, table.createdAt.desc()).concurrently()
+])
 
 
 

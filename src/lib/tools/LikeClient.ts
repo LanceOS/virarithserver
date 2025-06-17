@@ -44,10 +44,6 @@ class LikeClient {
             throw new Error(`Failed to like object: ${error}`)
         }
     }
-
-    static async getLikes(data: LikeSchema) {
-
-    }
 }
 
 

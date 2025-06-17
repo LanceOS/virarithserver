@@ -1,4 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
+import type { PostWithImage } from "$lib/@types/IPostSerializer.ts";
 import type { PostSchema } from "$lib/schemas/Posts.ts";
 
 
@@ -59,14 +60,14 @@ class PostClient {
     }
 
 
-    static async deletePost(postId: string) {
+    static async deletePost(post: PostWithImage) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/posts/delete`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: postId
+                body: JSON.stringify(post)
             })
 
             const data = await response.json()

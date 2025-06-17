@@ -42,7 +42,9 @@
 		openPostActions = false;
 
 		try {
-			await PostClient.deletePost(postId);
+			if(!post) return;
+
+			await PostClient.deletePost(post);
 
 			goto('/pages/forum');
 		} catch (error) {
@@ -153,7 +155,7 @@
 				<h1 class="text-lg sm:text-3xl">
 					{@html post.title}
 				</h1>
-				<p class="space-y-4 text-sm sm:text-base">
+				<p class="space-y-4 text-sm sm:text-base break-words">
 					{@html post.content}
 				</p>
 			</div>

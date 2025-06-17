@@ -1,5 +1,9 @@
 <script lang="ts">
-    const { MAX_FILES, handleFileChange, imagePreviews } = $props();
+    const { MAX_FILES, handleFileChange, imagePreviews } = $props<{
+        MAX_FILES: number;
+        handleFileChange: (event: Event) => void;
+        imagePreviews: { file?: File | undefined, url: string }[];
+    }>();
 </script>
 
 <div>

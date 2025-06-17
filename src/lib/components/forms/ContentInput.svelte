@@ -1,8 +1,15 @@
 <script lang="ts">
 
-    const { MAX_CONTENT_CHARS } = $props()
+    const { MAX_CONTENT_CHARS, currentBody } = $props<{
+		MAX_CONTENT_CHARS: number;
+		currentBody?: string;
+	}>()
 
-    let content = $state('')
+    let content = $state(currentBody || "")
+
+	$effect(() => {
+		content = currentBody
+	})
 
 	let isContentFocused = $state(false);
 
@@ -35,8 +42,8 @@
             border-transparent transition-all duration-200
             ease-in-out outline-none
             focus:border-[var(--color-primary)]
-            ${isContentFocused || content.length > 0 ? 'min-h-32' : 'min-h-12'}
-            ${content.length > MAX_CONTENT_CHARS ? 'border-[var(--color-error)] focus:border-[var(--color-error)]' : ''}
+            ${isContentFocused || content?.length > 0 ? 'min-h-32' : 'min-h-12'}
+            ${content?.length > MAX_CONTENT_CHARS ? 'border-[var(--color-error)] focus:border-[var(--color-error)]' : ''}
         `}
 		bind:value={content}
 		onfocus={handleContentFocus}
@@ -49,22 +56,22 @@
 	>
 	</textarea>
 
-	{#if isContentFocused || content.length > 0}
+	{#if isContentFocused || content?.length > 0}
 		<div
 			class={`
                 absolute right-3 bottom-3
                 px-2 py-1 text-xs font-medium
                 transition-all duration-200
                 ${
-									content.length > MAX_CONTENT_CHARS
+									content?.length > MAX_CONTENT_CHARS
 										? 'color-error'
-										: content.length > MAX_CONTENT_CHARS * 0.8
+										: content?.length > MAX_CONTENT_CHARS * 0.8
 											? 'text-orange-400'
 											: 'muted'
 								}
             `}
 		>
-			{content.length}/{MAX_CONTENT_CHARS}
+			{content?.length}/{MAX_CONTENT_CHARS}
 		</div>
 	{/if}
 </div>
