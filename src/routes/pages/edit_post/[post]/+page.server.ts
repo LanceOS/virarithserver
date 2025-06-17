@@ -41,16 +41,10 @@ export const actions: Actions = {
 
             let currentPostImagesInDatabase = await ImageClient.getDrizzleImageObjects(updatedPost);
 
-
-            console.log("Current post images from drizzle", currentPostImagesInDatabase)
-            console.log("Current images from the client", parsedExistingImagesFromClient)
-
             if (currentPostImagesInDatabase && parsedExistingImagesFromClient.length > 0) {
                 const imagesToDelete = currentPostImagesInDatabase.filter((img) =>
                     !parsedExistingImagesFromClient.some((clientImage: { id: string }) => clientImage.id === img.id)
                 );
-
-                console.log("Delete this image from the database", imagesToDelete)
 
                 if (imagesToDelete.length > 0) {
                     const s3DeleteResponse = await S3Client.deleteImages(imagesToDelete);
@@ -68,8 +62,6 @@ export const actions: Actions = {
                 currentPostImagesInDatabase = currentPostImagesInDatabase.filter(img => {
                     return !imagesToDelete.some(deletedImg => deletedImg.id === img.id);
                 });
-
-                console.log("Current images in database is now", currentPostImagesInDatabase)
             }
 
             const newImagesFromClient = data.getAll("newImages") as File[];

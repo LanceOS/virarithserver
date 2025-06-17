@@ -49,7 +49,7 @@
 						{@html post.title}
 					</h3>
 					<p class="text-sm leading-snug break-words">
-						{@html post.content.length > 50 ? post.content.slice(0, 256) + '…' : post.content}
+						{@html post.content.length > 50 ? post.content.slice(0, 350) + '…' : post.content}
 					</p>
 				</button>
 
