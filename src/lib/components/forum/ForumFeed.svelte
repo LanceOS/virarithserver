@@ -14,6 +14,8 @@
 			day: 'numeric'
 		});
 	}
+
+	console.log(posts)
 </script>
 
 <section class="flex w-full flex-col gap-4">

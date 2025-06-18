@@ -7,7 +7,11 @@
 	import CommentEdit from './CommentEdit.svelte';
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 
-	let { comments, isLoadingComments, handleCommentDelete } = $props();
+	let { comments, isLoadingComments, handleCommentDelete } = $props<{
+		comments: CommentSchema[];
+		isLoadingComments?: VoidFunction | undefined;
+		handleCommentDelete?: VoidFunction | undefined;
+	}>();
 
 	const session = authClient.useSession();
 
@@ -75,10 +79,12 @@
 </script>
 
 <section class="flex flex-col gap-4">
-	<h4 class="text-xl">Comments</h4>
+	{#if handleCommentDelete}
+		<h4 class="text-xl">Comments</h4>
+	{/if}
 	{#if isLoadingComments}
 		<section class="flex min-h-32 flex-col items-center justify-center gap-2">
-			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
 			<p class="text-muted">Loading comments...</p>
 		</section>
 	{:else if comments && comments.length > 0}
@@ -149,4 +155,3 @@
 		</section>
 	{/if}
 </section>
-
