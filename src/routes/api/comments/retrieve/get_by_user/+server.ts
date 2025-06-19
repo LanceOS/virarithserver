@@ -5,6 +5,7 @@ import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../../../posts/retrieve/retrieval.config.ts';
+import { comments } from '$lib/schemas/Comments.ts';
 
 
 export const GET = async ({ request }): Promise<Response> => {
@@ -29,13 +30,13 @@ export const GET = async ({ request }): Promise<Response> => {
          * @params userId
          * @returns Grabs a specific comments based on userId
          */
-        const comments = await DrizzleDB.query.comments.findMany({
+        const commentData = await DrizzleDB.query.comments.findMany({
             where: (comments, { eq }) => and(eq(comments.isDeleted, false), eq(comments.userId, userIdParam)),
             extras: {
                 likeCount: sql<number>`(
                     SELECT COUNT(*)::int 
                     FROM likes 
-                    WHERE likes.comment_id = comments.id
+                    WHERE likes.object_id = comments.id
                 )`.as('like_count'),
                 isLiked: isLikedSubquery(userId).as('is_liked'),
                 replyCount: replyCountSubquery(null)
@@ -54,17 +55,18 @@ export const GET = async ({ request }): Promise<Response> => {
          * This is so that way the number of pages for pagination can
          * be calculated.
         */
-        const [{ count: totalCount }] = await DrizzleDB
+       const [{ count: totalCount }] = await DrizzleDB
             .select({ count: count() })
             .from(comments)
-            .where(eq(comments.isDeleted, false));
+            .where(and(eq(comments.isDeleted, false), eq(comments.userId, userIdParam)));
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 
         /**
          * @returns Serializes comments
          */
-        const serializeData = comments.map(serializeComment)
+        const serializeData = commentData.map(serializeComment)
+
 
         return new Response(JSON.stringify({
             comments: serializeData,

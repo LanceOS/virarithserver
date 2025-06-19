@@ -14,21 +14,29 @@
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import { page } from '$app/state';
 	import PostClient from '$lib/tools/PostClient.ts';
+	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 
 	const { data } = $props<{ data: PageData }>();
-    const userPage = page.params.user;
+	const userPage = page.params.user;
 
 	const session = authClient.useSession();
 
 	let isHydrated = $state(false);
 
 	let profile: ProfileSchema = $state(data.profile);
-
 	let user: UserSchema = $state(data.profile.user);
-	let posts: PostWithImage = $state(data.posts.posts);
+	
+	let posts: PostWithImage[] = $state(data.posts.posts);
+	let postPagination = $state(data.posts.pagination);
 
-    let pagination: IPagination = $state(data.posts.pagination);
-    let isPaginationLoading: boolean = $state(false);
+	let comments: CommentSchema[] = $state(data.comments.comments);
+	let commentPagination = $state(data.comments.pagination);
+
+	let likedPosts: PostWithImage[] = $state(data.likes.posts);
+	let likePagination = $state(data.likes.pagination); 
+
+	let pagination = $state(postPagination);
+	let isPaginationLoading: boolean = $state(false);
 
 	let activeTab: 'posts' | 'comments' | 'likes' = $state('posts');
 
@@ -45,53 +53,84 @@
 		discordName: ''
 	});
 
-    const incrementPage = async () => {
-        if (pagination?.currentPage! >= pagination?.totalPages!) {
+	$effect(() => {
+		console.log('Profile page $effect: Reacting to new profile ID:', data.profile.id);
+
+		isEditing = false;
+		isLoading = false;
+		isPaginationLoading = false;
+		activeTab = 'posts';
+
+		newProfileInfo.bio = data.profile.bio || '';
+		newProfileInfo.minecraftName = data.profile.minecraftName || '';
+		newProfileInfo.discordName = data.profile.discordName || '';
+		isFollowing = false;
+	});
+
+	$effect(() => {
+		profile = data.profile;
+		user = data.profile.user;
+		posts = data.posts.posts;
+		console.log('Reloading main data');
+	});
+
+	const changeTab = (tab: string) => {
+		if(tab === "posts") {
+			activeTab = "posts";
+			pagination = postPagination;
+		}
+		else if (tab === "comments") {
+			activeTab = "comments";
+			pagination = commentPagination;
+		}
+		else {
+			activeTab = "likes";
+			pagination = likePagination;
+		}
+	}
+
+	const incrementPage = async () => {
+		if (pagination?.currentPage! >= pagination?.totalPages!) {
 			return;
 		}
-        try {
+		isLoading = true;
+		try {
+			const page = pagination?.currentPage! + 1;
+			if (activeTab === 'posts') {
+				const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
+				posts = response.posts;
+				pagination = response.pagination;
+			} else if (activeTab === 'comments') {
+				return;
+			} else {
+				return;
+			}
+		} catch (error) {
+			console.error(error);
+		} finally {
+			isLoading = false;
+		}
+	};
 
-            const page = pagination?.currentPage! + 1;
-            if(activeTab === "posts") {
-                const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
-                posts = response.posts;
-                pagination = response.pagination;
-            }
-            else if(activeTab === "comments") {
-                return;
-            }
-            else {
-                return;
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
-    const decrementPage = async () => {
-        if (pagination?.currentPage! >= pagination?.totalPages!) {
+	const decrementPage = async () => {
+		if (pagination?.currentPage! >= pagination?.totalPages!) {
 			return;
 		}
-        try {
-
-            const page = pagination?.currentPage! - 1;
-            if(activeTab === "posts") {
-                const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
-                posts = response.posts;
-                pagination = response.pagination;
-            }
-            else if(activeTab === "comments") {
-                return;
-            }
-            else {
-                return;
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
+		try {
+			const page = pagination?.currentPage! - 1;
+			if (activeTab === 'posts') {
+				const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
+				posts = response.posts;
+				pagination = response.pagination;
+			} else if (activeTab === 'comments') {
+				return;
+			} else {
+				return;
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const handleFollow = () => {
 		isFollowing = !isFollowing;
@@ -229,21 +268,21 @@
 					<div class="mb-4 border-b" style="border-color: var(--color-card-border);">
 						<nav class="flex space-x-4">
 							<button
-								onclick={() => (activeTab = 'posts')}
+								onclick={() => changeTab("posts")}
 								class:text-[var(--color-primary)]={activeTab === 'posts'}
 								class="btn-nav cursor-pointer border-b-2 px-1 py-2 font-semibold transition-colors duration-200"
 							>
 								Posts
 							</button>
 							<button
-								onclick={() => (activeTab = 'comments')}
+								onclick={() => changeTab("comments")}
 								class:text-[var(--color-primary)]={activeTab === 'comments'}
 								class="btn-nav cursor-pointer border-b-2 px-1 py-2 font-semibold transition-colors duration-200"
 							>
 								Comments
 							</button>
 							<button
-								onclick={() => (activeTab = 'likes')}
+								onclick={() => changeTab("likes")}
 								class:text-[var(--color-primary)]={activeTab === 'likes'}
 								class="btn-nav cursor-pointer border-b-2 px-1 py-2 font-semibold transition-colors duration-200"
 							>
@@ -254,13 +293,20 @@
 
 					{#if isHydrated}
 						<div class="space-y-4">
-                            <Pagination {pagination} {incrementPage} {decrementPage} {isPaginationLoading}/>
-							{#if activeTab === 'posts'}
-								<ForumFeed {posts} />
-							{:else if activeTab === 'comments'}
-								<CommentFeed comments={[]} />
-							{:else if activeTab === 'likes'}
-								<p class="muted">This user has not liked any posts yet.</p>
+							<Pagination {pagination} {incrementPage} {decrementPage} {isPaginationLoading} />
+							{#if !isLoading}
+								{#if activeTab === 'posts'}
+									<ForumFeed {posts} />
+								{:else if activeTab === 'comments'}
+									<CommentFeed {comments} />
+								{:else if activeTab === 'likes'}
+									<ForumFeed posts={likedPosts}/>
+								{/if}
+							{:else}
+								<section class="flex min-h-64 flex-col items-center justify-center gap-4">
+									<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
+									<p class="text-muted text-sm sm:text-base">Loading posts...</p>
+								</section>
 							{/if}
 						</div>
 					{:else}

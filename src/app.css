@@ -5,21 +5,29 @@
     this color of the site, have Gemini generate new colors and replace these here
     */
 :root {
-	--color-base: #1a1d1f; /* Deep Charcoal Stone */
-	--color-base-content: #e3e2de; /* Brighter Mortar Gray */
+	/* Base */
+	--color-base: #1e2a1e; /* Sunlit forest floor (lighter deep green) */
+	--color-base-content: #f5f7e9; /* Fresh cream (warmer bright text) */
 
-	--color-card: #262a2c; /* Polished Basalt */
-	--color-card-border: #ffffff14; /* Light edge for depth */
+	/* Cards (like sun-bleached wood) */
+	--color-card: #273a27; /* Weathered sage (softer than base) */
+	--color-card-border: #4d5e4d; /* Dried moss border */
 
-	--color-input: #2f3336; /* Weathered Cobblestone */
-	--color-input-content: #f0efec; /* Soft Light Gray */
+	/* Inputs (like carved birch) */
+	--color-input: #2d412d; /* Light cedar */
+	--color-input-content: #f8fae6; /* Soft sunlight text */
 
-	--color-primary: #6faa6f; /* Vibrant Moss Green */
-	--color-secondary: #5d7f9a; /* Cool Lapis Blue */
-	--color-secondary-dark: #476b88;
+	/* Accents */
+	--color-primary: #5d965d; /* New spring leaves (brighter green) */
+	--color-secondary: #c9a158; /* Honey gold (sunlit accents) */
 
-	--color-error: #b14e4e; /* Brighter Redstone Dust */
-	--color-muted: #7c8186; /* Steel Gray */
+	/* Status */
+	--color-error: #b87070; /* Terra cotta (earthy red) */
+	--color-muted: #7a8d77; /* Lichen (subtle gray-green) */
+
+	/* Bright rustic boosts */
+	--color-primary-hover: #4d844d; /* Shaded fern (hover state) */
+	--color-sunlight: #e3d9b3; /* Optional: Sunbeam (for highlights) */
 }
 
 .muted {
@@ -81,7 +89,6 @@ h1 {
 	background-color: var(--color-base);
 }
 
-
 .border-muted {
 	border: 1px solid var(--color-card-border);
 }
@@ -129,10 +136,6 @@ h1 {
 	transition: 200ms;
 }
 
-
-
-
-
 .btn-big {
 	background-color: var(--color-primary);
 	color: var(--color-base-content);
@@ -160,9 +163,6 @@ h1 {
 .btn-big-active:hover {
 	background-color: var(--color-secondary-dark);
 }
-
-
-
 
 .btn-nav {
 	cursor: pointer;

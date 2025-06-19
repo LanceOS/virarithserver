@@ -34,7 +34,7 @@
                 type="text"
                 bind:value={newProfileInfo.minecraftName}
                 placeholder="Enter Minecraft username"
-                class="input w-full p-2 text-sm"
+                class="input w-full text-md border-muted"
             />
         {:else}
             <p class="content text-sm">
@@ -53,7 +53,7 @@
                 type="text"
                 bind:value={newProfileInfo.discordName}
                 placeholder="Enter Discord username"
-                class="input w-full p-2 text-sm"
+                class="input w-full text-md border-muted"
             />
         {:else}
             <p class="content text-sm">

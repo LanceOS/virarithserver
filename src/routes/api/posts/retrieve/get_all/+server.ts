@@ -5,7 +5,7 @@ import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
 import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
-import ImageClient from '$lib/tools/ImageClient.ts';
+import ImageService from '$lib/server/ImageService.ts';
 
 
 
@@ -70,7 +70,7 @@ export const GET = async ({ request }): Promise<Response> => {
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 
-        const images = await ImageClient.getS3Objects(postData);
+        const images = await ImageService.getS3Objects(postData);
         const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images)
 
         return new Response(JSON.stringify({

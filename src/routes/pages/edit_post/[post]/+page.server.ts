@@ -2,9 +2,9 @@
 
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
-import ImageClient from '$lib/tools/ImageClient.ts';
 import S3Client from '$lib/tools/S3Client.ts';
 import PostClient from '$lib/tools/PostClient.ts';
+import ImageService from '$lib/server/ImageService.ts';
 
 
 export const actions: Actions = {
@@ -24,7 +24,7 @@ export const actions: Actions = {
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
 
-            await PostClient.actions.updatePost(updatedPost)
+            await PostClient.updatePost(updatedPost)
 
             if (!updatedPost) {
                 return fail(400, { success: false, message: "missing form data" })
@@ -42,7 +42,7 @@ export const actions: Actions = {
                 })
                 .filter(Boolean);
 
-            let currentPostImagesInDatabase = await ImageClient.getDrizzleImageObjects(updatedPost);
+            let currentPostImagesInDatabase = await ImageService.getDrizzleImageObjects(updatedPost);
 
             if (currentPostImagesInDatabase && parsedExistingImagesFromClient.length > 0) {
                 const imagesToDelete = currentPostImagesInDatabase.filter((img) =>
@@ -51,7 +51,7 @@ export const actions: Actions = {
 
                 if (imagesToDelete.length > 0) {
                     const s3DeleteResponse = await S3Client.deleteImages(imagesToDelete);
-                    const drizzleRemoveResponse = await ImageClient.removeDrizzleS3Objects(imagesToDelete);
+                    const drizzleRemoveResponse = await ImageService.removeDrizzleS3Objects(imagesToDelete);
                     if (s3DeleteResponse === true) {
                         console.log({ success: true })
                     }
@@ -77,7 +77,7 @@ export const actions: Actions = {
 
             if (parsedExistingImagesFromClient.length === 0 && currentPostImagesInDatabase.length > 0) {
                 const s3DeleteResponse = await S3Client.deleteImages(currentPostImagesInDatabase);
-                const drizzleRemoveResponse = await ImageClient.removeDrizzleS3Objects(currentPostImagesInDatabase);
+                const drizzleRemoveResponse = await ImageService.removeDrizzleS3Objects(currentPostImagesInDatabase);
 
                 if (s3DeleteResponse === true) {
                     console.log({ success: true })

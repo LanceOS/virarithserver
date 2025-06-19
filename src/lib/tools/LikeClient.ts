@@ -2,6 +2,11 @@ import { PUBLIC_URL } from "$env/static/public";
 import type { LikeSchema } from "$lib/schemas/Likes.ts";
 
 
+
+interface ILikesParams {
+    userId: string;
+    page: number;
+}
 class LikeClient {
     instance: LikeClient | null = null;
 
@@ -42,6 +47,22 @@ class LikeClient {
         }
         catch(error) {
             throw new Error(`Failed to like object: ${error}`)
+        }
+    }
+
+    static async getLikesByUser(params: ILikesParams) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/like/retrieve/get_by_user?userId=${params.userId}&page=${params.page}`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            })
+
+            const data = await response.json(); 
+            return data;
+        }
+        catch (error) {
+            throw new Error(`Failed to get post: ${error}`)
         }
     }
 }

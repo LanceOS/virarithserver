@@ -1,8 +1,8 @@
-import PostClient from '$lib/tools/PostClient.ts';
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
 import type { PostSchema } from '$lib/schemas/Posts.ts';
-import S3Client from '$lib/tools/S3Client.ts';
+import S3Service from '$lib/server/S3Service.ts';
+import PostService from '$lib/server/PostService.ts';
 
 export const actions: Actions = {
   submitData: async ({ request, fetch }) => {
@@ -27,7 +27,7 @@ export const actions: Actions = {
         userId: session.user.id
       }
 
-      const postData = await PostClient.createPost(post);
+      const postData = await PostService.createPost(post);
 
       let validFiles: File[] = [];
       let imageIds: string[] = [];
@@ -37,7 +37,7 @@ export const actions: Actions = {
         const object = postData[0];
           console.log(files)
           validFiles = files.filter(file => file instanceof File && file.size > 0);
-          imageIds = await S3Client.uploadImages(validFiles, object, fetch);
+          imageIds = await S3Service.uploadImages(validFiles, object, fetch);
           console.log("Successful ids", imageIds)
       }
   

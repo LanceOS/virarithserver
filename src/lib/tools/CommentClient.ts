@@ -1,6 +1,11 @@
 import { PUBLIC_URL } from "$env/static/public";
 import type { CommentSchema } from "$lib/schemas/Comments.ts";
 
+interface ICommentsParams {
+    userId: string;
+    page: number;
+}
+
 
 class CommentClient {
     instance: CommentClient | null = null;
@@ -70,6 +75,23 @@ class CommentClient {
                 headers: {
                     "Content-Type": "application/json"
                 },
+            })
+
+            const data = await response.json()
+            return data;
+        }
+        catch(error) {
+            console.error("Failed to create new comment", error)
+        }
+    }
+
+    static async getCommentsByUser(params: ICommentsParams) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/comments/retrieve/get_by_user?userId=${params.userId}&page=${params.page}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             })
 
             const data = await response.json()

@@ -1,8 +1,4 @@
 import { PUBLIC_URL } from "$env/static/public";
-import type { PostWithImage } from "$lib/@types/IPostSerializer.ts";
-import type { PostSchema } from "$lib/schemas/Posts.ts";
-
-
 interface IPostParams {
     category?: string;
     userId?: string;
@@ -16,66 +12,6 @@ class PostClient {
     constructor() {
         if(this.interface) return this.interface;
         this.interface = this;
-    }
-
-    /**
-     * 
-     * @param post 
-     * @returns Returns the created post
-     */
-    static async createPost(post: PostSchema) {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/create`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(post)
-            })
-            const data = await response.json();
-            return data;
-        }
-        catch (error) {
-            throw new Error(`Failed to create post: ${error}`)
-        }
-    }
-
-
-    static async updatePost(post: PostSchema) {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/edit`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(post)
-            })
-
-            const data = await response.json()
-            return data;
-        }
-        catch(error: unknown) {
-            throw new Error(`Failed to update post ${error}`)
-        }
-    }
-
-
-    static async deletePost(post: PostWithImage) {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/delete`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(post)
-            })
-
-            const data = await response.json()
-            return data;
-        }
-        catch(error: unknown) {
-            throw new Error(`Failed to delete post ${error}`)
-        }
     }
 
     /**

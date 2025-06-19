@@ -12,8 +12,8 @@ import type { ImageWithBuffer } from "$lib/@types/IImage.ts";
 type PostedObject = PostSchema | CommentSchema | CommentReplySchema;
 type PostedObjectArray = PostSchema[] | CommentSchema[] | CommentReplySchema[];
 
-class ImageClient {
-    instance: ImageClient | null = null;
+class ImageService {
+    instance: ImageService | null = null;
 
     constructor() {
         if (this.instance) return this.instance;
@@ -135,4 +135,4 @@ class ImageClient {
     }
 }
 
-export default ImageClient;
+export default ImageService;

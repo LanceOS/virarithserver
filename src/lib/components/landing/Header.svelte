@@ -32,7 +32,7 @@
     }
 
     function handleNavigation(path: string) {
-        goto(path);
+        goto(path, { replaceState: true, invalidateAll: true });
         closeMobileMenu();
     }
 </script>

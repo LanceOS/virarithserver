@@ -13,8 +13,8 @@ interface IExistingObject {
 }
 
 
-class S3Client {
-    instance: S3Client | null = null;
+class S3Service {
+    instance: S3Service | null = null;
 
     constructor() {
         if (this.instance) return this.instance;
@@ -106,4 +106,4 @@ class S3Client {
     }
 }
 
-export default S3Client;
+export default S3Service;

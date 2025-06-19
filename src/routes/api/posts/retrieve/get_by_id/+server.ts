@@ -1,8 +1,8 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import PostSerializer from '$lib/serializers/PostSerializer.ts';
+import ImageService from '$lib/server/ImageService.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
-import ImageClient from '$lib/tools/ImageClient.ts';
 import { and, sql } from 'drizzle-orm';
 
 
@@ -54,7 +54,7 @@ export const GET = async ({ request }): Promise<Response> => {
             throw new Error("Failed to find post")
         }
 
-        const images = await ImageClient.getS3Objects(post);
+        const images = await ImageService.getS3Objects(post);
         const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(post, images)
 
         return new Response(JSON.stringify(conformedPostData), {
