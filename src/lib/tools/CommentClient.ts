@@ -72,6 +72,7 @@ class CommentClient {
     static async getCommentsByPost(post: string) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/comments/retrieve/get_by_post?postId=${post}`, {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -93,7 +94,6 @@ class CommentClient {
                     "Content-Type": "application/json"
                 }
             })
-
             const data = await response.json()
             return data;
         }

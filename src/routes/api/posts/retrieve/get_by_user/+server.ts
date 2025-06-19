@@ -21,6 +21,8 @@ export const GET = async ({ request }): Promise<Response> => {
         });
         const userId: string | null = session?.user.id || null;
 
+        console.log(userId)
+
 
         const page = Number(pageParam)
 

@@ -1,8 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { serializeComment } from '$lib/serializers/CommentSerializer.ts';
-import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
-import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
+import { isLikedSubquery, replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../../../posts/retrieve/retrieval.config.ts';
 import { comments } from '$lib/schemas/Comments.ts';
@@ -48,7 +47,6 @@ export const GET = async ({ request }): Promise<Response> => {
             offset: offset,
             orderBy: (comments, { desc }) => [desc(comments.createdAt)]
         })
-
 
         /**
          * Getting the total number of comments from the database.

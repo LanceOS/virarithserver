@@ -15,77 +15,50 @@
 	import { page } from '$app/state';
 	import PostClient from '$lib/tools/PostClient.ts';
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
+	import ProfileClient from '$lib/tools/ProfileClient.ts';
+	import CommentClient from '$lib/tools/CommentClient.ts';
 
-	const { data } = $props<{ data: PageData }>();
 	const userPage = page.params.user;
 
 	const session = authClient.useSession();
 
 	let isHydrated = $state(false);
 
-	let profile: ProfileSchema = $state(data.profile);
-	let user: UserSchema = $state(data.profile.user);
+	let profile: ProfileSchema | undefined = $state();
+	let user: UserSchema | undefined = $state();
 	
-	let posts: PostWithImage[] = $state(data.posts.posts);
-	let postPagination = $state(data.posts.pagination);
+	let posts: PostWithImage[] | undefined = $state([]);
+	let postPagination: IPagination | undefined = $state();
 
-	let comments: CommentSchema[] = $state(data.comments.comments);
-	let commentPagination = $state(data.comments.pagination);
+	let comments: CommentSchema[] | undefined = $state([]);
+	let commentPagination: IPagination | undefined = $state();
 
-	let likedPosts: PostWithImage[] = $state(data.likes.posts);
-	let likePagination = $state(data.likes.pagination); 
-
-	let pagination = $state(postPagination);
+	let pagination: IPagination | undefined = $state();
 	let isPaginationLoading: boolean = $state(false);
 
-	let activeTab: 'posts' | 'comments' | 'likes' = $state('posts');
+	let activeTab: 'posts' | 'comments' = $state('posts');
 
 	let isFollowing: boolean = $state(false);
 
-	let newAvatar: File | undefined = $state();
-
+	
 	let isEditing: boolean = $state(false);
 	let isLoading: boolean = $state(false);
-
+	
 	let newProfileInfo = $state({
 		bio: '',
 		minecraftName: '',
 		discordName: ''
 	});
-
-	$effect(() => {
-		console.log('Profile page $effect: Reacting to new profile ID:', data.profile.id);
-
-		isEditing = false;
-		isLoading = false;
-		isPaginationLoading = false;
-		activeTab = 'posts';
-
-		newProfileInfo.bio = data.profile.bio || '';
-		newProfileInfo.minecraftName = data.profile.minecraftName || '';
-		newProfileInfo.discordName = data.profile.discordName || '';
-		isFollowing = false;
-	});
-
-	$effect(() => {
-		profile = data.profile;
-		user = data.profile.user;
-		posts = data.posts.posts;
-		console.log('Reloading main data');
-	});
+	let newAvatar: File | undefined = $state();
 
 	const changeTab = (tab: string) => {
 		if(tab === "posts") {
 			activeTab = "posts";
 			pagination = postPagination;
 		}
-		else if (tab === "comments") {
+		else {
 			activeTab = "comments";
 			pagination = commentPagination;
-		}
-		else {
-			activeTab = "likes";
-			pagination = likePagination;
 		}
 	}
 
@@ -141,9 +114,9 @@
 			handleSave();
 		} else {
 			isEditing = true;
-			newProfileInfo.bio = profile.bio || '';
-			newProfileInfo.minecraftName = profile.minecraftName || '';
-			newProfileInfo.discordName = profile.discordName || '';
+			newProfileInfo.bio = profile?.bio || '';
+			newProfileInfo.minecraftName = profile?.minecraftName || '';
+			newProfileInfo.discordName = profile?.discordName || '';
 		}
 	};
 
@@ -170,7 +143,7 @@
 			});
 		} catch (error) {
 			console.error('Error saving profile:', error);
-			alert(`Failed to save profile: ${error.message}`);
+			alert(`Failed to save profile: ${error}`);
 		} finally {
 			isLoading = false;
 			isEditing = false;
@@ -178,14 +151,33 @@
 	};
 
 	const handleCancel = () => {
-		newProfileInfo.bio = profile.bio || '';
-		newProfileInfo.minecraftName = profile.minecraftName || '';
-		newProfileInfo.discordName = profile.discordName || '';
+		newProfileInfo.bio = profile?.bio || '';
+		newProfileInfo.minecraftName = profile?.minecraftName || '';
+		newProfileInfo.discordName = profile?.discordName || '';
 		isEditing = false;
 	};
 
-	onMount(() => {
+	onMount(async () => {
 		isHydrated = true;
+
+		try {
+			const profileResponse = await ProfileClient.getUserProfile(userPage)
+            const postResponse = await PostClient.getPostsByUser({ userId: userPage, page: 1 })
+            const commentResponse = await CommentClient.getCommentsByUser({ userId: userPage, page: 1 })
+
+			profile = profileResponse;
+
+			posts = postResponse.posts;
+			postPagination = postResponse.pagination;
+
+			pagination = postPagination;
+
+			comments = commentResponse.comments;
+			commentPagination = commentResponse.pagination;
+		}
+		catch(error) {
+			console.error("Error on:", error)
+		}
 	});
 </script>
 
@@ -200,7 +192,7 @@
 					<div class="flex flex-col gap-6 lg:flex-row lg:items-start">
 						<div class="flex-1 space-y-6">
 							<div>
-								<h1 class="text-4xl font-bold text-white">{user.name}</h1>
+								<h1 class="text-4xl font-bold text-white">{user?.name}</h1>
 							</div>
 
 							<ProfileInfo {isEditing} {profile} bind:newProfileInfo />
@@ -260,7 +252,7 @@
 							</section>
 						</div>
 
-						<ProfileAvatar {isEditing} />
+						<ProfileAvatar {isEditing} bind:newAvatar/>
 					</div>
 				</div>
 
@@ -281,13 +273,6 @@
 							>
 								Comments
 							</button>
-							<button
-								onclick={() => changeTab("likes")}
-								class:text-[var(--color-primary)]={activeTab === 'likes'}
-								class="btn-nav cursor-pointer border-b-2 px-1 py-2 font-semibold transition-colors duration-200"
-							>
-								Likes
-							</button>
 						</nav>
 					</div>
 
@@ -295,12 +280,12 @@
 						<div class="space-y-4">
 							<Pagination {pagination} {incrementPage} {decrementPage} {isPaginationLoading} />
 							{#if !isLoading}
-								{#if activeTab === 'posts'}
+								{#if activeTab === 'posts' && posts}
 									<ForumFeed {posts} />
-								{:else if activeTab === 'comments'}
+								{:else if activeTab === 'comments' && comments}
 									<CommentFeed {comments} />
-								{:else if activeTab === 'likes'}
-									<ForumFeed posts={likedPosts}/>
+								<!-- {:else if activeTab === 'likes'}
+									<ForumFeed posts={likedPosts}/> -->
 								{/if}
 							{:else}
 								<section class="flex min-h-64 flex-col items-center justify-center gap-4">

@@ -1,5 +1,5 @@
 
-export interface ImageWithBuffer {
+export interface ImageWithUrl {
     id: string;
     url: string;
     bucketObjectId: string;

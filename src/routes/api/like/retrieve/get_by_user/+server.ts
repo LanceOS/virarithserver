@@ -44,6 +44,7 @@ export const GET = async ({ request }): Promise<Response> => {
                 SELECT COUNT(*)::int
                 FROM likes
                 WHERE likes.object_id = posts.id
+                AND likes.object_type = 'post'
             )`.as('like_count'),
             commentCount: sql<number>`(
                 SELECT COUNT(*)::int
@@ -51,7 +52,7 @@ export const GET = async ({ request }): Promise<Response> => {
                 WHERE comments.post_id = posts.id
                 AND comments.is_deleted = false
             )`.as('comment_count'),
-            isLiked: isLikedSubquery(currentUserId!).as('is_liked'),
+            isLiked: isLikedSubquery(currentUserId).as('is_liked'),
         })
         .from(posts)
         .innerJoin(user, eq(posts.userId, user.id))

@@ -18,7 +18,7 @@ export const isLikedSubquery = (userId: string | null) => {
         return sql<boolean>`EXISTS (
             SELECT 1 FROM likes
             WHERE likes.object_id = posts.id
-            AND likes.object_type = posts.type
+            AND likes.object_type = 'post'
             AND likes.user_id = ${userId}
         )`
     }

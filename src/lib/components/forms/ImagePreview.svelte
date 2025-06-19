@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { ImageWithBuffer } from '$lib/@types/IImage.ts';
+	import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 	import Icon from '@iconify/svelte';
 
 	const { imagePreviews, removeAllImages, removeImage, maxFiles } = $props<{
-		imagePreviews?: ImageWithBuffer[] | { file?: File | undefined; url: string; }[];
+		imagePreviews?: ImageWithUrl[] | { file?: File | undefined; url: string; }[];
 		maxFiles?: number;
 		removeAllImages?: () => void;
 		removeImage?: (index: number) => void;

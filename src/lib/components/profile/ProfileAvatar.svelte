@@ -1,14 +1,25 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 
-    const { isEditing } = $props();
+    const { isEditing, newAvatar = $bindable() } = $props();
 
 	let avatarInputField: HTMLInputElement | undefined = $state();
+    let selectedFile: File | undefined = $state();
+
+    $effect(() => {
+        selectedFile = newAvatar
+    })
 
 	const updateAvatar = () => {
         if (avatarInputField) {
             avatarInputField.click();
         }
+	}
+
+	const handleFileChange = (event: Event) => {
+		const target = event.target as HTMLInputElement;
+		const file = target.files?.[0];
+		selectedFile = file;
 	}
 </script>
 
@@ -32,6 +43,7 @@
             id="avatar"
             class="hidden"
             bind:this={avatarInputField}
+            onchange={handleFileChange}
         />
     {/if}
 </section>

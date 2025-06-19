@@ -2,9 +2,9 @@
 
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
-import S3Client from '$lib/tools/S3Client.ts';
-import PostClient from '$lib/tools/PostClient.ts';
 import ImageService from '$lib/server/ImageService.ts';
+import PostService from '$lib/server/PostService.ts';
+import S3Service from '$lib/server/S3Service.ts';
 
 
 export const actions: Actions = {
@@ -24,7 +24,7 @@ export const actions: Actions = {
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
 
-            await PostClient.updatePost(updatedPost)
+            await PostService.updatePost(updatedPost)
 
             if (!updatedPost) {
                 return fail(400, { success: false, message: "missing form data" })
@@ -50,7 +50,7 @@ export const actions: Actions = {
                 );
 
                 if (imagesToDelete.length > 0) {
-                    const s3DeleteResponse = await S3Client.deleteImages(imagesToDelete);
+                    const s3DeleteResponse = await S3Service.deleteImages(imagesToDelete);
                     const drizzleRemoveResponse = await ImageService.removeDrizzleS3Objects(imagesToDelete);
                     if (s3DeleteResponse === true) {
                         console.log({ success: true })

@@ -5,9 +5,7 @@ import { images, type ImageSchema } from "$lib/schemas/Images.ts";
 import type { PostSchema } from "$lib/schemas/Posts.ts";
 import { bucketName, minioClient } from "$lib/server/MinIO.ts";
 import { and, eq } from "drizzle-orm";
-import { pipeline } from 'stream/promises';
-import { Writable } from 'stream';
-import type { ImageWithBuffer } from "$lib/@types/IImage.ts";
+import type { ImageWithUrl } from "$lib/@types/IImage.ts";
 
 type PostedObject = PostSchema | CommentSchema | CommentReplySchema;
 type PostedObjectArray = PostSchema[] | CommentSchema[] | CommentReplySchema[];
@@ -45,48 +43,48 @@ class ImageService {
     };
 
     /**
-     * Retrieves images from S3 object storage and converts them to base64 data URLs.
-     * 
-     * First queries the database for image metadata using {@link getDrizzleImageObjects}, 
-     * then fetches the actual image files from S3 storage and converts them to base64 
-     * format for client consumption.
-     * 
-     * Uses {@link getDrizzleImageObjects} to query the {@link ImageSchema} table
-     * Uses {@link ImageWithBuffer} for the return type structure
-     * 
-     * @param {PostedObject|PostedObjectArray} postedObject 
-     *        Single object or array of posts, comments, or comment replies to fetch images for
-     * @returns {Promise<ImageWithBuffer[]>} Promise resolving to image objects with base64 data URLs
-     * 
-     * @see minioClient.getObject - S3 object retrieval
+     * Retrieves presigned URLs for images from S3 object storage.
+     *
+     * First queries the database for image metadata using {@link getDrizzleImageObjects},
+     * then generates a time-limited presigned URL for each image file from S3 storage.
+     * These URLs can be used directly in `<img>` tags on the client-side.
+     *
+     * Uses {@link getDrizzleImageObjects} to query the {@link ImageSchema} table.
+     * Uses {@link ImageWithUrl} for the return type structure.
+     *
+     * @param {PostedObject|PostedObjectArray} postedObject
+     * Single object or array of posts, comments, or comment replies to fetch images for
+     * @param {number} expirySeconds The expiry time in seconds for the presigned URL (default: 3600 seconds = 1 hour).
+     * @returns {Promise<ImageWithUrl[]>} Promise resolving to image objects with presigned URLs.
+     *
+     * @see minioClient.presignedGetObject - S3 presigned URL generation
      * @requires minio - For S3 object storage access
      */
-    static async getS3Objects(postedObject: PostedObject | PostedObjectArray): Promise<ImageWithBuffer[]> {
-        const drizzleImageObjects = this.getDrizzleImageObjects(postedObject);
-        const imagePromises = (await drizzleImageObjects).map(async (imageObj: ImageSchema): Promise<ImageWithBuffer> => {
-            const chunks: Buffer[] = [];
+    static async getS3Objects(postedObject: PostedObject | PostedObjectArray, expirySeconds: number = 3600): Promise<ImageWithUrl[]> {
+        const drizzleImageObjects = await this.getDrizzleImageObjects(postedObject); // Await this call
+        const imagePromises = drizzleImageObjects.map(async (imageObj: ImageSchema): Promise<ImageWithUrl> => {
+            try {
+                // Generate the presigned URL
+                const url = await minioClient.presignedGetObject(bucketName, imageObj.bucketObjectId, expirySeconds);
 
-            const collectChunks = new Writable({
-                write(chunk: Buffer, encoding, callback) {
-                    chunks.push(chunk);
-                    callback();
-                }
-            });
-
-            const dataStream = await minioClient.getObject(bucketName, imageObj.bucketObjectId);
-
-            await pipeline(dataStream, collectChunks);
-
-            const bufferedImage = Buffer.concat(chunks)
-            const base64 = bufferedImage.toString('base64');
-
-            return {
-                id: imageObj.id!,
-                objectId: imageObj.objectId,
-                objectType: imageObj.objectType,
-                url: `data:image/*;base64,${base64}`,
-                bucketObjectId: imageObj.bucketObjectId
-            };
+                return {
+                    id: imageObj.id!,
+                    objectId: imageObj.objectId,
+                    objectType: imageObj.objectType,
+                    url: url, // This is the presigned URL
+                    bucketObjectId: imageObj.bucketObjectId
+                };
+            } catch (error) {
+                console.error(`Error generating presigned URL for ${imageObj.bucketObjectId}:`, error);
+                // Optionally, handle error gracefully, e.g., return a placeholder URL or null
+                return {
+                    id: imageObj.id!,
+                    objectId: imageObj.objectId,
+                    objectType: imageObj.objectType,
+                    url: '/path/to/placeholder-image.png', // Or some other default
+                    bucketObjectId: imageObj.bucketObjectId
+                };
+            }
         });
 
         return Promise.all(imagePromises);
