@@ -4,6 +4,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
 import ImageClient from '$lib/tools/ImageClient.ts';
 import S3Client from '$lib/tools/S3Client.ts';
+import PostClient from '$lib/tools/PostClient.ts';
 
 
 export const actions: Actions = {
@@ -22,6 +23,8 @@ export const actions: Actions = {
 
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
+
+            await PostClient.actions.updatePost(updatedPost)
 
             if (!updatedPost) {
                 return fail(400, { success: false, message: "missing form data" })

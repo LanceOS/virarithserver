@@ -3,7 +3,7 @@ import { posts } from '$lib/schemas/Posts.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
-import PostSerializer, { serializePost } from '$lib/serializers/PostSerializer.ts';
+import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import ImageClient from '$lib/tools/ImageClient.ts';
 
@@ -76,13 +76,13 @@ export const GET = async ({ request }): Promise<Response> => {
         const [{ count: totalCount }] = await DrizzleDB
             .select({ count: count() })
             .from(posts)
-            .where(eq(posts.isDeleted, false));
+            .where(and(eq(posts.isDeleted, false), eq(posts.userId, userIdParam)));
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
         
         const images = await ImageClient.getS3Objects(postData);
         const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images);
-
+        
         return new Response(JSON.stringify({
             posts: conformedPostData,
             pagination: {

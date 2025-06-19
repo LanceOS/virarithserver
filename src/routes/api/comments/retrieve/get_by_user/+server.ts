@@ -3,13 +3,15 @@ import { DrizzleDB } from '$lib/Drizzle.ts';
 import { serializeComment } from '$lib/serializers/CommentSerializer.ts';
 import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
-import { and, sql } from 'drizzle-orm';
+import { and, count, eq, sql } from 'drizzle-orm';
+import { postPageLimit } from '../../../posts/retrieve/retrieval.config.ts';
 
 
 export const GET = async ({ request }): Promise<Response> => {
     try {
         const url = new URL(request.url)
         const userIdParam = url.searchParams.get("userId")
+        const pageParam = url.searchParams.get("page")
 
         const session = await auth.api.getSession({
             headers: request.headers
@@ -19,6 +21,9 @@ export const GET = async ({ request }): Promise<Response> => {
         if (!userIdParam) {
             throw new Error("Must pass a postId to fetch specific post")
         }
+
+        const page = Number(pageParam)
+        const offset = (page - 1) * postPageLimit;
 
         /**
          * @params userId
@@ -38,15 +43,38 @@ export const GET = async ({ request }): Promise<Response> => {
             with: {
                 user: true,
             },
+            limit: postPageLimit,
+            offset: offset,
             orderBy: (comments, { desc }) => [desc(comments.createdAt)]
         })
+
+
+        /**
+         * Getting the total number of comments from the database.
+         * This is so that way the number of pages for pagination can
+         * be calculated.
+        */
+        const [{ count: totalCount }] = await DrizzleDB
+            .select({ count: count() })
+            .from(comments)
+            .where(eq(comments.isDeleted, false));
+
+        const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 
         /**
          * @returns Serializes comments
          */
         const serializeData = comments.map(serializeComment)
 
-        return new Response(JSON.stringify(serializeData), {
+        return new Response(JSON.stringify({
+            comments: serializeData,
+            pagination: {
+                currentPage: page,
+                totalPages: totalPages,
+                hasNext: page < totalPages,
+                hasPrevious: page > 1
+            }
+        }), {
             status: 200,
             statusText: "OK",
             headers: {

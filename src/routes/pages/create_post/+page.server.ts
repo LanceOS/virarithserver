@@ -23,14 +23,11 @@ export const actions: Actions = {
         title: data.get("title") as string,
         content: data.get("content") as string,
         category: data.get("category") as string,
+        type: "post",
         userId: session.user.id
       }
 
       const postData = await PostClient.createPost(post);
-      
-      if(postData.name && postData.name.toLowerCase() === 'error') {
-        console.log(postData)
-      }
 
       let validFiles: File[] = [];
       let imageIds: string[] = [];

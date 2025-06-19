@@ -63,13 +63,13 @@ export const GET = async ({ request }): Promise<Response> => {
          * This is so that way the number of pages for pagination can
          * be calculated.
         */
-       const [{ count: totalCount }] = await DrizzleDB
-       .select({ count: count() })
-       .from(posts)
-       .where(eq(posts.isDeleted, false));
-       
-       const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
-       
+        const [{ count: totalCount }] = await DrizzleDB
+            .select({ count: count() })
+            .from(posts)
+            .where(eq(posts.isDeleted, false));
+
+        const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
+
         const images = await ImageClient.getS3Objects(postData);
         const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images)
 

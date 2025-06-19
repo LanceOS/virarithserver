@@ -113,14 +113,6 @@
         const contentInput = formElement.elements.namedItem('content') as HTMLInputElement;
         const categoryInput = formElement.elements.namedItem('category') as HTMLInputElement;
 
-		/**
-		 * @todo Create logic to determine image upload
-		 *
-		 * @description When the user removes an existing image, grab the image from the existing image array that is being removed
-		 * and run a delete query where the image is removed from the S3 bucket and postgres database. This is so that way the
-		 * program will know which images to remove from the past and then to add to the post.
-		 */
-
 		try {
             isSubmitting = true;
 
