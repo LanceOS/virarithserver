@@ -105,8 +105,8 @@
 			<header class="relative flex items-center justify-between gap-3">
 				<div class="flex items-center gap-2">
 					{#if post.user.image && post.user.image !== 'placeholder'}
-					<div class="w-12 h-12 bg-base border-muted p-2">
-						<img src={post.user.image} alt="" class="h-full w-full object-contain" />
+					<div class="user-avatar">
+						<img src={post.user.image} alt=""/>
 					</div>
 					{/if}
 					<div class="flex flex-col">
@@ -156,7 +156,7 @@
 				{/if}
 			</header>
 
-			<div class="mb-1 flex flex-col gap-6">
+			<div class="mb-1 flex flex-col gap-2">
 				<h1 class="text-lg sm:text-3xl">
 					{@html post.title}
 				</h1>

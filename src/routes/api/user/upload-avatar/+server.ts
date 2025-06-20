@@ -2,6 +2,7 @@ import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { user } from '$lib/schemas/authentication.ts';
 import { uploadFile } from '$lib/server/MinIO.ts';
+import { and } from 'drizzle-orm';
 import { eq } from 'drizzle-orm';
 
 export const POST = async ({ request }) => {
@@ -18,7 +19,7 @@ export const POST = async ({ request }) => {
         });
         const userId: string | null = session?.user.id || null;
 
-        if (!userId) {
+        if (!userId || !session?.user.email) {
             throw new Error("User must be logged in to upload an avatar.");
         }
 
@@ -26,7 +27,7 @@ export const POST = async ({ request }) => {
 
         await DrizzleDB.update(user)
             .set({ image: fileId, updatedAt: new Date() }) 
-            .where(eq(user.id, userId));
+            .where(and(eq(user.id, userId), eq(user.email, session?.user.email)));
 
         return new Response(JSON.stringify({
             bucketId: fileId,

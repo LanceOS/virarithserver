@@ -29,7 +29,7 @@ export const actions: Actions = {
                     await S3Service.deleteImages({ userId: currentUser.id, bucketObjectId: currentUser.image! })
                 }
                 const imageId = await S3Service.uploadUserAvatar(newAvatar, currentUser.id, fetch)
-                await UserService.updateUserAvatar(imageId);
+                await UserService.updateUserImageId(imageId, currentUser.id);
             }
 
             await new Promise(resolve => setTimeout(resolve, 500));
@@ -37,7 +37,7 @@ export const actions: Actions = {
             return { success: true }
         }
         catch (error) {
-            return fail(500, { success: false, message: error.message })
+            return fail(500, { success: false, message: error })
         }
     }
 }

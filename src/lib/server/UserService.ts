@@ -3,6 +3,7 @@ import type { NewPost } from "$lib/@types/IPostSerializer.ts";
 import type { IProfileWithUser } from "$lib/@types/IProfile.ts";
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import { user } from "$lib/schemas/authentication.ts";
+import { eq } from "drizzle-orm";
 import { bucketName, minioClient } from "./MinIO.ts";
 
 
@@ -17,11 +18,12 @@ class UserService {
     }
 
 
-    static async updateUserAvatar(image: string) {
+    static async updateUserImageId(image: string, userId: string) {
         try {
             const updatedUser = await DrizzleDB.update(user).set({
                 image: image
-            }).returning()
+            }).where(eq(user.id, userId))
+            .returning()
 
             return updatedUser;
         }

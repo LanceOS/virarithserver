@@ -1,4 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
+import type { PostWithImage } from "$lib/@types/IPostSerializer.ts";
 interface IPostParams {
     category?: string;
     userId?: string;
@@ -10,10 +11,26 @@ class PostClient {
     interface: PostClient | null = null;
 
     constructor() {
-        if(this.interface) return this.interface;
+        if (this.interface) return this.interface;
         this.interface = this;
     }
+    static async deletePost(post: PostWithImage) {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/delete`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(post)
+            })
 
+            const data = await response.json()
+            return data;
+        }
+        catch (error: unknown) {
+            throw new Error(`Failed to delete post ${error}`)
+        }
+    }
     /**
      * 
      * @returns Fetches all posts from the database
@@ -26,7 +43,7 @@ class PostClient {
                 },
             })
 
-            const data = await response.json(); 
+            const data = await response.json();
             return data;
         }
         catch (error) {
@@ -41,7 +58,7 @@ class PostClient {
      */
     static async getPostsByCategory(orderBy: string, category: string, page: number) {
         try {
-            if(!category) {
+            if (!category) {
                 throw new Error("A category must be provided.")
             }
 
@@ -50,7 +67,7 @@ class PostClient {
                     "Content-Type": "application/json"
                 },
             })
-            const data = await response.json(); 
+            const data = await response.json();
             return data;
         }
         catch (error) {
@@ -70,7 +87,7 @@ class PostClient {
                     "Content-Type": "application/json"
                 },
             })
-            const data = await response.json(); 
+            const data = await response.json();
             return data;
         }
         catch (error) {
@@ -91,7 +108,7 @@ class PostClient {
                     "Content-Type": "application/json"
                 },
             })
-            const data = await response.json(); 
+            const data = await response.json();
             return data;
         }
         catch (error) {

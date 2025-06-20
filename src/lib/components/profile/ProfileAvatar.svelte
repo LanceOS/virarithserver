@@ -40,7 +40,9 @@
 				<Icon icon="mdi:account-circle" class="text-6xl text-gray-400" />
 			</div>
 		{:else}
-			<img src={avatar} alt="" />
+		<div class="bg-base h-full border-muted p-2">
+			<img src={avatar} alt="" class="h-full w-full object-contain" />
+		</div>
 		{/if}
 	</div>
 	{#if isEditing}

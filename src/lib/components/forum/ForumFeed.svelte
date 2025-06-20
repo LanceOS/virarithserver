@@ -23,8 +23,8 @@
 				<header class="flex items-center justify-between gap-2">
 					<div class="flex items-center gap-2">
 						{#if post.user.image && post.user.image !== 'placeholder'}
-						<div class="w-12 h-12 bg-base border-muted p-2">
-							<img src={post.user.image} alt="" class="h-full w-full object-contain" />
+						<div class="user-avatar">
+							<img src={post.user.image} alt=""/>
 						</div>
 						{/if}
 						<div class="flex flex-col leading-tight">
@@ -46,7 +46,7 @@
 				</header>
 
 				<button
-					class="flex cursor-pointer flex-col gap-4 text-left"
+					class="flex cursor-pointer flex-col gap-1 text-left"
 					onclick={() => goto(`/pages/posts/${post.id}`)}
 					type="button"
 				>

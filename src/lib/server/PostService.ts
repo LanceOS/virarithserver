@@ -89,24 +89,6 @@ class PostService {
         }
     }
 
-
-    static async deletePost(post: PostWithImage) {
-        try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/delete`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(post)
-            })
-
-            const data = await response.json()
-            return data;
-        }
-        catch(error: unknown) {
-            throw new Error(`Failed to delete post ${error}`)
-        }
-    }
 }
 
 export default PostService;

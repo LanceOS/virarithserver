@@ -9,17 +9,17 @@
 
 	let { comments, isLoadingComments, handleCommentDelete } = $props<{
 		comments: CommentSchema[];
-		isLoadingComments?: VoidFunction | undefined;
-		handleCommentDelete?: VoidFunction | undefined;
+		isLoadingComments?: boolean;
+		handleCommentDelete?: Function | undefined;
 	}>();
 
 	const session = authClient.useSession();
 
 	let openActionsCommentId: string | null = $state(null);
-	let isEditingComment: boolean = $state(false);
+	let editingCommentId: string | null = $state(null);
 
 	const cancelEdit = () => {
-		isEditingComment = false;
+		editingCommentId = null;
 	};
 
 	const toggleActionsMenu = (commentId: string) => {
@@ -30,8 +30,8 @@
 		openActionsCommentId = null;
 	};
 
-	const openEdit = () => {
-		isEditingComment = true;
+	const openEdit = (commentId: string) => {
+		editingCommentId = commentId; 
 		closeActionsMenu();
 	};
 
@@ -48,6 +48,7 @@
 		});
 
 		comments = newCommentArr;
+		editingCommentId = null; 
 	};
 
 	const deleteComment = async (comment: any) => {
@@ -113,7 +114,7 @@
 							class="actions-menu bg-base absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
 						>
 							<button
-								onclick={() => openEdit()}
+								onclick={() => openEdit(comment.id)}
 								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors duration-150 hover:bg-gray-600"
 							>
 								<Icon icon="mdi:text-box-edit-outline" />
@@ -133,7 +134,7 @@
 					{/if}
 				</div>
 
-				{#if isEditingComment}
+				{#if editingCommentId === comment.id}
 					<CommentEdit {cancelEdit} {comment} {commentFeedUpdate} />
 				{:else}
 					<p class="text-sm sm:text-base">
