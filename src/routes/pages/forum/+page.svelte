@@ -115,6 +115,8 @@
 			categoryList = categoryResponse;
 			posts = postResponse.posts;
 			pagination = postResponse.pagination;
+
+			console.log(posts)
 		} catch (err) {
 			error = 'Failed to load posts. Please check your connection and try again.';
 			console.error('Error loading posts:', err);

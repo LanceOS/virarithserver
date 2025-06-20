@@ -1,4 +1,5 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
+import UserService from '$lib/server/UserService.ts';
 import { and } from 'drizzle-orm';
 
 
@@ -18,7 +19,13 @@ export const GET = async ({ request }): Promise<Response>  => {
             },
         })
 
-        return new Response(JSON.stringify(profile), {
+        if(!profile) {
+            throw new Error(`Failed to get user's profile`)
+        }
+
+        const profileWithAvatar = await UserService.alignUserAvatars(profile!)
+
+        return new Response(JSON.stringify(profileWithAvatar), {
             status: 200,
             statusText: "OK",
             headers: {

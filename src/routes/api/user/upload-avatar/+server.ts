@@ -1,27 +1,16 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { images, type ImageSchema } from '$lib/schemas/Images.ts';
+import { user } from '$lib/schemas/authentication.ts';
 import { uploadFile } from '$lib/server/MinIO.ts';
+import { eq } from 'drizzle-orm';
 
 export const POST = async ({ request }) => {
     try {
         const formData = await request.formData();
-
-        console.log("In backend", formData)
         const file = formData.get('file') as File | null;
-
-        /**
-         * Object refers to the post, comment, comment reply, and user objects.
-         */
-        const objectId = formData.get('objectId') as string;
-        const objectType = formData.get("objectType") as string;
-
 
         if (!file) {
             throw new Error("No file provided");
-        }
-        if(!objectId || !objectType) {
-            throw new Error("Missing object values needed for image uplaod.")
         }
 
         const session = await auth.api.getSession({
@@ -29,41 +18,35 @@ export const POST = async ({ request }) => {
         });
         const userId: string | null = session?.user.id || null;
 
-        if(!userId) {
-            throw new Error("User must be logged in to upload photos.")
-        };
+        if (!userId) {
+            throw new Error("User must be logged in to upload an avatar.");
+        }
 
         const fileId = await uploadFile(file);
 
-        const schemaValues: ImageSchema = {
-            bucketObjectId: fileId,
-            objectId: objectId,
-            objectType: objectType,
-            userId: userId
-        };
-
-        const newImage = await DrizzleDB.insert(images).values(schemaValues).returning();
-        
+        await DrizzleDB.update(user)
+            .set({ image: fileId, updatedAt: new Date() }) 
+            .where(eq(user.id, userId));
 
         return new Response(JSON.stringify({
             bucketId: fileId,
-            drizzleId: newImage[0].id
+            message: "Avatar uploaded successfully"
         }), {
             status: 200,
             statusText: "OK",
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        });
 
     } catch (error) {
-        console.error('File upload error:', error);
+        console.error('User avatar upload error:', error);
         return new Response(JSON.stringify(error.message), {
             status: 500,
             statusText: "FAIL",
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        });
     }
 };

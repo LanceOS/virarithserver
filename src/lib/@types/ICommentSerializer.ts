@@ -12,6 +12,6 @@ export interface NewComment {
     postId: string;
     likeCount: number;
     isLiked: boolean;
-    replyCount: number;
+    replyCount?: number;
     user: UserSchema
 }

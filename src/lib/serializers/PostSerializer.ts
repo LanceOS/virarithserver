@@ -1,4 +1,3 @@
-import type { ImageWithBuffer } from "$lib/@types/IImage.ts";
 import type { PostWithImage, NewPost } from "$lib/@types/IPostSerializer.ts";
 
 /**
@@ -70,6 +69,7 @@ class PostSerializer {
 
         return isInputArray ? result : result[0];
     }
+
 }
 
 export default PostSerializer;

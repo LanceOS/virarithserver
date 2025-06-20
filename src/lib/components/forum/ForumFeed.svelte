@@ -14,7 +14,6 @@
 			day: 'numeric'
 		});
 	}
-
 </script>
 
 <section class="flex w-full flex-col gap-4">
@@ -22,7 +21,12 @@
 		{#each posts as post (post.id)}
 			<article class="card-setup flex flex-col gap-6 p-4">
 				<header class="flex items-center justify-between gap-2">
-					<div class="flex items-center gap-4">
+					<div class="flex items-center gap-2">
+						{#if post.user.image && post.user.image !== 'placeholder'}
+						<div class="w-12 h-12 bg-base border-muted p-2">
+							<img src={post.user.image} alt="" class="h-full w-full object-contain" />
+						</div>
+						{/if}
 						<div class="flex flex-col leading-tight">
 							<button
 								class="btn-nav text-base font-semibold"
@@ -55,11 +59,10 @@
 				</button>
 
 				{#if post.images}
-				<div class="-mt-2">
-					<ImagePreview imagePreviews={post.images} />
-				</div>
+					<div class="-mt-2">
+						<ImagePreview imagePreviews={post.images} />
+					</div>
 				{/if}
-				
 
 				<footer class="flex items-center justify-between text-sm">
 					<div class="flex items-center gap-4">

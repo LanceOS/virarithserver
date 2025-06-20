@@ -1,0 +1,1 @@
+ALTER TABLE "profile" ADD COLUMN "type" text DEFAULT 'profile' NOT NULL;

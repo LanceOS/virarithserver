@@ -1,10 +1,7 @@
 <script lang="ts">
 	import Header from '$lib/components/landing/Header.svelte';
 	import Icon from '@iconify/svelte';
-	import type { PageData } from '../$types.js';
-	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import CommentFeed from '$lib/components/comments/CommentFeed.svelte';
-	import type { ProfileSchema } from '$lib/schemas/Profile.ts';
 	import type { UserSchema } from '$lib/schemas/authentication.ts';
 	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import ProfileAvatar from '$lib/components/profile/ProfileAvatar.svelte';
@@ -17,6 +14,8 @@
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 	import ProfileClient from '$lib/tools/ProfileClient.ts';
 	import CommentClient from '$lib/tools/CommentClient.ts';
+	import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
+	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 
 	const userPage = page.params.user;
 
@@ -24,9 +23,9 @@
 
 	let isHydrated = $state(false);
 
-	let profile: ProfileSchema | undefined = $state();
-	let user: UserSchema | undefined = $state();
-	
+	let profile: IProfileWithUser | undefined = $state();
+	let profileUser: UserSchema | undefined = $state();
+
 	let posts: PostWithImage[] | undefined = $state([]);
 	let postPagination: IPagination | undefined = $state();
 
@@ -39,7 +38,6 @@
 	let activeTab: 'posts' | 'comments' = $state('posts');
 
 	let isFollowing: boolean = $state(false);
-
 	
 	let isEditing: boolean = $state(false);
 	let isLoading: boolean = $state(false);
@@ -123,9 +121,6 @@
 	const handleSave = async () => {
 		isLoading = true;
 		try {
-			console.log('Current profile:', profile);
-			console.log('New profile info to merge:', newProfileInfo);
-
 			const formData = new FormData();
 			formData.append(
 				'profile',
@@ -136,6 +131,10 @@
 					discordName: newProfileInfo.discordName
 				})
 			);
+
+			if(newAvatar) {
+				formData.append('file', newAvatar)
+			}
 
 			await fetch('?/submitEditedProfile', {
 				method: 'POST',
@@ -166,6 +165,7 @@
             const commentResponse = await CommentClient.getCommentsByUser({ userId: userPage, page: 1 })
 
 			profile = profileResponse;
+			profileUser = profile?.user;
 
 			posts = postResponse.posts;
 			postPagination = postResponse.pagination;
@@ -192,7 +192,7 @@
 					<div class="flex flex-col gap-6 lg:flex-row lg:items-start">
 						<div class="flex-1 space-y-6">
 							<div>
-								<h1 class="text-4xl font-bold text-white">{user?.name}</h1>
+								<h1 class="text-4xl font-bold text-white">{profileUser?.name}</h1>
 							</div>
 
 							<ProfileInfo {isEditing} {profile} bind:newProfileInfo />
@@ -252,7 +252,7 @@
 							</section>
 						</div>
 
-						<ProfileAvatar {isEditing} bind:newAvatar/>
+						<ProfileAvatar {isEditing} bind:newAvatar avatar={profile?.user.image || undefined}/>
 					</div>
 				</div>
 

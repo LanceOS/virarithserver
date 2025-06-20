@@ -8,6 +8,7 @@ export const profile = pgTable('profile', {
     bio: varchar("bio", { length: 500 }),
     discordName: text("discord_name"),
     minecraftName: text("minecraft_name"),
+    type: text("type").default("profile").notNull(),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())

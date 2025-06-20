@@ -43,8 +43,6 @@ class ProfileService {
             if (response.length === 0) {
                 throw new Error(`Failed to update profile. It may not exist or you may not have permission.`);
             }
-
-            console.log(response.length)
     
             return response[0];
         }

@@ -71,12 +71,12 @@ export const actions: Actions = {
 
             if (currentPostImagesInDatabase.length < 3 && newImagesFromClient.length > 0) {
                 const validFiles = newImagesFromClient.filter(file => file instanceof File && file.size > 0);
-                const imageIds = await S3Client.uploadImages(validFiles, updatedPost, fetch);
+                const imageIds = await S3Service.uploadImages(validFiles, updatedPost, fetch);
                 console.log(imageIds)
             }
 
             if (parsedExistingImagesFromClient.length === 0 && currentPostImagesInDatabase.length > 0) {
-                const s3DeleteResponse = await S3Client.deleteImages(currentPostImagesInDatabase);
+                const s3DeleteResponse = await S3Service.deleteImages(currentPostImagesInDatabase);
                 const drizzleRemoveResponse = await ImageService.removeDrizzleS3Objects(currentPostImagesInDatabase);
 
                 if (s3DeleteResponse === true) {

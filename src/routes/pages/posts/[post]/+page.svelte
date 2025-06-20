@@ -103,7 +103,12 @@
 	{:else if post}
 		<article class="card-setup flex flex-col gap-8 p-6">
 			<header class="relative flex items-center justify-between gap-3">
-				<div class="flex items-center gap-4">
+				<div class="flex items-center gap-2">
+					{#if post.user.image && post.user.image !== 'placeholder'}
+					<div class="w-12 h-12 bg-base border-muted p-2">
+						<img src={post.user.image} alt="" class="h-full w-full object-contain" />
+					</div>
+					{/if}
 					<div class="flex flex-col">
 						<span class="btn-nav font-semibold sm:text-lg">{post.user.name}</span>
 						<time class="text-xs font-light sm:text-sm" datetime={formatDate(post.createdAt)}>

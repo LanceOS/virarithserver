@@ -7,18 +7,17 @@
 	import PostClient from '$lib/tools/PostClient.ts';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import type { ImageWithBuffer } from '$lib/@types/IImage.ts';
 	import TitleInput from '$lib/components/forms/TitleInput.svelte';
 	import ContentInput from '$lib/components/forms/ContentInput.svelte';
 	import CategorySelect from '$lib/components/forms/CategorySelect.svelte';
 	import ImageInput from '$lib/components/forms/ImageInput.svelte';
 	import Icon from '@iconify/svelte';
-	import type { PostSchema } from '$lib/schemas/Posts.ts';
+	import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
 
-	let existingImages: ImageWithBuffer[] = $state([]);
+	let existingImages: ImageWithUrl[] = $state([]);
 	let newImageFiles: File[] = $state([]);
 
 	let imagePreviews: { file?: File | undefined; url: string }[] = $state([]);

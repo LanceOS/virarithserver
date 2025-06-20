@@ -6,8 +6,8 @@ import { bucketName, minioClient } from "$lib/server/MinIO.ts";
 
 interface IExistingObject {
     userId: string;
-    objectId: string;
-    objectType: string;
+    objectId?: string;
+    objectType?: string;
     bucketObjectId: string;
     id?: string | undefined;
 }
@@ -103,6 +103,31 @@ class S3Service {
             }
         }
         return true;
+    }
+
+
+    static async uploadUserAvatar(file: File, userId: string, fetchFn: typeof fetch): Promise<string> {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('userId', userId);
+    
+            const response = await fetchFn('/api/user/upload-avatar', {
+                method: 'POST',
+                body: formData
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: 'No additional error details.' }));
+                throw new Error(`Upload failed for avatar "${file.name}" with status ${response.status}: ${errorData.message || response.statusText}`);
+            }
+    
+            const result = await response.json();
+            return result.bucketId;
+        } catch (error) {
+            console.error(`S3Client upload error for avatar "${file?.name || 'unknown'}":`, error instanceof Error ? error.message : error);
+            throw new Error(`Upload process failed: ${error instanceof Error ? error.message : 'An unknown error occurred during upload.'}`);
+        }
     }
 }
 

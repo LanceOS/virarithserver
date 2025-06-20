@@ -6,6 +6,9 @@ import { auth } from '$lib/auth.ts';
 import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import ImageService from '$lib/server/ImageService.ts';
+import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
+import type { ImageWithUrl } from '$lib/@types/IImage.ts';
+import UserService from '$lib/server/UserService.ts';
 
 
 
@@ -82,8 +85,9 @@ export const GET = async ({ request }): Promise<Response> => {
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
         
-        const images = await ImageService.getS3Objects(postData);
-        const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images);
+        const postsWithAvatar = await UserService.alignUserAvatars(postData);
+        const images: ImageWithUrl[] = await ImageService.getS3Objects(postsWithAvatar);
+        const conformedPostData: PostWithImage | PostWithImage[] = PostSerializer.serializedPostDataAndAlignImages(postsWithAvatar, images)
         
         return new Response(JSON.stringify({
             posts: conformedPostData,

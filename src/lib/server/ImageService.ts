@@ -64,14 +64,13 @@ class ImageService {
         const drizzleImageObjects = await this.getDrizzleImageObjects(postedObject); // Await this call
         const imagePromises = drizzleImageObjects.map(async (imageObj: ImageSchema): Promise<ImageWithUrl> => {
             try {
-                // Generate the presigned URL
                 const url = await minioClient.presignedGetObject(bucketName, imageObj.bucketObjectId, expirySeconds);
 
                 return {
                     id: imageObj.id!,
                     objectId: imageObj.objectId,
                     objectType: imageObj.objectType,
-                    url: url, // This is the presigned URL
+                    url: url,
                     bucketObjectId: imageObj.bucketObjectId
                 };
             } catch (error) {
@@ -81,7 +80,7 @@ class ImageService {
                     id: imageObj.id!,
                     objectId: imageObj.objectId,
                     objectType: imageObj.objectType,
-                    url: '/path/to/placeholder-image.png', // Or some other default
+                    url: '/path/to/placeholder-image.png',
                     bucketObjectId: imageObj.bucketObjectId
                 };
             }
