@@ -26,18 +26,18 @@
 
 <!-- Desktop View -->
 <div class="hidden h-fit flex-col gap-6 lg:flex">
-	{#if categoryList}
-		{#each categoryList as category}
-			<button
-				type="button"
-				aria-label="Select Topic"
-				class={category.topic === selectedCategory
-					? 'border-muted btn-small-active cursor-pointer p-2 text-white'
-					: 'border-muted cursor-pointer p-2'}
-				onclick={() => changeCategory(category.topic)}
-			>
-				{category.topic.toUpperCase()}
-			</button>
-		{/each}
-	{/if}
+    {#if categoryList}
+        {#each categoryList as category}
+            <button
+                type="button"
+                aria-label="Select Topic"
+                class="{category.topic === selectedCategory
+                    ? 'border-muted btn-small-active cursor-pointer p-2 text-white'
+                    : 'border-muted cursor-pointer p-2'}
+                    max-w-full break-words" onclick={() => changeCategory(category.topic)}
+            >
+                {category.topic.toUpperCase()}
+            </button>
+        {/each}
+    {/if}
 </div>

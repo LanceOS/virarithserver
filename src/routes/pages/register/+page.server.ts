@@ -33,8 +33,6 @@ export const actions: Actions = {
             if (!response || !response.data) {
                 throw new Error('Failed to create user!');
             }
-
-            await ProfileService.createNewProfile({ userId: response.data.user.id });
         }
         catch (error) {
             console.error(error);

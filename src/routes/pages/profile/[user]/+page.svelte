@@ -49,6 +49,7 @@
 	});
 	let newAvatar: File | undefined = $state();
 
+
 	const changeTab = (tab: string) => {
 		if(tab === "posts") {
 			activeTab = "posts";
@@ -146,6 +147,7 @@
 		} finally {
 			isLoading = false;
 			isEditing = false;
+			profile = await ProfileClient.getUserProfile(userPage)
 		}
 	};
 
@@ -192,7 +194,7 @@
 					<div class="flex flex-col gap-6 lg:flex-row lg:items-start">
 						<div class="flex-1 space-y-6">
 							<div>
-								<h1 class="text-4xl font-bold text-white">{profileUser?.name}</h1>
+								<h1 class="text-4xl font-bold text-white">{profile.user?.name}</h1>
 							</div>
 
 							<ProfileInfo {isEditing} {profile} bind:newProfileInfo />

@@ -21,7 +21,7 @@
 
 	const MAX_CONTENT_CHARS = 1200;
 	const MAX_TITLE_CHARS = 100;
-	const MAX_FILE_SIZE = 9 * 1024 * 1024;
+	const MAX_FILE_SIZE = 4 * 1024 * 1024;
 	const MAX_FILES = 3;
 
 	const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];

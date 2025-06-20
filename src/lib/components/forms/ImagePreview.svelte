@@ -79,13 +79,13 @@
 			<!-- Main Image Display -->
 			<div class="mb-4">
 				<div class="group border-muted relative overflow-hidden rounded-lg">
-					<div class="relative aspect-video overflow-hidden">
+					<a class="relative aspect-video overflow-hidden" href={currentImage.url} target="_blank">
 						<img
 							src={currentImage?.url}
 							alt="Preview {currentImage?.file ? currentImage?.file.name : 'Image'}"
 							class="h-full w-full object-cover"
 						/>
-					</div>
+					</a>
 
 					<!-- Remove Current Image Button -->
 					{#if removeImage}

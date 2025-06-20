@@ -116,7 +116,7 @@
 			posts = postResponse.posts;
 			pagination = postResponse.pagination;
 
-			console.log(posts)
+			console.log(posts);
 		} catch (err) {
 			error = 'Failed to load posts. Please check your connection and try again.';
 			console.error('Error loading posts:', err);
@@ -130,10 +130,10 @@
 <main class="border-muted mx-auto mb-16 max-w-7xl">
 	<Hero />
 	<div class="bg-base mx-auto flex w-full flex-col gap-6 p-4 sm:p-6 lg:flex-row lg:gap-8 lg:p-12">
-		<div class="w-full lg:w-3/4">
+		<div class="w-full lg:w-3/4 lg:min-w-0">
 			{#if isInitialLoading}
 				<section class="flex min-h-64 flex-col items-center justify-center gap-4">
-					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
+					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
 					<p class="text-muted text-sm sm:text-base">Loading posts...</p>
 				</section>
 			{:else if error && !posts}
@@ -193,7 +193,7 @@
 					<div class="relative">
 						{#if isPaginationLoading}
 							<div class="flex min-h-64 flex-col items-center justify-center gap-4">
-								<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl"/>
+								<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
 								<p class="text-muted text-sm sm:text-base">Loading posts...</p>
 							</div>
 						{/if}
@@ -207,7 +207,7 @@
 			{/if}
 		</div>
 
-		<aside class="hidden w-full flex-col gap-4 lg:flex lg:w-1/4 lg:gap-6">
+		<aside class="hidden w-full flex-col gap-4 lg:flex lg:w-1/4 lg:flex-shrink-0 lg:gap-6">
 			<h4 class="text-xl sm:text-2xl">Categories</h4>
 			{#if categoryList}
 				<CategoryFilter {categoryList} {changeCategory} {selectedCategory} />

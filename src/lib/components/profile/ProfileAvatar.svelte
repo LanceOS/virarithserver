@@ -11,13 +11,34 @@
 		avatar: string | undefined;
 	}>();
 
+	const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+	const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
 	let avatarInputField: HTMLInputElement | undefined = $state();
 	let selectedFile: File | undefined = $state();
+	let avatarPreviewUrl: string | undefined = $state();
 
 	$effect(() => {
 		selectedFile = newAvatar;
+
+		if (selectedFile) {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				if (e.target) {
+					avatarPreviewUrl = e.target.result as string;
+				}
+			};
+			reader.readAsDataURL(selectedFile);
+		} else {
+			avatarPreviewUrl = undefined;
+		}
 	});
-	
+
+	$effect(() => {
+		if(!isEditing) {
+			avatarPreviewUrl = avatar
+		}
+	})
 
 	const updateAvatar = () => {
 		if (avatarInputField) {
@@ -30,6 +51,25 @@
 		const file = target.files?.[0];
 		selectedFile = file;
 		newAvatar = file;
+
+		if (!file) return;
+
+		if (!ALLOWED_TYPES.includes(file.type)) {
+			console.warn(
+				`File ${file.name} has invalid type. Allowed types: ${ALLOWED_TYPES.join(', ')}`
+			);
+			return;
+		}
+
+		if (file.size > MAX_FILE_SIZE) {
+			console.warn(
+				`File ${file.name} is too large. Maximum size: ${MAX_FILE_SIZE / (1024 * 1024)}MB`
+			);
+			return;
+		}
+
+		selectedFile = file;
+		newAvatar = file;
 	};
 </script>
 
@@ -40,9 +80,9 @@
 				<Icon icon="mdi:account-circle" class="text-6xl text-gray-400" />
 			</div>
 		{:else}
-		<div class="bg-base h-full border-muted p-2">
-			<img src={avatar} alt="" class="h-full w-full object-contain" />
-		</div>
+			<div class="bg-base border-muted h-full p-2">
+				<img src={avatar} alt="" class="h-full w-full object-contain" />
+			</div>
 		{/if}
 	</div>
 	{#if isEditing}
@@ -58,6 +98,7 @@
 			name="avatar"
 			id="avatar"
 			class="hidden"
+			accept={ALLOWED_TYPES.join(',')}
 			bind:this={avatarInputField}
 			onchange={handleFileChange}
 		/>

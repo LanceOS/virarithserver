@@ -7,7 +7,8 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import * as schema from "./schemas/authentication.ts"
 import { DrizzleDB } from "./Drizzle.ts";
-
+import { DISCORD_CLIENT, DISCORD_SECRET } from "$env/static/private";
+import ProfileService from "./server/ProfileService.ts";
 /**
  * Initializes and configures the `better-auth` instance.
  *
@@ -58,17 +59,22 @@ export const auth = betterAuth({
         autoSignIn: false, // Don't auto sign-in after registration.
     },
     /**
-     * Email verification settings (placeholder).
-     */
-    emailVerification: {
-        // ... (specific email verification configuration)
-    },
-    /**
      * Discord OAuth provider configuration.
      */
-    discord: {
-        clientId: process.env.DISCORD_CLIENT_ID as string, // Discord application client ID.
-        clientSecret: process.env.DISCORD_CLIENT_SECRET as string, // Discord application client secret.
+    socialProviders: {
+        discord: {
+            clientId: DISCORD_CLIENT as string, 
+            clientSecret: DISCORD_SECRET as string, 
+        },
+    },
+    databaseHooks: {
+        user: {
+            create: {
+                after: async(user, ctx) => {
+                    await ProfileService.createNewProfile({ userId: user.id });
+                }
+            }
+        }
     },
     /**
      * Rate limiting configuration.

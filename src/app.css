@@ -1,26 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import 'tailwindcss';
 
+
+
 :root {
-	--color-base: #121212; /* Nearly Black */
+    --color-base: #181c18; /* Very Dark Green-Gray */
 
-	--color-base-content: #e8e8e8;
+    --color-base-content: #f0f2f0; /* Soft Off-White */
 
-	--color-card: #1e1e1e; /* Dark Gray */
+    --color-card: #242a24; /* Dark Slate Green */
 
-	--color-card-border: #ffffff0d; /* Subtle white border */
+    --color-card-border: #ffffff10; /* Subtle white border */
 
-	--color-input: #1e1e1e; /* Dark Gray */
+    --color-input: #242a24; /* Dark Slate Green */
 
-	--color-input-content: #f0f0f0; /* Slightly Lighter Gray */
+    --color-input-content: #f0f2f0; /* Soft Off-White */
 
-	--color-primary: #5f73e9; /* Soft Violet (inspired by Material Design) */
+    --color-primary: #22a06b; /* Muted Emerald Green */
 
-	--color-secondary: #3952e0; /* Teal (inspired by Material Design) */
+    --color-primary-hover: #1e8a5c; /* Darker Emerald Green */
 
-	--color-error: #b14458; /* Muted Rose Red */
+    --color-secondary: #f4b860; /* Soft Amber/Gold */
 
-	--color-muted: #6b6b6b; /* Medium Gray */
+    --color-secondary-dark: #d99f4e; /* Darker Amber/Gold */
+
+    --color-error: #c94c4c; /* Muted Terracotta Red */
+
+    --color-muted: #7a857a; /* Medium Green-Gray */
 }
 
 .muted {

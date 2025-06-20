@@ -66,6 +66,23 @@
 				loading = false;
 			});
 	};
+
+	const signInWithDiscord = async () => {
+        errorLog = '';
+        loading = true;
+
+        try {
+            await authClient.signIn.social({
+                provider: 'discord',
+            });
+
+        } catch (error: any) {
+            console.error('Discord Sign-in Error:', error.message, error.status);
+            errorLog = error.message || 'Failed to sign in with Discord.';
+        } finally {
+            loading = false;
+        }
+    };
 </script>
 
 <main class="relative flex min-h-screen w-full overflow-hidden">
@@ -120,7 +137,12 @@
 					/>
 				</div>
 			</div>
-
+            <div>
+                <button type="button" class="btn-discord w-full flex items-center justify-center gap-2" disabled={loading} onclick={signInWithDiscord}>
+                    <Icon icon="ic:baseline-discord" class="text-2xl" />
+                    Log in with Discord
+                </button>
+            </div>
 			<!-- Log in and register buttons are disabled while loadings -->
 			<div class="flex flex-col gap-4">
 				<button type="button" class="btn-big" disabled={loading} onclick={() => logInUser()}
