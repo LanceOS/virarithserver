@@ -56,7 +56,7 @@
 <button class="stat-item" onclick={() => likePost(object.id)} disabled={sendingLike}>
 	<Icon
 		icon="material-symbols:thumb-up"
-		class={`text-xl duration-200 sm:text-xl ${object.isLiked ? 'text-green-400' : ''}`}
+		class={`text-xl duration-200 sm:text-xl ${object.isLiked ? 'text-[var(--color-primary)]' : ''}`}
 	/>
 	{object.likeCount || 0} Likes
 </button>

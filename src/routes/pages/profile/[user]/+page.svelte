@@ -43,6 +43,7 @@
 	let isLoading: boolean = $state(false);
 	
 	let newProfileInfo = $state({
+		name: '',
 		bio: '',
 		minecraftName: '',
 		discordName: ''
@@ -168,7 +169,7 @@
 
 			profile = profileResponse;
 			profileUser = profile?.user;
-
+			
 			posts = postResponse.posts;
 			postPagination = postResponse.pagination;
 

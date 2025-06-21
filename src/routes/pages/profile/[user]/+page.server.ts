@@ -5,7 +5,6 @@ import S3Service from "$lib/server/S3Service.ts";
 import UserService from "$lib/server/UserService.ts";
 
 
-
 export const actions: Actions = {
     submitEditedProfile: async ({ request, fetch }) => {
         try {
@@ -23,6 +22,7 @@ export const actions: Actions = {
             const currentUser = session.user
 
             await ProfileService.updateUserProfile({ ...profile, userId: currentUser.id })
+
 
             if(newAvatar && newAvatar instanceof File && newAvatar.size > 0) {
                 if(currentUser.image && currentUser.image !== "placeholder") {

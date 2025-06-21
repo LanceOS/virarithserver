@@ -32,7 +32,8 @@
 </script>
 
 <main class="relative flex min-h-screen w-full overflow-hidden">
-	<section class="relative flex w-3/4 items-center justify-center px-4">
+	<h1>Registering with email and password has been disabled</h1>
+	<!-- <section class="relative flex w-3/4 items-center justify-center px-4">
 		{#if errorLog}
 			<ErrorModal {errorLog} />
 		{/if}
@@ -137,5 +138,5 @@
 	</section>
 	<section class="w-full">
 		<img src="/images/gray.png" alt="" class="h-full w-full object-cover" />
-	</section>
+	</section> -->
 </main>

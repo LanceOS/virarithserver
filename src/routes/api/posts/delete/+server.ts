@@ -4,8 +4,8 @@ import { commentReply } from '$lib/schemas/CommentReply.ts'
 import { comments } from '$lib/schemas/Comments.ts'
 import { images } from '$lib/schemas/Images.ts'
 import { posts, type PostSchema } from '$lib/schemas/Posts.ts'
-import ImageClient from '$lib/tools/ImageClient.ts'
-import S3Client from '$lib/tools/S3Client.ts'
+import ImageService from '$lib/server/ImageService.ts'
+import S3Service from '$lib/server/S3Service.ts'
 import { and, eq } from 'drizzle-orm'
 
 /**
@@ -32,6 +32,7 @@ export const PUT = async ({ request }) => {
             throw new Error("User must be logged in to delete post.")
         }
 
+        const drizzleImagesForPosts  = await ImageService.getDrizzleImageObjects(post)
 
         await DrizzleDB.transaction(async (tx) => {
             await tx.update(posts).set({ isDeleted: true }).where(and(eq(posts.id, post.id!), eq(posts.userId, userId))).execute();
@@ -40,8 +41,7 @@ export const PUT = async ({ request }) => {
             await tx.delete(images).where(and(eq(images.objectId, post.id!), eq(images.objectType, post.type!), eq(images.userId, userId)))
         })
 
-        const drizzleImagesForPosts  = await ImageClient.getDrizzleImageObjects(post)
-        await S3Client.deleteImages(drizzleImagesForPosts)
+        await S3Service.deleteImages(drizzleImagesForPosts)
 
 
 

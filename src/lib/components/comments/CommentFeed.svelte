@@ -81,19 +81,20 @@
 
 <section class="flex flex-col gap-4">
 	{#if handleCommentDelete}
-		<h4 class="text-xl">Comments</h4>
+		<h4 class="text-xl content">Comments</h4>
 	{/if}
+
 	{#if isLoadingComments}
 		<section class="flex min-h-32 flex-col items-center justify-center gap-2">
-			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
-			<p class="text-muted">Loading comments...</p>
+			<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl muted" />
+			<p class="muted">Loading comments...</p>
 		</section>
 	{:else if comments && comments.length > 0}
 		{#each comments as comment (comment.id)}
-			<div class="card-setup flex flex-col gap-2 p-6">
+			<div class="card-setup flex flex-col gap-3">
 				<div class="relative flex items-center justify-between">
 					<button
-						class="text-md btn-nav w-fit font-semibold"
+						class="btn-nav text-base font-semibold"
 						onclick={() => goto(`/pages/profile/${comment.user.id}`)}
 					>
 						{comment.user.name}
@@ -105,30 +106,30 @@
 							onclick={() => toggleActionsMenu(comment.id)}
 							aria-label="Comment actions"
 						>
-							<Icon icon="ic:outline-more-vert" class="text-xl duration-200 sm:text-xl" />
+							<Icon icon="ic:outline-more-vert" class="text-xl" />
 						</button>
 					{/if}
 
 					{#if openActionsCommentId === comment.id}
-						<div
-							class="actions-menu bg-base absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
-						>
+						<div class="actions-menu bg-base absolute top-full right-0 z-50 mt-2 w-44 overflow-hidden border-muted">
 							<button
 								onclick={() => openEdit(comment.id)}
-								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors duration-150 hover:bg-gray-600"
+								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors duration-150 hover:bg-primary content"
+								style="background-color: var(--color-card);"
 							>
-								<Icon icon="mdi:text-box-edit-outline" />
+								<Icon icon="mdi:text-box-edit-outline" class="text-base" />
 								<span class="text-sm font-medium">Edit Comment</span>
 							</button>
 
-							<div class="border-muted border-t"></div>
+							<div class="border-t" style="border-color: var(--color-card-border);"></div>
 
 							<button
-								onclick={() => deleteComment(comment)}
-								class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left text-red-600 transition-colors duration-150 hover:bg-red-200"
-							>
-								<Icon icon="mdi:trash-can-outline" />
-								<span class="text-sm font-medium">Delete Post</span>
+							onclick={() => deleteComment(comment)}
+							class="flex w-full cursor-pointer items-center gap-3 px-4 py-3 text-left transition-colors duration-150 color-error hover:bg-red-900/20"
+							style="background-color: var(--color-card);"
+						>
+								<Icon icon="mdi:trash-can-outline" class="text-base" />
+								<span class="text-sm font-medium">Delete Comment</span>
 							</button>
 						</div>
 					{/if}
@@ -137,7 +138,7 @@
 				{#if editingCommentId === comment.id}
 					<CommentEdit {cancelEdit} {comment} {commentFeedUpdate} />
 				{:else}
-					<p class="text-sm sm:text-base">
+					<p class="text-sm sm:text-base content">
 						{@html comment.content}
 					</p>
 				{/if}
@@ -150,9 +151,9 @@
 			</div>
 		{/each}
 	{:else if comments && comments.length === 0}
-		<section class="card-setup flex flex-col gap-1 p-6">
-			<h2 class="mb-2 text-lg text-white sm:text-2xl">Comments</h2>
-			<p class="muted text-sm sm:text-base">No comments yet. Be the first to leave one!</p>
+		<section class="card-setup flex flex-col gap-1">
+			<h2 class="mb-2 text-lg content sm:text-xl">Comments</h2>
+			<p class="muted text-sm sm:text-base">No comments yet!</p>
 		</section>
 	{/if}
 </section>

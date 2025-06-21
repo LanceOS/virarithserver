@@ -2,15 +2,13 @@
 	import { goto } from '$app/navigation';
 	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import { authClient } from '$lib/auth-client.ts';
-	import CategoryFilter from '$lib/components/CategoryFilter.svelte';
+	import CategoryFilter from '$lib/components/forms/CategoryFilter.svelte';
 	import Filter from '$lib/components/forum/Filter.svelte';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
-	import Hero from '$lib/components/landing/Hero.svelte';
-	import CategoryClient from '$lib/tools/CategoryClient.ts';
 	import PostClient from '$lib/tools/PostClient.ts';
-	import Icon from '@iconify/svelte';
+	import CategoryClient from '$lib/tools/CategoryClient.ts';
 	import { onMount } from 'svelte';
 
 	let isInitialLoading = $state(true);
@@ -58,10 +56,8 @@
 		if (pagination?.currentPage! >= pagination?.totalPages!) {
 			return;
 		}
-
 		isPaginationLoading = true;
 		error = null;
-
 		try {
 			const page = pagination?.currentPage! + 1;
 			await fetchPosts(page);
@@ -77,10 +73,8 @@
 		if (pagination?.currentPage! <= 1) {
 			return;
 		}
-
 		isPaginationLoading = true;
 		error = null;
-
 		try {
 			const page = pagination?.currentPage! - 1;
 			await fetchPosts(page);
@@ -95,7 +89,6 @@
 	const retryLoading = async () => {
 		isInitialLoading = true;
 		error = null;
-
 		try {
 			const response = await PostClient.getAllPosts(orderBy, 1);
 			posts = response.posts;
@@ -115,7 +108,6 @@
 			categoryList = categoryResponse;
 			posts = postResponse.posts;
 			pagination = postResponse.pagination;
-
 			console.log(posts);
 		} catch (err) {
 			error = 'Failed to load posts. Please check your connection and try again.';
@@ -127,91 +119,47 @@
 </script>
 
 <Header />
-<main class="border-muted mx-auto mb-16 max-w-7xl">
-	<Hero />
-	<div class="bg-base mx-auto flex w-full flex-col gap-6 p-4 sm:p-6 lg:flex-row lg:gap-8 lg:p-12">
-		<div class="w-full lg:w-3/4 lg:min-w-0">
-			{#if isInitialLoading}
-				<section class="flex min-h-64 flex-col items-center justify-center gap-4">
-					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
-					<p class="text-muted text-sm sm:text-base">Loading posts...</p>
-				</section>
-			{:else if error && !posts}
-				<section class="flex min-h-64 flex-col items-center justify-center gap-4 px-4">
-					<Icon icon="material-symbols:error-outline" class="text-3xl text-red-500 sm:text-4xl" />
-					<p class="text-center text-sm text-red-500 sm:text-base">{error}</p>
-					<button
-						class="btn-big rounded bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 sm:text-base"
-						onclick={retryLoading}
-					>
-						Try Again
-					</button>
-				</section>
-			{:else if posts && pagination}
-				<div class="flex flex-col gap-4">
-					{#if error}
-						<div
-							class="mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-sm text-red-700 sm:text-base"
-						>
-							<p>{error}</p>
-						</div>
-					{/if}
+<main class="mx-auto max-w-7xl px-4 py-8">
+	<section class="mb-8 border-b-1 border-[var(--color-muted)] pb-6">
+		<div class="flex flex-wrap items-center justify-between gap-4">
+			<div>
+				<h1 class="text-3xl font-semibold">Forums</h1>
+				<p class="font-regular">Discuss the latest and greatest happening on Virarith!</p>
+			</div>
+			{#if $session.data?.user}
+				<button class="btn-small-active" onclick={() => goto('/pages/create_post')}>
+					Create Post
+				</button>
+			{/if}
+		</div>
+	</section>
 
-					<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-						<div class="flex flex-col gap-2">
-							<h2 class="text-2xl sm:text-3xl lg:text-4xl">Virarith Forums</h2>
-							<p class="muted text-sm sm:text-base">
-								Discuss the latest and greatest happening on Virarith!
-							</p>
-						</div>
-						{#if $session.data?.user}
-							<button
-								class="btn-small self-start text-sm sm:self-auto sm:text-base"
-								onclick={() => goto('/pages/create_post')}
-							>
-								Create Post
-							</button>
-						{/if}
-					</div>
+	<div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+		<aside class="lg:col-span-1">
+			<div class="border-muted bg-card sticky top-6 p-6">
+				<h2 class="mb-2 text-lg font-light">Categories</h2>
+				{#if categoryList}
+					<CategoryFilter {categoryList} {changeCategory} {selectedCategory} />
+				{:else if !isInitialLoading}
+					<p class="muted">Could not load categories.</p>
+				{/if}
+			</div>
+		</aside>
 
-					<div class="flex flex-col gap-4 lg:hidden">
-						<h4 class="text-xl sm:text-2xl">Categories</h4>
-						{#if categoryList}
-							<CategoryFilter {categoryList} {changeCategory} {selectedCategory} />
-						{/if}
-					</div>
+		<div class="lg:col-span-3">
+			{#if posts && posts.length > 0}
+				<div class="mb-4 flex items-center justify-end">
+					<Filter {changeOrder} />
+				</div>
+			{/if}
 
-					<div class="flex items-center justify-between gap-2">
-						<div class="order-2 sm:order-1">
-							<Pagination {pagination} {decrementPage} {incrementPage} {isPaginationLoading} />
-						</div>
-						<div class="order-1 sm:order-2">
-							<Filter {changeOrder} />
-						</div>
-					</div>
+			<ForumFeed {posts} />
 
-					<div class="relative">
-						{#if isPaginationLoading}
-							<div class="flex min-h-64 flex-col items-center justify-center gap-4">
-								<Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" />
-								<p class="text-muted text-sm sm:text-base">Loading posts...</p>
-							</div>
-						{/if}
-						<ForumFeed {posts} />
-					</div>
-
-					<div class="flex justify-center sm:justify-start">
-						<Pagination {pagination} {decrementPage} {incrementPage} {isPaginationLoading} />
-					</div>
+			{#if pagination && pagination.totalPages > 1}
+				<div class="mt-8 flex justify-center">
+					<Pagination {pagination} {incrementPage} {decrementPage} {isPaginationLoading} />
 				</div>
 			{/if}
 		</div>
-
-		<aside class="hidden w-full flex-col gap-4 lg:flex lg:w-1/4 lg:flex-shrink-0 lg:gap-6">
-			<h4 class="text-xl sm:text-2xl">Categories</h4>
-			{#if categoryList}
-				<CategoryFilter {categoryList} {changeCategory} {selectedCategory} />
-			{/if}
-		</aside>
 	</div>
 </main>

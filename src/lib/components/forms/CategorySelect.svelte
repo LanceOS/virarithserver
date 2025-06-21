@@ -16,7 +16,7 @@
 </script>
 
 <div>
-	<label for="category" class="content text-md mb-2 block font-medium">
+	<label for="category" class="text-md mb-2 block font-medium">
 		Category <span class="color-error">*</span></label
 	>
 	<select

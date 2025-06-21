@@ -1,5 +1,4 @@
 import { authClient } from "$lib/auth-client.ts";
-import ProfileService from "$lib/server/ProfileService.ts";
 import { fail, type Actions } from "@sveltejs/kit";
 
 export const actions: Actions = {

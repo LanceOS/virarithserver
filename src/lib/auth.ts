@@ -7,7 +7,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import * as schema from "./schemas/authentication.ts"
 import { DrizzleDB } from "./Drizzle.ts";
-import { DISCORD_CLIENT, DISCORD_SECRET } from "$env/static/private";
+import { DISCORD_CLIENT, DISCORD_SECRET, GOOGLE_CLIENT, GOOGLE_SECRET } from "$env/static/private";
 import ProfileService from "./server/ProfileService.ts";
 /**
  * Initializes and configures the `better-auth` instance.
@@ -63,14 +63,34 @@ export const auth = betterAuth({
      */
     socialProviders: {
         discord: {
-            clientId: DISCORD_CLIENT as string, 
-            clientSecret: DISCORD_SECRET as string, 
+            clientId: DISCORD_CLIENT as string,
+            clientSecret: DISCORD_SECRET as string,
+            profile(profile) {
+                return {
+                    id: profile.id,
+                    name: profile.username,
+                    email: profile.email,
+                    image: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${profile.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
+                }
+            }
         },
+        google: {
+            clientId: GOOGLE_CLIENT,
+            clientSecret: GOOGLE_SECRET,
+            profile(profile) {
+                return {
+                    id: profile.sub || profile.id,
+                    name: profile.name,
+                    email: profile.email,
+                    image: profile.picture,
+                }
+            }
+        }
     },
     databaseHooks: {
         user: {
             create: {
-                after: async(user, ctx) => {
+                after: async (user, ctx) => {
                     await ProfileService.createNewProfile({ userId: user.id });
                 }
             }
