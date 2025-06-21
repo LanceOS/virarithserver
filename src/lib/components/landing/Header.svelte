@@ -37,7 +37,7 @@
     }
 </script>
 
-<header class="bg-base border-muted mx-auto flex h-16 w-full max-w-7xl items-center justify-end px-4">
+<header class="bg-base mx-auto flex py-4 w-full max-w-7xl items-center justify-end px-4">
     <nav class="hidden items-center gap-6 md:flex">
         {#each navigationItems as item}
             <button

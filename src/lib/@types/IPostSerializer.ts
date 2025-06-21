@@ -1,5 +1,5 @@
 import type { UserSchema } from "$lib/schemas/authentication.ts";
-import type { ImageWithBuffer } from "./IImage.ts";
+import type { ImageWithUrl } from "./IImage.ts";
 
 export interface NewPost {
     id: string;
@@ -20,10 +20,10 @@ export interface NewPost {
 export interface IPagination {
     currentPage: number;
     totalPages: number;
-    hasNext: number;
-    hasPrevious: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
 }
 
 export interface PostWithImage extends NewPost {
-    images: ImageWithBuffer[]
+    images: ImageWithUrl[]
 }

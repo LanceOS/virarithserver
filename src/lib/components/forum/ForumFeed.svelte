@@ -64,13 +64,15 @@
 					</div>
 				{/if}
 
-				<footer class="flex items-center justify-between text-sm">
+				<footer class="flex flex-col sm:flex-row gap-4 sm:items-center justify-between text-sm">
 					<div class="flex items-center gap-4">
 						<LikeButton object={post} />
-						<span class="stat-item">
-							<Icon icon="material-symbols:comment-sharp" class="text-xl duration-200 sm:text-xl" />
-							{post.commentCount || 0} Comments
-						</span>
+						<div class="stat-item">
+							<Icon icon="material-symbols:comment-sharp" class="stat-icon" />
+							<span class="text-sm font-medium">
+								{post.commentCount || 0} Comments
+							</span>
+						</div>
 					</div>
 					<button class="read-more-btn" onclick={() => goto(`/pages/posts/${post.id}`)}>
 						Read More

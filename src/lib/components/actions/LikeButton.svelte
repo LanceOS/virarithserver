@@ -53,10 +53,18 @@
 {#if errorLog}
 	<ErrorModal {errorLog} />
 {/if}
-<button class="stat-item" onclick={() => likePost(object.id)} disabled={sendingLike}>
-	<Icon
-		icon="material-symbols:thumb-up"
-		class={`text-xl duration-200 sm:text-xl ${object.isLiked ? 'text-[var(--color-primary)]' : ''}`}
-	/>
-	{object.likeCount || 0} Likes
+
+<button
+    class="stat-item"
+    onclick={() => likePost(object.id)}
+    disabled={sendingLike}
+    aria-label={object.isLiked ? 'Unlike' : 'Like'}
+>
+    <Icon
+        icon="material-symbols:thumb-up"
+        class="stat-icon"
+    />
+    <span class=" lg:text-sm font-medium">
+        {object.likeCount || 0} Likes
+    </span>
 </button>

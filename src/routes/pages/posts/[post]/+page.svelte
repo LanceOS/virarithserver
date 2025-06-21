@@ -172,12 +172,12 @@
 			{/if}
 
 			<footer class="flex justify-between">
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-4">
 					<LikeButton object={post} />
-					<span class="stat-item text-xs sm:text-sm">
+					<span class="stat-item">
 						<Icon
 							icon="material-symbols:comment-sharp"
-							class="text-base duration-200 active:text-blue-700 sm:text-xl"
+							class="text-base duration-200 active:text-blue-700"
 						/>
 						{post.commentCount || 0} Comments
 					</span>
