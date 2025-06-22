@@ -2,9 +2,8 @@ import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import PostSerializer from '$lib/serializers/PostSerializer.ts';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 import ImageService from '$lib/server/ImageService.ts';
-import UserService from '$lib/server/UserService.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import { and, sql } from 'drizzle-orm';
 
@@ -57,9 +56,8 @@ export const GET = async ({ request }): Promise<Response> => {
             throw new Error("Failed to find post")
         }
 
-        const postsWithAvatar = await UserService.alignUserAvatars(post);
-        const images: ImageWithUrl[] = await ImageService.getS3Objects(postsWithAvatar);
-        const conformedPostData: PostWithImage | PostWithImage[] = PostSerializer.serializedPostDataAndAlignImages(postsWithAvatar, images)
+        const images: ImageWithUrl[] = await ImageService.getS3Objects(post);
+        const conformedPostData: PostWithImage | PostWithImage[] = Generalizer.serializedPostDataAndAlignImages(post, images)
 
         return new Response(JSON.stringify(conformedPostData), {
             status: 200,

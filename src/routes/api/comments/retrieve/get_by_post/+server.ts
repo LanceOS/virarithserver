@@ -1,6 +1,6 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { serializeComment } from '$lib/serializers/CommentSerializer.ts';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { isLikedSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { and, sql } from 'drizzle-orm';
@@ -41,7 +41,7 @@ export const GET = async ({ request }): Promise<Response> => {
             orderBy: (comments, { desc }) => [desc(comments.createdAt)]
         })
 
-        const serializeData = comments.map(serializeComment)
+        const serializeData = comments.map(Generalizer.serializeComment)
 
         return new Response(JSON.stringify(serializeData), {
             status: 200,

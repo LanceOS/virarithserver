@@ -33,51 +33,6 @@
 		pagination = response.pagination;
 	};
 
-	const incrementPage = async () => {
-		if (pagination?.currentPage! >= pagination?.totalPages!) {
-			console.log('returning');
-			return;
-		}
-
-		isPaginationLoading = true;
-		error = null;
-
-		try {
-			const nextPage = pagination?.currentPage! + 1;
-			const response = await PostClient.getPostsByCategory(orderBy, 'updates', nextPage);
-			posts = response.posts;
-			pagination = response.pagination;
-		} catch (err) {
-			error = 'Failed to load next page. Please try again.';
-			console.error('Error loading next page:', err);
-		} finally {
-			isPaginationLoading = false;
-			scrollToTop();
-		}
-	};
-
-	const decrementPage = async () => {
-		if (pagination?.currentPage! <= 1) {
-			return;
-		}
-
-		isPaginationLoading = true;
-		error = null;
-
-		try {
-			const lastPage = pagination?.currentPage! - 1;
-			const response = await PostClient.getPostsByCategory(orderBy, 'updates', lastPage);
-			posts = response.posts;
-			pagination = response.pagination;
-		} catch (err) {
-			error = 'Failed to load previous page. Please try again.';
-			console.error('Error loading previous page:', err);
-		} finally {
-			isPaginationLoading = false;
-			scrollToTop();
-		}
-	};
-
 	const retryLoading = async () => {
 		isInitialLoading = true;
 		error = null;
@@ -109,7 +64,8 @@
 </script>
 
 <Header />
-<main class="mx-auto border-muted max-w-7xl flex flex-col pb-16">
+<main class="mx-auto max-w-7xl flex flex-col pb-16">
 	<Hero />
+
 
 </main>

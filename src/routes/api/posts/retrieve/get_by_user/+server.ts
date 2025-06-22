@@ -3,12 +3,11 @@ import { posts } from '$lib/schemas/Posts.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
-import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
 import ImageService from '$lib/server/ImageService.ts';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 import type { ImageWithUrl } from '$lib/@types/IImage.ts';
-import UserService from '$lib/server/UserService.ts';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 
 
 
@@ -84,11 +83,10 @@ export const GET = async ({ request }): Promise<Response> => {
             .where(and(eq(posts.isDeleted, false), eq(posts.userId, userIdParam)));
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
-        
-        const postsWithAvatar = await UserService.alignUserAvatars(postData);
-        const images: ImageWithUrl[] = await ImageService.getS3Objects(postsWithAvatar);
-        const conformedPostData: PostWithImage | PostWithImage[] = PostSerializer.serializedPostDataAndAlignImages(postsWithAvatar, images)
-        
+
+        const images: ImageWithUrl[] = await ImageService.getS3Objects(postData);
+        const conformedPostData: PostWithImage | PostWithImage[] = Generalizer.serializedPostDataAndAlignImages(postData, images)
+
         return new Response(JSON.stringify({
             posts: conformedPostData,
             pagination: {

@@ -32,42 +32,46 @@ class UserService {
         }
     }
 
-    static async alignUserAvatars<T extends ContentWithAvatar | ContentWithAvatar[]>(objectData: T): Promise<T> {
-        try {
-            const isArrayInput = Array.isArray(objectData);
-            const objectArray = (isArrayInput ? objectData : [objectData]) as ContentWithAvatar[];
+    /**
+     * @Description IF YOU ARE GOING TO ADD USER EMAIL AND PASSWORDS AS SIGN IN USE THIS FUNCTION TO GATHER USER AVATARS FROM BUCKET
+     * AND ALIGN THEM WITH OBJECTS
+     */
+    // static async alignUserAvatars<T extends ContentWithAvatar | ContentWithAvatar[]>(objectData: T): Promise<T> {
+    //     try {
+    //         const isArrayInput = Array.isArray(objectData);
+    //         const objectArray = (isArrayInput ? objectData : [objectData]) as ContentWithAvatar[];
 
-            const objectPromises = objectArray.map(async (object) => {
-                const typedObject = object as ContentWithAvatar;
+    //         const objectPromises = objectArray.map(async (object) => {
+    //             const typedObject = object as ContentWithAvatar;
 
-                if (typedObject.user?.image && typedObject.user.image !== 'placeholder') {
-                    try {
-                        const userAvatarUrl = await minioClient.presignedGetObject(bucketName, typedObject.user.image, 3600);
-                        return {
-                            ...typedObject,
-                            user: {
-                                ...typedObject.user,
-                                image: userAvatarUrl
-                            }
-                        };
-                    } catch (presignError) {
-                        console.error(`Error generating presigned URL for image '${typedObject.user.image}':`, presignError);
-                        return typedObject;
-                    }
-                } else {
-                    return typedObject;
-                }
-            });
+    //             if (typedObject.user?.image && typedObject.user.image !== 'placeholder' && !typedObject.user.image.includes("https")) {
+    //                 try {
+    //                     const userAvatarUrl = await minioClient.presignedGetObject(bucketName, typedObject.user.image, 3600);
+    //                     return {
+    //                         ...typedObject,
+    //                         user: {
+    //                             ...typedObject.user,
+    //                             image: userAvatarUrl
+    //                         }
+    //                     };
+    //                 } catch (presignError) {
+    //                     console.error(`Error generating presigned URL for image '${typedObject.user.image}':`, presignError);
+    //                     return typedObject;
+    //                 }
+    //             } else {
+    //                 return typedObject;
+    //             }
+    //         });
 
-            const resolvedObjects = await Promise.all(objectPromises);
+    //         const resolvedObjects = await Promise.all(objectPromises);
 
-            return (isArrayInput ? resolvedObjects : resolvedObjects[0]) as T;
+    //         return (isArrayInput ? resolvedObjects : resolvedObjects[0]) as T;
 
-        } catch (error) {
-            console.error("Error in alignUserAvatars:", error);
-            throw error; 
-        }
-    }
+    //     } catch (error) {
+    //         console.error("Error in alignUserAvatars:", error);
+    //         throw error; 
+    //     }
+    // }
 }
 
 export default UserService;

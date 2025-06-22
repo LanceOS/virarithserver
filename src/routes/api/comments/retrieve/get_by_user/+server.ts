@@ -1,10 +1,10 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { serializeComment } from '$lib/serializers/CommentSerializer.ts';
 import { isLikedSubquery, replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../../../posts/retrieve/retrieval.config.ts';
 import { comments } from '$lib/schemas/Comments.ts';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 
 
 export const GET = async ({ request }): Promise<Response> => {
@@ -63,7 +63,7 @@ export const GET = async ({ request }): Promise<Response> => {
         /**
          * @returns Serializes comments
          */
-        const serializeData = commentData.map(serializeComment)
+        const serializeData = commentData.map(Generalizer.serializeComment)
 
 
         return new Response(JSON.stringify({

@@ -139,7 +139,6 @@
 </script>
 
 <Header />
-
 <main class="bg-base border-muted mx-auto max-w-7xl px-6 py-8">
 	<div class="">
 		<div class="mb-8">

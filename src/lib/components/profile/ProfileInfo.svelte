@@ -6,7 +6,7 @@
 </script>
 
 <div>
-    <h3 class="text-lg font-semibold text-white">Bio</h3>
+    <h3 class="text-xl font-semibold text-white">Bio</h3>
     {#if isEditing}
         <textarea
             bind:value={newProfileInfo.bio}
@@ -15,7 +15,6 @@
             rows="3"
         ></textarea>
     {:else}
-        <h2 class="text-2xl">Bio</h2>
         <p class="content">
             {profile.bio || 'This user has not set a bio yet.'}
         </p>

@@ -65,26 +65,10 @@ export const auth = betterAuth({
         discord: {
             clientId: DISCORD_CLIENT as string,
             clientSecret: DISCORD_SECRET as string,
-            profile(profile) {
-                return {
-                    id: profile.id,
-                    name: profile.username,
-                    email: profile.email,
-                    image: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${profile.avatar?.startsWith('a_') ? 'gif' : 'png'}`,
-                }
-            }
         },
         google: {
             clientId: GOOGLE_CLIENT,
             clientSecret: GOOGLE_SECRET,
-            profile(profile) {
-                return {
-                    id: profile.sub || profile.id,
-                    name: profile.name,
-                    email: profile.email,
-                    image: profile.picture,
-                }
-            }
         }
     },
     databaseHooks: {

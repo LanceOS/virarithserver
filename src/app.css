@@ -4,31 +4,37 @@
 
 :root {
     /* Base */
-    --color-base: #FAFBFC;            /* Ultra Light Gray Background */
-    --color-base-content: #1A202C;    /* Professional Dark Gray */
-
+    --color-base: #1A202C;            /* Dark Charcoal Background */
+    --color-base-content: #E2E8F0;    /* Light Gray Text */
+ 
+ 
     /* Cards */
-    --color-card: #FFFFFF;            /* Pure White Cards */
-    --color-card-border: #E2E8F0;     /* Subtle Light Border */
-
+    --color-card: #2D3748;            /* Slightly Lighter Dark Card Background */
+    --color-card-border: #4A5568;     /* Medium Gray Border */
+ 
+ 
     /* Inputs */
-    --color-input: #FFFFFF;           /* White Input Background */
-    --color-input-content: #2D3748;   /* Dark Input Text */
-
+    --color-input: #4A5568;           /* Medium Dark Input Background */
+    --color-input-content: #F7FAFC;   /* Very Light Input Text */
+ 
+ 
     /* Accents */
-    --color-primary: #3182CE;         /* Professional Blue */
-    --color-secondary: #805AD5;       /* Refined Purple */
-
+    --color-primary: #235072;         /* Vibrant Sky Blue */
+    --color-secondary: #4f2c8b;       /* Soft Lavender Purple */
+ 
+ 
     /* Status */
-    --color-error: #E53E3E;           /* Professional Red */
-    --color-muted: #718096;           /* Sophisticated Gray */
-
+    --color-error: #FC8181;           /* Lighter Red for Errors */
+    --color-muted: #A0AEC0;           /* Soft Muted Gray (consistent with light mode for subtle elements) */
+ 
+ 
     /* Bright boosts */
-    --color-primary-hover: #2C5282;   /* Darker Professional Blue */
-    --color-secondary-dark: #6B46C1;  /* Deeper Purple */
-    --color-sunlight: #ECC94B;        /* Muted Gold */
-}
-
+    --color-primary-hover: #26608f;   /* Slightly Darker Sky Blue */
+    --color-secondary-dark: #9F7AEA;  /* Deeper Lavender */
+    --color-sunlight: #F6E05E;        /* Bright Gold (for highlights) */
+ }
+ 
+ 
 
 @layer utilities {
     @keyframes fade-up {
@@ -294,7 +300,7 @@ p {
 
 .btn-google {
     background-color: #ffffff;
-    color: var(--color-base-content);
+    color: var(--color-base);
     padding: 0.875rem 2rem;
     font-weight: 600;
     border: 1.5px solid var(--color-card-border);

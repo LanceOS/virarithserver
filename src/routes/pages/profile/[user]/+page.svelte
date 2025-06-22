@@ -104,13 +104,13 @@
         } catch (error) {
             console.error(error);
         } finally {
-            isLoading = false; // Reset loading state
+            isLoading = false; 
         }
     };
 
     const handleFollow = () => {
         isFollowing = !isFollowing;
-        // In a real app, you would make an API call here to update follow status
+
     };
 
     const handleEdit = () => {
@@ -118,7 +118,7 @@
             handleSave();
         } else {
             isEditing = true;
-            // Initialize newProfileInfo with current profile data
+
             newProfileInfo.bio = profile?.bio || '';
             newProfileInfo.minecraftName = profile?.minecraftName || '';
             newProfileInfo.discordName = profile?.discordName || '';
@@ -143,17 +143,16 @@
                 formData.append('file', newAvatar)
             }
 
-            // This fetch call should trigger a SvelteKit form action if handled on the server
             await fetch('?/submitEditedProfile', {
                 method: 'POST',
                 body: formData
             });
 
-            // Re-fetch profile data to update UI after successful save
+
             profile = await ProfileClient.getUserProfile(userPage)
         } catch (error) {
             console.error('Error saving profile:', error);
-            alert(`Failed to save profile: ${error}`); // Provide user feedback
+            alert(`Failed to save profile: ${error}`); 
         } finally {
             isLoading = false;
             isEditing = false;
@@ -169,7 +168,7 @@
     };
 
     onMount(async () => {
-        isHydrated = true; // Indicate that hydration is complete
+        isHydrated = true; 
 
         try {
             const profileResponse = await ProfileClient.getUserProfile(userPage)
@@ -182,14 +181,14 @@
             posts = postResponse.posts;
             postPagination = postResponse.pagination;
 
-            pagination = postPagination; // Set initial pagination to posts
+            pagination = postPagination; 
 
             comments = commentResponse.comments;
             commentPagination = commentResponse.pagination;
+
         }
         catch(error) {
             console.error("Error fetching profile data:", error);
-            // You might want to set an error state here to show a message to the user
         }
     });
 </script>

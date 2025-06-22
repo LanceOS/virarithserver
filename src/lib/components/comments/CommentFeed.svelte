@@ -91,14 +91,19 @@
 		</section>
 	{:else if comments && comments.length > 0}
 		{#each comments as comment (comment.id)}
-			<div class="card-setup flex flex-col gap-3">
+			<div class="card-setup flex flex-col gap-4">
 				<div class="relative flex items-center justify-between">
-					<button
-						class="btn-nav text-base font-semibold"
-						onclick={() => goto(`/pages/profile/${comment.user.id}`)}
-					>
-						{comment.user.name}
-					</button>
+					<div class="flex items-center gap-2">
+						<div class="user-avatar">
+							<img src={comment.user.image} alt=""/>
+						</div>
+						<button
+							class="btn-nav text-base font-semibold"
+							onclick={() => goto(`/pages/profile/${comment.user.id}`)}
+						>
+							{comment.user.name}
+						</button>
+					</div>
 
 					{#if comment.userId === $session.data?.user.id}
 						<button

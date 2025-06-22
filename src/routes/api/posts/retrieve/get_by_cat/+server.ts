@@ -4,12 +4,11 @@ import { and, count, eq } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { sql } from 'drizzle-orm';
 import { auth } from '$lib/auth.ts';
-import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import { isLikedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
 import ImageService from '$lib/server/ImageService.ts';
-import UserService from '$lib/server/UserService.ts';
 import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 
 
 
@@ -89,11 +88,9 @@ export const GET = async ({ request }): Promise<Response> => {
 
 
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
-
-
-        const postsWithAvatar = await UserService.alignUserAvatars(postData);
-        const images: ImageWithUrl[] = await ImageService.getS3Objects(postsWithAvatar);
-        const conformedPostData: PostWithImage | PostWithImage[] = PostSerializer.serializedPostDataAndAlignImages(postsWithAvatar, images)
+        
+        const images: ImageWithUrl[] = await ImageService.getS3Objects(postData);
+        const conformedPostData: PostWithImage | PostWithImage[] = Generalizer.serializedPostDataAndAlignImages(postData, images)
 
         return new Response(JSON.stringify({
             posts: conformedPostData,
