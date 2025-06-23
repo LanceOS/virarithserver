@@ -34,7 +34,6 @@
     let commentPagination: IPagination | undefined = $state();
 
     let pagination: IPagination | undefined = $state();
-    let isPaginationLoading: boolean = $state(false);
 
     let activeTab: 'posts' | 'comments' = $state('posts');
 
@@ -50,6 +49,13 @@
         discordName: ''
     });
     let newAvatar: File | undefined = $state();
+
+    const stripHtmlTags = (html: string): string => {
+		if (!html) return '';
+		const tempDiv = document.createElement('div');
+		tempDiv.innerHTML = html;
+		return tempDiv.textContent || tempDiv.innerText || '';
+	};
 
 
     const changeTab = (tab: string) => {
@@ -119,10 +125,10 @@
             handleSave();
         } else {
             isEditing = true;
-
-            newProfileInfo.bio = profile?.bio || '';
-            newProfileInfo.minecraftName = profile?.minecraftName || '';
-            newProfileInfo.discordName = profile?.discordName || '';
+            
+            newProfileInfo.bio = profile?.bio ? stripHtmlTags(profile.bio) : '';
+            newProfileInfo.minecraftName = profile?.minecraftName ? stripHtmlTags(profile.minecraftName) : '';
+            newProfileInfo.discordName = profile?.discordName ? stripHtmlTags(profile.discordName) : '';
         }
     };
 
@@ -161,7 +167,6 @@
     };
 
     const handleCancel = () => {
-        // Reset newProfileInfo to original values and exit edit mode
         newProfileInfo.bio = profile?.bio || '';
         newProfileInfo.minecraftName = profile?.minecraftName || '';
         newProfileInfo.discordName = profile?.discordName || '';
@@ -172,9 +177,11 @@
         isHydrated = true; 
 
         try {
-            const profileResponse = await ProfileClient.getUserProfile(userPage)
-            const postResponse = await PostClient.getPostsByUser({ userId: userPage, page: 1 })
-            const commentResponse = await CommentClient.getCommentsByUser({ userId: userPage, page: 1 })
+            const [ profileResponse, postResponse, commentResponse ] = await Promise.all([
+                await ProfileClient.getUserProfile(userPage),
+                await PostClient.getPostsByUser({ userId: userPage, page: 1 }),
+                await CommentClient.getCommentsByUser({ userId: userPage, page: 1 })
+            ])
 
             profile = profileResponse;
             profileUser = profile?.user;

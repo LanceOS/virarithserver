@@ -1,7 +1,8 @@
 import type { NewComment } from "$lib/@types/ICommentSerializer.ts";
 import type { ImageWithUrl } from "$lib/@types/IImage.ts";
 import type { NewPost, PostWithImage } from "$lib/@types/IPostSerializer.ts";
-
+import { marked } from "marked";
+import sanitizeHtml from 'sanitize-html';
 
 
 
@@ -98,6 +99,25 @@ class Generalizer {
             updatedAt: post.updatedAt,
             user: post.user
         } satisfies NewPost
+    }
+
+
+
+
+    static async serializeRawText(text: string) {
+        const rawText = await marked(text);
+
+        const cleanedText = sanitizeHtml(rawText, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+                'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 's', 'u', 'sub', 'sup', 'cite', 'abbr', 'p', 'a'
+            ]),
+            allowedAttributes: {
+                a: ['href', 'name', 'target'],
+                img: ['src', 'alt', 'title', 'width', 'height'],
+            },
+        });
+
+        return cleanedText
     }
 }
 

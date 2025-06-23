@@ -8,6 +8,8 @@
 	import CategorySelect from '$lib/components/forms/CategorySelect.svelte';
 	import ImageInput from '$lib/components/forms/ImageInput.svelte';
 	import type { PageData } from './$types.js';
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 
 	const { data } = $props<{ data: PageData }>(); 
 
@@ -118,7 +120,13 @@
 			</div>
 		{/if}
 
-		<form method="POST" action="?/submitData" enctype="multipart/form-data" class="space-y-8">
+		<form method="POST" action="?/submitData" enctype="multipart/form-data" class="space-y-8" use:enhance={() => {
+			return async ({ result }) => {
+				if(result.type === "success") {
+					goto("/pages/forum")
+				}
+			}
+		}}>
 			<TitleInput {MAX_TITLE_CHARS} />
 
 			<ContentInput {MAX_CONTENT_CHARS} />

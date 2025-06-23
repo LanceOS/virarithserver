@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ request }) => {
   }
   catch(error) {
     return fail(500, {
-      message: `Failed to upload data ${error.message}`,
+      message: `Failed to upload data ${error}`,
       error: true,
       details: error instanceof Error ? error.message : String(error)
     });
@@ -96,7 +96,7 @@ export const actions: Actions = {
     catch (error) {
       console.log(error)
       return fail(500, {
-        message: `Failed to upload data ${error.message}`,
+        message: `Failed to upload data ${error}`,
         error: true,
         details: error instanceof Error ? error.message : String(error)
       });

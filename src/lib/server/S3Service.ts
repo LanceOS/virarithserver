@@ -12,6 +12,8 @@ interface IExistingObject {
     id?: string | undefined;
 }
 
+type PostedObject = PostSchema | CommentSchema | CommentReplySchema;
+
 
 class S3Service {
     instance: S3Service | null = null;
@@ -22,23 +24,23 @@ class S3Service {
     }
 
     /**
-     * Uploads multiple image files to the server, associating them with a specific object.
+     * @description Uploads multiple image files to the server, associating them with a specific object.
      * Each file is uploaded individually using a FormData object. The function returns a list
      * of IDs for the successfully uploaded files, which are then stored in both PostgreSQL and MinIO.
      *
-     * @param files An array of `File` objects to be uploaded. Each `File` object represents an image.
-     * @param object An object conforming to `PostSchema`, `CommentSchema`, or `CommentReplySchema`.
+     * @param {File} files An array of `File` objects to be uploaded. Each `File` object represents an image.
+     * @param {PostedObject} object An object conforming to `PostSchema`, `CommentSchema`, or `CommentReplySchema`.
      * This object must contain `id` and `type` properties, which are used to associate the uploaded
      * images with the respective database record.
-     * @param fetchFn The `fetch` function or a compatible mock function, used for making API requests.
+     * @param {FetchFunction} fetchFn The `fetch` function or a compatible mock function, used for making API requests.
      * This allows for dependency injection and easier testing.
-     * @returns A `Promise` that resolves to an array of `string`s. Each string is the unique ID
+     * @returns {Promise<string[]>} A `Promise` that resolves to an array of `string`s. Each string is the unique ID
      * of a successfully uploaded file, as returned by the backend service.
      * @throws {Error} If `object.id` or `object.type` are missing, or if any upload operation fails.
      * Specific error messages will indicate the cause of failure, including network issues or
      * server-side errors.
      */
-    static async uploadImages(files: File[], object: PostSchema | CommentSchema | CommentReplySchema, fetchFn: typeof fetch): Promise<string[]> {
+    static async uploadImages(files: File[], object: PostedObject, fetchFn: typeof fetch): Promise<string[]> {
         const successfullIds: string[] = [];
         for await (const file of files) {
             try {
@@ -74,13 +76,13 @@ class S3Service {
 
 
     /**
-     * Deletes one or more image files from MinIO storage.
+     * @description Deletes one or more image files from MinIO storage.
      * This function iterates through the provided object(s) and attempts to remove each corresponding
      * image from the configured MinIO bucket.
      *
-     * @param objects An `IExistingObject` or an array of `IExistingObject`s. Each object must contain
+     * @param {IExistingObject | IExistingObject[] } objects An `IExistingObject` or an array of `IExistingObject`s. Each object must contain
      * a `bucketObjectId` property, which is the unique identifier for the image file in MinIO.
-     * @returns A `Promise` that resolves to `true` if all specified images were successfully
+     * @returns {Promise<boolean>} A `Promise` that resolves to `true` if all specified images were successfully
      * removed from MinIO.
      * @throws {Error} If the deletion of any image fails. The error message will include
      * details about the failure.

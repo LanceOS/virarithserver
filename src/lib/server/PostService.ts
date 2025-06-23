@@ -1,17 +1,8 @@
 import { PUBLIC_URL } from "$env/static/public";
-import type { PostWithImage } from "$lib/@types/IPostSerializer.ts";
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import { posts, type PostSchema } from "$lib/schemas/Posts.ts";
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
-
-
-interface IPostParams {
-    category?: string;
-    userId?: string;
-    page: number;
-}
-
 
 class PostService {
     interface: PostService | null = null;
