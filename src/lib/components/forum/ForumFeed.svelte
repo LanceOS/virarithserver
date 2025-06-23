@@ -3,6 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
 	import ImagePreview from '../forms/ImagePreview.svelte';
+	import RoleCard from '../cards/RoleCard.svelte';
 
 	let { posts } = $props();
 
@@ -38,6 +39,7 @@
 								{formatDate(post.createdAt)}
 							</time>
 						</div>
+						<RoleCard role={post.user.role}/>
 						{#if post.isEdited}
 							<p class="text-xs">(edited)</p>
 						{/if}

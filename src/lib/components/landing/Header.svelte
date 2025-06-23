@@ -54,7 +54,7 @@
             <button
                 type="button"
                 aria-label="Log In"
-                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
+                class="py-2 px-4 btn-small cursor-pointer duration-200"
                 onclick={() => goto('/pages/login')}
             >
                 Log In
@@ -63,7 +63,7 @@
             <button
                 type="button"
                 aria-label="View notifications"
-                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
+                class="py-2 px-4 btn-small cursor-pointer duration-200"
                 onclick={() => goto('/pages/notifications')}
             >
                 <Icon icon="material-symbols:notifications-outline" class="h-6 w-6" />
@@ -71,7 +71,7 @@
             <button
                 type="button"
                 aria-label="View profile"
-                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
+                class="py-2 px-4 btn-small cursor-pointer duration-200"
                 onclick={() => goto(`/pages/profile/${$session.data?.user.id}`)}
             >
                 <Icon icon="material-symbols:person-outline" class="h-6 w-6" />
@@ -79,7 +79,7 @@
             <button
                 type="button"
                 aria-label="Log Out"
-                class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200"
+                class="py-2 px-4 btn-small cursor-pointer duration-200"
                 onclick={handleSignOut}
             >
                 Log Out
@@ -90,7 +90,7 @@
     <button
         type="button"
         aria-label="Toggle mobile menu"
-        class="border-muted btn-nav p-2 transition-colors md:!hidden"
+        class="btn-nav p-2 transition-colors md:!hidden"
         onclick={toggleMobileMenu}
     >
         <Icon 
@@ -100,13 +100,13 @@
     </button>
 
     {#if isMobileMenuOpen}
-        <div class="bg-base border-muted absolute top-16 right-0 left-0 z-50 border-t md:hidden">
+        <div class="bg-base absolute top-16 right-0 left-0 z-50 border-t md:hidden">
             <nav class="flex flex-col gap-6 px-4 py-8">
                 {#each navigationItems as item}
                     <button
                         type="button"
                         aria-label={item.ariaLabel}
-                        class="btn-nav border-muted w-full px-4 py-2 text-left transition-colors"
+                        class="btn-nav w-full px-4 py-2 text-left transition-colors"
                         onclick={() => handleNavigation(item.path)}
                     >
                         {item.label}
@@ -118,7 +118,7 @@
                         <button
                             type="button"
                             aria-label="Log In"
-                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
+                            class="py-2 px-4 btn-small cursor-pointer duration-200 w-full"
                             onclick={() => handleNavigation('/pages/login')}
                         >
                             Log In
@@ -127,7 +127,7 @@
                         <button
                             type="button"
                             aria-label="View notifications"
-                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
+                            class="py-2 px-4 btn-small cursor-pointer duration-200 w-full"
                             onclick={() => handleNavigation('/pages/notifications')}
                         >
                             Notifications
@@ -135,7 +135,7 @@
                         <button
                             type="button"
                             aria-label="View profile"
-                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
+                            class="py-2 px-4 btn-small w-full"
                             onclick={() => handleNavigation(`/pages/profile/${$session.data?.user.id}`)}
                         >
                             Profile
@@ -143,7 +143,7 @@
                         <button
                             type="button"
                             aria-label="Log Out"
-                            class="border-muted py-2 px-4 hover:bg-[var(--color-secondary)] bg-[var(--color-primary)] cursor-pointer duration-200 w-full"
+                            class="py-2 px-4 btn-small w-full"
                             onclick={() => {
                                 handleSignOut();
                                 closeMobileMenu();

@@ -16,6 +16,7 @@
     import CommentClient from '$lib/tools/CommentClient.ts';
     import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
     import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
+	import RoleCard from '$lib/components/cards/RoleCard.svelte';
 
     const userPage = page.params.user;
 
@@ -203,10 +204,11 @@
                         <ProfileAvatar {isEditing} bind:newAvatar avatar={profile?.user.image || undefined}/>
 
                         <div class="flex-1 space-y-6 text-center lg:text-left">
-                            <div>
-                                <h1 class="content text-3xl sm:text-4xl font-bold tracking-tight mb-1">
+                            <div class="flex items-center gap-6 h-fit">
+                                <h1 class="content text-3xl sm:text-4xl font-bold tracking-tight">
                                     {profile.user?.name}
                                 </h1>
+                                <RoleCard role={profile.user.role}/>
                             </div>
 
                             <ProfileInfo {isEditing} {profile} bind:newProfileInfo />

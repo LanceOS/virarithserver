@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { authClient } from '$lib/auth-client.ts';
 	import Header from '$lib/components/landing/Header.svelte';
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
-	import CategoryClient from '$lib/tools/CategoryClient.ts';
 	import { onMount } from 'svelte';
 	import ContentInput from '$lib/components/forms/ContentInput.svelte';
 	import Icon from '@iconify/svelte';
 	import TitleInput from '$lib/components/forms/TitleInput.svelte';
 	import CategorySelect from '$lib/components/forms/CategorySelect.svelte';
 	import ImageInput from '$lib/components/forms/ImageInput.svelte';
+	import type { PageData } from './$types.js';
 
-	const session = authClient.useSession();
+	const { data } = $props<{ data: PageData }>(); 
+
+	let categoryList = data.categories;
 
 	let imagePreviews: { file: File; url: string }[] = $state([]);
 
-	let categoryList: any = $state([]);
 	let isSubmitting: boolean = $state(false);
 	let error: string = $state('');
 
@@ -98,40 +97,7 @@
 		}
 	};
 
-
-
-	/**
-	 * @return Grabbing all available topics from the database. Removing topics that include "update", "announcement",
-	 * and "all", as those are specifically reserved for admins only.
-	 */
 	onMount(async () => {
-		if (!$session.data?.user) {
-			goto('/pages/forum');
-		}
-
-		try {
-			const response = await CategoryClient.getCategories();
-			let filteredCategories: string[] = [];
-
-			for (let i = 0; i < response.length; i++) {
-				const topic = response[i].topic.trim().toLowerCase();
-				if (
-					topic.toLowerCase() === 'updates' ||
-					topic.toLowerCase() === 'announcements' ||
-					topic.toLowerCase() === 'all'
-				) {
-					continue;
-				}
-
-				filteredCategories.push(response[i].topic);
-			}
-
-			categoryList = filteredCategories;
-		} catch (err) {
-			error = 'Failed to load categories. Please check your connection and try again.';
-			console.error('Error loading categories:', err);
-		}
-
 		() => {
 			imagePreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
 		};
@@ -153,7 +119,7 @@
 		{/if}
 
 		<form method="POST" action="?/submitData" enctype="multipart/form-data" class="space-y-8">
-			<TitleInput {MAX_TITLE_CHARS}/>
+			<TitleInput {MAX_TITLE_CHARS} />
 
 			<ContentInput {MAX_CONTENT_CHARS} />
 
@@ -161,15 +127,15 @@
 				<ImagePreview {imagePreviews} {removeAllImages} {removeImage} maxFiles={MAX_FILES} />
 			{/if}
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-				<CategorySelect {categoryList}/>
+				<CategorySelect {categoryList} />
 
-				<ImageInput {MAX_FILES} {imagePreviews} {handleFileChange}/>
+				<ImageInput {MAX_FILES} {imagePreviews} {handleFileChange} />
 			</div>
 
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				class="btn-big flex flex-1 items-center justify-center disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none disabled:pointer-events-none"
+				class="btn-big flex flex-1 items-center justify-center disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
 			>
 				{#if isSubmitting}
 					<span>

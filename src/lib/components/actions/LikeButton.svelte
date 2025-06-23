@@ -62,7 +62,7 @@
 >
     <Icon
         icon="material-symbols:thumb-up"
-        class="stat-icon"
+        class={`stat-icon ${object.isLiked ? "content" : ""}`}
     />
     <span class=" lg:text-sm font-medium">
         {object.likeCount || 0} Likes

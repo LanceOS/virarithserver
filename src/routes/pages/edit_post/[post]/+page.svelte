@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { authClient } from '$lib/auth-client.ts';
+	import { authClient, useSession } from '$lib/auth-client.ts';
 	import Header from '$lib/components/landing/Header.svelte';
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
 	import CategoryClient from '$lib/tools/CategoryClient.ts';
@@ -13,16 +13,21 @@
 	import ImageInput from '$lib/components/forms/ImageInput.svelte';
 	import Icon from '@iconify/svelte';
 	import type { ImageWithUrl } from '$lib/@types/IImage.ts';
+	import type { PageData } from '../$types.js';
 
 	const session = authClient.useSession();
-	const postId = page.params.post;
+	let postId = page.params.post
+
+
+	const { data } = $props<{ data: PageData }>();
+
+	let categoryList = data.categories;
 
 	let existingImages: ImageWithUrl[] = $state([]);
 	let newImageFiles: File[] = $state([]);
 
 	let imagePreviews: { file?: File | undefined; url: string }[] = $state([]);
 
-	let categoryList: string[] = $state([]);
 	let isSubmitting: boolean = $state(false);
 	let error: string = $state('');
 
@@ -106,55 +111,52 @@
 
 	const handleSubmit = async (event: Event) => {
 		event.preventDefault();
-        const formElement = event.target as HTMLFormElement;
+		const formElement = event.target as HTMLFormElement;
 
-        const titleInput = formElement.elements.namedItem('title') as HTMLInputElement;
-        const contentInput = formElement.elements.namedItem('content') as HTMLInputElement;
-        const categoryInput = formElement.elements.namedItem('category') as HTMLInputElement;
+		const titleInput = formElement.elements.namedItem('title') as HTMLInputElement;
+		const contentInput = formElement.elements.namedItem('content') as HTMLInputElement;
+		const categoryInput = formElement.elements.namedItem('category') as HTMLInputElement;
 
 		try {
-            isSubmitting = true;
+			isSubmitting = true;
 
-            const formData = new FormData();
-            if(existingImages) {
-                existingImages.forEach(img => {
-                    const image = {
-                        bucketObjectId: img.bucketObjectId,
-                        id: img.id,
-                        objectId: img.objectId
-                    }
-                    formData.append("existingImages", JSON.stringify(image)) 
-                })
-            }
-            if(newImageFiles) {
-                newImageFiles.forEach(img => {
-                    formData.append("newImages", img)
-                })
+			const formData = new FormData();
+			if (existingImages) {
+				existingImages.forEach((img) => {
+					const image = {
+						bucketObjectId: img.bucketObjectId,
+						id: img.id,
+						objectId: img.objectId
+					};
+					formData.append('existingImages', JSON.stringify(image));
+				});
+			}
+			if (newImageFiles) {
+				newImageFiles.forEach((img) => {
+					formData.append('newImages', img);
+				});
+			}
 
-            }
+			const newPost = {
+				title: titleInput.value,
+				content: contentInput.value,
+				category: categoryInput.value,
+				type: 'post',
+				id: postId
+			};
+			formData.append('post', JSON.stringify(newPost));
 
-            const newPost = {
-                title: titleInput.value,
-                content: contentInput.value,
-                category: categoryInput.value,
-                type: 'post',
-                id: postId
-            }
-            formData.append("post", JSON.stringify(newPost))
-
-
-            await fetch("?/submitData", {
-                method: "POST",
-                body: formData
-            });
+			await fetch('?/submitData', {
+				method: 'POST',
+				body: formData
+			});
 		} catch (error) {
-            isSubmitting = false;
+			isSubmitting = false;
 			console.error(error);
+		} finally {
+			isSubmitting = false;
+			goto('/pages/forum');
 		}
-        finally {
-            isSubmitting = false;
-            goto("/pages/forum")
-        }
 	};
 
 	const stripHtmlTags = (html: string): string => {
@@ -175,7 +177,6 @@
 		}
 
 		try {
-			const categoryResponse = await CategoryClient.getCategories();
 			const postResponse = await PostClient.getPostById(postId);
 
 			currentTitle = stripHtmlTags(postResponse.title);
@@ -187,10 +188,6 @@
 				imagePreviews = existingImages;
 				updateImagePreviews();
 			}
-
-			categoryList = categoryResponse
-				.map((cat: any) => cat.topic)
-				.filter((topic: any) => !['updates', 'announcements', 'all'].includes(topic));
 		} catch (err) {
 			error = 'Failed to load post data or categories. Please check your connection and try again.';
 			console.error('Error loading data:', err);

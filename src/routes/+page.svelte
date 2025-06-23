@@ -2,6 +2,7 @@
 	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import Header from '$lib/components/landing/Header.svelte';
 	import Hero from '$lib/components/landing/Hero.svelte';
+	import LatestAnnouncement from '$lib/components/landing/LatestAnnouncement.svelte';
 	import Links from '$lib/components/Links.svelte';
 	import PostClient from '$lib/tools/PostClient.ts';
 	import Icon from '@iconify/svelte';
@@ -64,8 +65,8 @@
 </script>
 
 <Header />
-<main class="mx-auto max-w-7xl flex flex-col pb-16">
+<main class="mx-auto max-w-7xl flex flex-col pb-16 gap-8 border-muted">
 	<Hero />
-
-
+	
+	<LatestAnnouncement />
 </main>

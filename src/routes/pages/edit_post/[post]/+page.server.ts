@@ -1,10 +1,53 @@
-
-
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
 import ImageService from '$lib/server/ImageService.ts';
 import PostService from '$lib/server/PostService.ts';
 import S3Service from '$lib/server/S3Service.ts';
+import type { TopicSchema } from '$lib/schemas/Topic.ts';
+import CategoryClient from '$lib/tools/CategoryClient.ts';
+import type { PageServerLoad } from '../$types.js';
+
+
+export const load: PageServerLoad = async ({ request }) => {
+    try {
+      const session = await auth.api.getSession({
+        headers: request.headers
+      });
+      if(!session) {
+        return;
+      };
+  
+      const user = session.user;
+  
+      const response: TopicSchema[] = await CategoryClient.getCategories();
+      const filteredCategories: string[] = [];
+  
+      for (let i = 0; i < response.length; i++) {
+        const topic = response[i].topic.trim().toLowerCase();
+  
+        if (user.role === 'user' && (topic === 'updates' || topic === 'announcements')) {
+          continue;
+        }
+        if (topic === 'all') {
+          continue;
+        }
+  
+        filteredCategories.push(response[i].topic);
+      }
+  
+      return {
+        categories: filteredCategories
+      }
+  
+    }
+    catch(error) {
+      return fail(500, {
+        message: `Failed to upload data ${error.message}`,
+        error: true,
+        details: error instanceof Error ? error.message : String(error)
+      });
+    }
+  }
 
 
 export const actions: Actions = {

@@ -115,6 +115,22 @@ class PostClient {
             throw new Error(`Failed to get post: ${error}`)
         }
     }
+
+
+    static async getLatestAnnouncementPost() {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/announcement_latest`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            })
+            const data = await response.json();
+            return data;
+        }
+        catch (error) {
+            throw new Error(`Failed to get post: ${error}`)
+        }
+    }
 }
 
 export default PostClient;
