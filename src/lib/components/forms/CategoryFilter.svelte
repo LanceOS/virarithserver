@@ -3,9 +3,6 @@
 
 	type Category = {
 		topic: string;
-		// You could add more properties here, like post counts or icons
-		// postCount?: number;
-		// icon?: string;
 	};
 
 	const { changeCategory, categoryList, selectedCategory } = $props<{

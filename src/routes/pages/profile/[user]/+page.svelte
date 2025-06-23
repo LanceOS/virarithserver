@@ -81,6 +81,9 @@
                 posts = response.posts;
                 pagination = response.pagination;
             } else if (activeTab === 'comments') {
+                const response = await CommentClient.getCommentsByUser({ userId: userPage, page: page })
+                comments = response.comments;
+                commentPagination = response.commentPagination;
                 return;
             } else {
                 return;
@@ -104,7 +107,9 @@
                 posts = response.posts;
                 pagination = response.pagination;
             } else if (activeTab === 'comments') {
-                return;
+                const response = await CommentClient.getCommentsByUser({ userId: userPage, page: page })
+                comments = response.comments;
+                commentPagination = response.commentPagination;
             } else {
                 return;
             }

@@ -13,7 +13,7 @@
 
 	let isInitialLoading = $state(true);
 	let isPaginationLoading = $state(false);
-	let error = $state<string | null>(null);
+	let errorLog = $state<string | null>(null);
 
 	const session = authClient.useSession();
 
@@ -37,18 +37,26 @@
 	};
 
 	const fetchPosts = async (page: number) => {
-		if (selectedCategory !== 'all') {
-			const response = await PostClient.getPostsByCategory(
-				orderBy,
-				selectedCategory.toLocaleLowerCase(),
-				page
-			);
-			posts = response.posts;
-			pagination = response.pagination;
-		} else {
-			const response = await PostClient.getAllPosts(orderBy, page);
-			posts = response.posts;
-			pagination = response.pagination;
+		isPaginationLoading = true;
+		try {
+			if (selectedCategory !== 'all') {
+				const response = await PostClient.getPostsByCategory(
+					orderBy,
+					selectedCategory.toLocaleLowerCase(),
+					page
+				);
+				posts = response.posts;
+				pagination = response.pagination;
+			} else {
+				const response = await PostClient.getAllPosts(orderBy, page);
+				posts = response.posts;
+				pagination = response.pagination;
+			}
+		} catch (error) {
+			console.error('Error loading posts:', error);
+			errorLog = 'Failed to load posts. Please check your connection and try again.';
+		} finally {
+			isPaginationLoading = false;
 		}
 	};
 
@@ -56,46 +64,28 @@
 		if (pagination?.currentPage! >= pagination?.totalPages!) {
 			return;
 		}
-		isPaginationLoading = true;
-		error = null;
-		try {
-			const page = pagination?.currentPage! + 1;
-			await fetchPosts(page);
-		} catch (err) {
-			error = 'Failed to load next page. Please try again.';
-			console.error('Error loading next page:', err);
-		} finally {
-			isPaginationLoading = false;
-		}
+		const page = pagination?.currentPage! + 1;
+		await fetchPosts(page);
 	};
 
 	const decrementPage = async () => {
 		if (pagination?.currentPage! <= 1) {
 			return;
 		}
-		isPaginationLoading = true;
-		error = null;
-		try {
-			const page = pagination?.currentPage! - 1;
-			await fetchPosts(page);
-		} catch (err) {
-			error = 'Failed to load previous page. Please try again.';
-			console.error('Error loading previous page:', err);
-		} finally {
-			isPaginationLoading = false;
-		}
+		const page = pagination?.currentPage! - 1;
+		await fetchPosts(page);
 	};
 
 	const retryLoading = async () => {
 		isInitialLoading = true;
-		error = null;
+		errorLog = null;
 		try {
 			const response = await PostClient.getAllPosts(orderBy, 1);
 			posts = response.posts;
 			pagination = response.pagination;
-		} catch (err) {
-			error = 'Failed to load posts. Please check your connection and try again.';
-			console.error('Error loading posts:', err);
+		} catch (error) {
+			errorLog = 'Failed to load posts. Please check your connection and try again.';
+			console.error('Error loading posts:', error);
 		} finally {
 			isInitialLoading = false;
 		}
@@ -108,10 +98,9 @@
 			categoryList = categoryResponse;
 			posts = postResponse.posts;
 			pagination = postResponse.pagination;
-			console.log(posts);
-		} catch (err) {
-			error = 'Failed to load posts. Please check your connection and try again.';
-			console.error('Error loading posts:', err);
+		} catch (error) {
+			errorLog = 'Failed to load posts. Please check your connection and try again.';
+			console.error('Error loading posts:', error);
 		} finally {
 			isInitialLoading = false;
 		}

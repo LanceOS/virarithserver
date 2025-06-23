@@ -6,13 +6,6 @@
 
 	const MAX_BIO_CHARS = 400;
 
-    const stripHtmlTags = (html: string): string => {
-		if (!html) return '';
-		const tempDiv = document.createElement('div');
-		tempDiv.innerHTML = html;
-		return tempDiv.textContent || tempDiv.innerText || '';
-	};
-
 	const autoGrow = (event: Event) => {
 		const textarea = event.target as HTMLInputElement;
 		textarea.style.height = 'auto';
@@ -28,8 +21,6 @@
 			isBioFocused = false;
 		}
 	};
-
-    
 </script>
 
 <div class="relative">
