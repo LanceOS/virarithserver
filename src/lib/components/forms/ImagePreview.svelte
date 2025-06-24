@@ -82,7 +82,7 @@
 					<img
 						src={currentImage?.url}
 						alt="Preview {currentImage?.file ? currentImage?.file.name : 'Image'}"
-						class="w-full max-h-[35rem] object-contain"
+						class="w-full max-h-[35rem] object-cover"
 					/>
 				</a>
 
@@ -91,7 +91,7 @@
 					<button
 						type="button"
 						onclick={() => removeImage(currentIndex)}
-						class="absolute top-2 right-2 cursor-pointer rounded-full bg-red-600 p-2 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:bg-red-700"
+						class="absolute top-2 right-2 cursor-pointer rounded-full bg-red-600 p-2 content opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:bg-red-700"
 						aria-label="Remove current image"
 					>
 						<Icon icon="mage:multiply" />
@@ -130,7 +130,7 @@
 					<div
 						class="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4"
 					>
-						<div class="text-white">
+						<div class="content">
 							<div class="truncate text-sm font-medium" title={currentImage?.file.name}>
 								{currentImage?.file.name}
 							</div>

@@ -14,6 +14,7 @@
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import type { NewComment } from '$lib/@types/ICommentSerializer.ts';
+	import RoleCard from '$lib/components/cards/RoleCard.svelte';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
@@ -115,6 +116,7 @@
 							{formatDate(post.createdAt)}
 						</time>
 					</div>
+					<RoleCard role={post.user.role}/>
 					{#if post.isEdited}
 						<p class="text-xs">(edited)</p>
 					{/if}
@@ -189,7 +191,7 @@
 			<Icon icon="material-symbols:error-outline" class="text-3xl text-red-500" />
 			<p class="text-center text-red-500">Post not found or could not be loaded</p>
 			<button
-				class="btn-big rounded bg-blue-500 px-3 py-1.5 text-sm text-white hover:bg-blue-600"
+				class="btn-big rounded bg-blue-500 px-3 py-1.5 text-sm content hover:bg-blue-600"
 				onclick={() => window.location.reload()}
 			>
 				Try Again

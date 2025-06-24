@@ -72,7 +72,7 @@
 </div>
 
 <section class="space-y-3">
-	<h3 class="text-lg font-semibold text-white">Gaming Info</h3>
+	<h3 class="text-lg font-semibold content">Gaming Info</h3>
 
 	<div class="input p-3">
 		<div class="mb-1 flex items-center gap-2">

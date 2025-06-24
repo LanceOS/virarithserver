@@ -1,13 +1,9 @@
-import type { NewComment } from "$lib/@types/ICommentSerializer.ts";
-import type { NewPost } from "$lib/@types/IPostSerializer.ts";
-import type { IProfileWithUser } from "$lib/@types/IProfile.ts";
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import { user } from "$lib/schemas/authentication.ts";
-import { eq } from "drizzle-orm";
-import { bucketName, minioClient } from "./MinIO.ts";
+import { eq, or } from "drizzle-orm";
 
 
-type ContentWithAvatar = NewPost | NewComment | IProfileWithUser;
+// type ContentWithAvatar = NewPost | NewComment | IProfileWithUser;
 
 class UserService {
     instance: UserService | null = null;
@@ -29,6 +25,25 @@ class UserService {
         }
         catch(error) {
             throw new Error(`Failed to updated user avatar: ${error}`)
+        }
+    }
+
+
+    static async getStaffUsers() {
+        try {
+            const users = await DrizzleDB.query.user.findMany({
+                where: or(
+                    eq(user.role, "developer"),
+                    eq(user.role, "moderator"),
+                    eq(user.role, "admin"),
+                    eq(user.role, "founder")
+                )
+            });
+
+            return users;
+        }
+        catch(error) {
+            throw new Error(`Failed to get staff members: ${error}`)
         }
     }
 

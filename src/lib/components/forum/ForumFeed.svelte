@@ -24,9 +24,9 @@
 				<header class="flex items-center justify-between gap-2">
 					<div class="flex items-center gap-2">
 						{#if post.user.image && post.user.image !== 'placeholder'}
-						<div class="user-avatar">
-							<img src={post.user.image} alt=""/>
-						</div>
+							<div class="user-avatar">
+								<img src={post.user.image} alt="" />
+							</div>
 						{/if}
 						<div class="flex flex-col leading-tight">
 							<button
@@ -39,7 +39,7 @@
 								{formatDate(post.createdAt)}
 							</time>
 						</div>
-						<RoleCard role={post.user.role}/>
+						<RoleCard role={post.user.role} />
 						{#if post.isEdited}
 							<p class="text-xs">(edited)</p>
 						{/if}
@@ -66,7 +66,7 @@
 					</div>
 				{/if}
 
-				<footer class="flex flex-col sm:flex-row gap-4 sm:items-center justify-between text-sm">
+				<footer class="flex flex-col justify-between gap-4 text-sm sm:flex-row sm:items-center">
 					<div class="flex items-center gap-4">
 						<LikeButton object={post} />
 						<div class="stat-item">
