@@ -117,7 +117,7 @@ class PostClient {
     }
 
 
-    static async getLatestAnnouncementPost() {
+    static async getLatestAnnouncementPost(): Promise<PostWithImage> {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/announcement_latest`, {
                 headers: {

@@ -13,24 +13,13 @@ import Generalizer from '$lib/serializers/Generalizer.ts';
 
 export const GET = async ({ request }): Promise<Response> => {
     try {
-        const category = "annoucements"
+        const category = "announcements"
 
         const session = await auth.api.getSession({
             headers: request.headers
         });
         const userId: string | null = session?.user.id || null;
 
-
-        if (!category) {
-            throw new Error("A category must be passed to fetch by categorys")
-        }
-
-
-
-        /**
-         * @params category
-         * @returns posts filtered by is_deleted and category
-         */
         const postData = await DrizzleDB.query.posts.findFirst({
             where: (posts, { eq }) => and(
                 eq(posts.category, category),
@@ -63,9 +52,7 @@ export const GET = async ({ request }): Promise<Response> => {
         const images: ImageWithUrl[] = await ImageService.getS3Objects(postData);
         const conformedPostData: PostWithImage | PostWithImage[] = Generalizer.serializedPostDataAndAlignImages(postData, images)
 
-        return new Response(JSON.stringify({
-            posts: conformedPostData
-        }), {
+        return new Response(JSON.stringify(conformedPostData), {
             status: 200,
             statusText: "OK",
             headers: {
