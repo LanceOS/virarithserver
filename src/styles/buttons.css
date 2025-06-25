@@ -1,0 +1,266 @@
+/* Redesigned Buttons - Ensured Rounded Corners and Corrected Active States */
+
+/* Base Button Styles - Applied to all main button types for consistency */
+.btn-small,
+.btn-small-active, /* Added to base styles */
+.btn-big,
+.btn-big-active, /* Added to base styles */
+.btn-discord,
+.btn-google,
+.read-more-btn {
+    border: none; /* Remove default borders for a cleaner look */
+    border-radius: 8px; /* Consistent rounded corners */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out; /* Smoother transitions for all states */
+    font-weight: 600; /* Modern font weight */
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Focus state for accessibility - Applied universally */
+.btn-small:focus-visible,
+.btn-small-active:focus-visible, /* Ensured focus for active small button */
+.btn-big:focus-visible,
+.btn-big-active:focus-visible, /* Ensured focus for active big button */
+.btn-discord:focus-visible,
+.btn-google:focus-visible,
+.read-more-btn:focus-visible,
+.btn-nav:focus-visible {
+    outline: 3px solid var(--color-focus-ring); /* Strong, accessible focus ring */
+    outline-offset: 2px;
+}
+
+
+/* Small Buttons */
+.btn-small {
+    background-color: var(--color-primary);
+    color: var(--color-base-content);
+    padding: 0.75rem 1.75rem;
+    font-size: 0.875rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn-small:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-small:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-primary-hover);
+}
+
+/* Small Active Button - Distinctive Look */
+.btn-small-active {
+    background-color: var(--color-secondary); /* Uses secondary color for active state */
+    color: var(--color-base-content);
+    padding: 0.75rem 1.75rem;
+    font-size: 0.875rem;
+    /* Using a shadow that leans into primary or a more subtle shadow for active */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn-small-active:hover {
+    background-color: var(--color-secondary-dark); /* Darker secondary on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-small-active:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-secondary-dark); /* Keep hover background on active */
+}
+
+
+/* Big Buttons */
+.btn-big {
+    background-color: var(--color-primary);
+    color: var(--color-base-content);
+    padding: 1rem 2.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-big:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-big:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: var(--color-primary-hover);
+}
+
+/* Big Active Button - Distinctive Look */
+.btn-big-active {
+    background-color: var(--color-secondary);
+    color: var(--color-base-content);
+    padding: 1rem 2.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-big-active:hover {
+    background-color: var(--color-secondary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-big-active:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: var(--color-secondary-dark);
+}
+
+
+/* Navigation Buttons (subtle, text-based) */
+.btn-nav {
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    display: inline-block;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 4px;
+}
+
+.btn-nav:hover {
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.btn-nav::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-primary);
+    transition: width 0.2s ease-in-out;
+}
+
+.btn-nav:hover::after {
+    width: 100%;
+}
+
+
+/* Discord Button */
+.btn-discord {
+    background-color: #5865f2;
+    color: white;
+    padding: 1rem 2.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-discord:hover {
+    background-color: #4752c4;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-discord:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    background-color: #4752c4;
+}
+
+
+/* Google Button */
+.btn-google {
+    background-color: var(--color-card);
+    color: var(--color-input-content);
+    padding: 1rem 2.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-google:hover {
+    background-color: var(--color-card-border);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-google:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    background-color: var(--color-card-border);
+}
+
+/* Read More Button (Ghost/Outline style) */
+.read-more-btn {
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.read-more-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-base);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.read-more-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+    background: var(--color-primary-hover);
+    color: var(--color-base);
+}
+
+/* Disabled State - Applied universally */
+.btn-small:disabled,
+.btn-small-active:disabled, /* Ensured disabled for active small button */
+.btn-big:disabled,
+.btn-big-active:disabled, /* Ensured disabled for active big button */
+.btn-discord:disabled,
+.btn-google:disabled,
+.read-more-btn:disabled {
+    background-color: var(--color-disabled-background);
+    color: var(--color-disabled-content);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+.btn-small:disabled:hover,
+.btn-small-active:disabled:hover, /* Ensured disabled hover for active small button */
+.btn-big:disabled:hover,
+.btn-big-active:disabled:hover, /* Ensured disabled hover for active big button */
+.btn-discord:disabled:hover,
+.btn-google:disabled:hover,
+.read-more-btn:disabled:hover {
+    background-color: var(--color-disabled-background);
+    color: var(--color-disabled-content);
+}
+
+

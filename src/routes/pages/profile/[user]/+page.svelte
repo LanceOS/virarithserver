@@ -16,16 +16,16 @@
     import CommentClient from '$lib/tools/CommentClient.ts';
     import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
     import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
-	import RoleCard from '$lib/components/cards/RoleCard.svelte';
+    import RoleCard from '$lib/components/cards/RoleCard.svelte';
 
     const userPage = page.params.user;
 
     const session = authClient.useSession();
 
-    let isHydrated = $state(false);
+    let isHydrated = $state(false); 
 
     let profile: IProfileWithUser | undefined = $state();
-    let profileUser: UserSchema | undefined = $state();
+    let profileUser: UserSchema | undefined = $state(); 
 
     let posts: PostWithImage[] | undefined = $state([]);
     let postPagination: IPagination | undefined = $state();
@@ -37,13 +37,10 @@
 
     let activeTab: 'posts' | 'comments' = $state('posts');
 
-    let isFollowing: boolean = $state(false);
-
+    let isFollowing: boolean = $state(false); 
     let isEditing: boolean = $state(false);
-    let isLoading: boolean = $state(false);
-
+    let isLoading: boolean = $state(false); 
     let newProfileInfo = $state({
-        name: '',
         bio: '',
         minecraftName: '',
         discordName: ''
@@ -51,78 +48,67 @@
     let newAvatar: File | undefined = $state();
 
     const stripHtmlTags = (html: string): string => {
-		if (!html) return '';
-		const tempDiv = document.createElement('div');
-		tempDiv.innerHTML = html;
-		return tempDiv.textContent || tempDiv.innerText || '';
-	};
+        if (!html) return '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        return tempDiv.textContent || tempDiv.innerText || '';
+    };
 
+    const changeTab = (tab: 'posts' | 'comments') => {
+        activeTab = tab;
+        pagination = tab === 'posts' ? postPagination : commentPagination;
+    };
 
-    const changeTab = (tab: string) => {
-        if(tab === "posts") {
-            activeTab = "posts";
-            pagination = postPagination;
-        }
-        else {
-            activeTab = "comments";
-            pagination = commentPagination;
-        }
-    }
-
-    const incrementPage = async () => {
-        if (pagination?.currentPage! >= pagination?.totalPages!) {
-            return;
-        }
+    const fetchPosts = async (page: number) => {
         isLoading = true;
         try {
-            const page = pagination?.currentPage! + 1;
-            if (activeTab === 'posts') {
-                const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
-                posts = response.posts;
-                pagination = response.pagination;
-            } else if (activeTab === 'comments') {
-                const response = await CommentClient.getCommentsByUser({ userId: userPage, page: page })
-                comments = response.comments;
-                commentPagination = response.commentPagination;
-                return;
-            } else {
-                return;
-            }
+            const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
+            posts = response.posts;
+            postPagination = response.pagination;
+            if (activeTab === 'posts') pagination = postPagination;
         } catch (error) {
-            console.error(error);
+            console.error('Error fetching posts:', error);
         } finally {
             isLoading = false;
         }
     };
 
-    const decrementPage = async () => {
-        if (pagination?.currentPage! <= 1) {
-            return;
-        }
+    const fetchComments = async (page: number) => {
         isLoading = true;
         try {
-            const page = pagination?.currentPage! - 1;
-            if (activeTab === 'posts') {
-                const response = await PostClient.getPostsByUser({ userId: userPage, page: page });
-                posts = response.posts;
-                pagination = response.pagination;
-            } else if (activeTab === 'comments') {
-                const response = await CommentClient.getCommentsByUser({ userId: userPage, page: page })
-                comments = response.comments;
-                commentPagination = response.commentPagination;
-            } else {
-                return;
-            }
+            const response = await CommentClient.getCommentsByUser({ userId: userPage, page: page });
+            comments = response.comments;
+            commentPagination = response.pagination; 
+            if (activeTab === 'comments') pagination = commentPagination;
         } catch (error) {
-            console.error(error);
+            console.error('Error fetching comments:', error);
         } finally {
-            isLoading = false; 
+            isLoading = false;
+        }
+    };
+
+    const incrementPage = async () => {
+        if (!pagination || pagination.currentPage >= pagination.totalPages) return;
+
+        if (activeTab === 'posts') {
+            await fetchPosts(pagination.currentPage + 1);
+        } else if (activeTab === 'comments') {
+            await fetchComments(pagination.currentPage + 1);
+        }
+    };
+
+    const decrementPage = async () => {
+        if (!pagination || pagination.currentPage <= 1) return;
+
+        if (activeTab === 'posts') {
+            await fetchPosts(pagination.currentPage - 1);
+        } else if (activeTab === 'comments') {
+            await fetchComments(pagination.currentPage - 1);
         }
     };
 
     const handleFollow = () => {
         isFollowing = !isFollowing;
-
     };
 
     const handleEdit = () => {
@@ -130,7 +116,6 @@
             handleSave();
         } else {
             isEditing = true;
-            
             newProfileInfo.bio = profile?.bio ? stripHtmlTags(profile.bio) : '';
             newProfileInfo.minecraftName = profile?.minecraftName ? stripHtmlTags(profile.minecraftName) : '';
             newProfileInfo.discordName = profile?.discordName ? stripHtmlTags(profile.discordName) : '';
@@ -141,18 +126,15 @@
         isLoading = true;
         try {
             const formData = new FormData();
-            formData.append(
-                'profile',
-                JSON.stringify({
-                    ...profile,
-                    bio: newProfileInfo.bio,
-                    minecraftName: newProfileInfo.minecraftName,
-                    discordName: newProfileInfo.discordName
-                })
-            );
+            const updatedProfileData = {
+                bio: newProfileInfo.bio,
+                minecraftName: newProfileInfo.minecraftName,
+                discordName: newProfileInfo.discordName
+            };
+            formData.append('profile', JSON.stringify(updatedProfileData));
 
-            if(newAvatar) {
-                formData.append('file', newAvatar)
+            if (newAvatar) {
+                formData.append('file', newAvatar);
             }
 
             await fetch('?/submitEditedProfile', {
@@ -160,86 +142,92 @@
                 body: formData
             });
 
-
-            profile = await ProfileClient.getUserProfile(userPage)
+            profile = await ProfileClient.getUserProfile(userPage);
+            profileUser = profile?.user;
         } catch (error) {
             console.error('Error saving profile:', error);
-            alert(`Failed to save profile: ${error}`); 
+            alert(`Failed to save profile: ${error}`);
         } finally {
             isLoading = false;
             isEditing = false;
+            newAvatar = undefined; 
         }
     };
 
     const handleCancel = () => {
-        newProfileInfo.bio = profile?.bio || '';
-        newProfileInfo.minecraftName = profile?.minecraftName || '';
-        newProfileInfo.discordName = profile?.discordName || '';
+        newProfileInfo.bio = profile?.bio ? stripHtmlTags(profile.bio) : '';
+        newProfileInfo.minecraftName = profile?.minecraftName ? stripHtmlTags(profile.minecraftName) : '';
+        newProfileInfo.discordName = profile?.discordName ? stripHtmlTags(profile.discordName) : '';
+        newAvatar = undefined;
         isEditing = false;
     };
 
     onMount(async () => {
-        isHydrated = true; 
-
         try {
-            const [ profileResponse, postResponse, commentResponse ] = await Promise.all([
-                await ProfileClient.getUserProfile(userPage),
-                await PostClient.getPostsByUser({ userId: userPage, page: 1 }),
-                await CommentClient.getCommentsByUser({ userId: userPage, page: 1 })
-            ])
+            const [profileResp, postsResp, commentsResp] = await Promise.all([
+                ProfileClient.getUserProfile(userPage),
+                PostClient.getPostsByUser({ userId: userPage, page: 1 }),
+                CommentClient.getCommentsByUser({ userId: userPage, page: 1 })
+            ]);
 
-            profile = profileResponse;
+            profile = profileResp;
             profileUser = profile?.user;
 
-            posts = postResponse.posts;
-            postPagination = postResponse.pagination;
+            posts = postsResp.posts;
+            postPagination = postsResp.pagination;
 
-            pagination = postPagination; 
+            comments = commentsResp.comments;
+            commentPagination = commentsResp.pagination;
 
-            comments = commentResponse.comments;
-            commentPagination = commentResponse.pagination;
-
-        }
-        catch(error) {
-            console.error("Error fetching profile data:", error);
+            pagination = postPagination;
+        } catch (error) {
+            console.error('Error fetching profile data:', error);
+        } finally {
+            isHydrated = true;
         }
     });
 </script>
 
 <Header />
 <main class="mx-auto min-h-screen max-w-7xl p-4 sm:p-6 lg:p-8">
-    <div class="container w-full">
-        {#if profile}
+    <div class="w-full">
+        {#if !isHydrated}
+            <div class="flex h-[calc(100vh-10rem)] flex-col items-center justify-center gap-4 card-setup p-8">
+                <Icon icon="svg-spinners:blocks-shuffle-3" class="text-5xl" style="color: var(--color-primary);" />
+                <p class="text-2xl font-semibold" style="color: var(--color-base-content);">Loading profile...</p>
+            </div>
+        {:else if profile}
             <div class="space-y-8">
                 <div class="card-setup p-6">
                     <div class="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:gap-10">
-                        <ProfileAvatar {isEditing} bind:newAvatar avatar={profile?.user.image || undefined}/>
+                        <ProfileAvatar {isEditing} bind:newAvatar avatar={profile?.user.image || undefined} />
 
                         <div class="flex-1 space-y-6 text-center lg:text-left">
-                            <div class="flex items-center gap-6 h-fit">
-                                <h1 class="content text-3xl sm:text-4xl font-bold tracking-tight">
+                            <div class="flex items-center gap-4 h-fit">
+                                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight" style="color: var(--color-base-content);">
                                     {profile.user?.name}
                                 </h1>
-                                <RoleCard role={profile.user.role}/>
+                                {#if profile.user.role} <RoleCard role={profile.user.role} />
+                                {/if}
                             </div>
 
                             <ProfileInfo {isEditing} {profile} bind:newProfileInfo />
 
                             <section class="space-y-3 pt-4">
-                                {#if !isHydrated || isLoading}
-                                    <div class="btn-small flex w-full items-center justify-center gap-2 opacity-60 cursor-not-allowed">
-                                        <Icon icon="svg-spinners:ring-resize" class="text-lg"/>
-                                        Loading...
-                                    </div>
+                                {#if isLoading}
+                                    <button class="btn-small w-full opacity-70 cursor-not-allowed" disabled>
+                                        <Icon icon="svg-spinners:ring-resize" class="iconify" />
+                                        Processing...
+                                    </button>
                                 {:else}
                                     {#if !isEditing && profile.userId !== $session.data?.user.id}
                                         <button
                                             onclick={handleFollow}
-                                            class="btn-big-active flex w-full items-center justify-center gap-2"
+                                            class={isFollowing ? 'btn-small-active' : 'btn-small'}
                                         >
                                             <Icon
                                                 icon={isFollowing ? 'mdi:account-check' : 'mdi:account-plus'}
-                                                class="text-lg"
+                                                class="iconify"
                                             ></Icon>
                                             {isFollowing ? 'Following' : 'Follow'}
                                         </button>
@@ -250,27 +238,27 @@
                                             <div class="flex flex-col sm:flex-row gap-2">
                                                 <button
                                                     onclick={handleSave}
-                                                    class="btn-big-active flex flex-1 items-center justify-center gap-2"
+                                                    class="btn-small"
                                                     disabled={isLoading}
                                                 >
-                                                    <Icon icon="mdi:content-save" class="text-lg"></Icon>
+                                                    <Icon icon="mdi:content-save" class="iconify"></Icon>
                                                     Save
                                                 </button>
                                                 <button
                                                     onclick={handleCancel}
-                                                    class="btn-small border-muted flex flex-1 items-center justify-center gap-2"
+                                                    class="btn-small-active"
                                                     disabled={isLoading}
                                                 >
-                                                    <Icon icon="mdi:close" class="text-lg"></Icon>
+                                                    <Icon icon="mdi:close" class="iconify"></Icon>
                                                     Cancel
                                                 </button>
                                             </div>
                                         {:else}
                                             <button
                                                 onclick={handleEdit}
-                                                class="btn-small border-muted flex w-full items-center justify-center gap-2"
+                                                class="btn-small"
                                             >
-                                                <Icon icon="mdi:account-edit" class="text-lg"></Icon>
+                                                <Icon icon="mdi:account-edit" class="iconify"></Icon>
                                                 Edit Profile
                                             </button>
                                         {/if}
@@ -282,8 +270,9 @@
                 </div>
 
                 <div class="card-setup p-6">
-                    <div class="mb-6 border-b border-[var(--color-card-border)]">
-                        <nav class="flex space-x-6 -mb-px"> <button
+                    <div class="mb-6 card-border-subtle border-b">
+                        <nav class="flex space-x-6 -mb-px">
+                            <button
                                 onclick={() => changeTab("posts")}
                                 class:text-[var(--color-primary)]={activeTab === 'posts'}
                                 class:border-[var(--color-primary)]={activeTab === 'posts'}
@@ -301,47 +290,43 @@
                             >
                                 Comments
                             </button>
-                            </nav>
+                        </nav>
                     </div>
 
-                    {#if isHydrated}
-                        <div class="space-y-4">
-                            {#if pagination && pagination.totalPages > 1}
-                                <div class="flex justify-center py-4">
-                                    <Pagination {pagination} {incrementPage} {decrementPage} isPaginationLoading={isLoading} />
-                                </div>
-                            {/if}
-
-                            {#if !isLoading}
-                                {#if activeTab === 'posts' && posts && posts.length > 0}
-                                    <ForumFeed {posts} />
-                                {:else if activeTab === 'comments' && comments && comments.length > 0}
-                                    <CommentFeed {comments} />
-                                {:else if (activeTab === 'posts' && (!posts || posts.length === 0)) || (activeTab === 'comments' && (!comments || comments.length === 0))}
-                                    <section class="flex flex-col items-center justify-center gap-4 py-12">
-                                        <Icon icon="mdi:information-outline" class="text-4xl text-[var(--color-muted)]" />
-                                        <p class="muted text-lg">No {activeTab} yet.</p>
-                                    </section>
-                                {/if}
-                            {:else}
-                                <section class="flex min-h-64 flex-col items-center justify-center gap-4 py-12">
-                                    <Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl text-[var(--color-primary)]" />
-                                    <p class="muted text-base">Loading {activeTab}...</p>
-                                </section>
-                            {/if}
-                        </div>
-                    {:else}
+                    {#if isLoading}
                         <section class="flex min-h-64 flex-col items-center justify-center gap-4 py-12">
-                            <Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl text-[var(--color-primary)]" />
-                            <p class="muted text-base">Loading profile data...</p>
+                            <Icon icon="svg-spinners:blocks-shuffle-3" class="text-4xl" style="color: var(--color-primary);" />
+                            <p class="text-base" style="color: var(--color-muted);">Loading {activeTab}...</p>
+                        </section>
+                    {:else if activeTab === 'posts' && posts && posts.length > 0}
+                        <ForumFeed {posts} />
+                        {#if pagination && pagination.totalPages > 1}
+                            <div class="flex justify-center py-4">
+                                <Pagination {pagination} {incrementPage} {decrementPage} isPaginationLoading={isLoading} />
+                            </div>
+                        {/if}
+                    {:else if activeTab === 'comments' && comments && comments.length > 0}
+                        <CommentFeed {comments} />
+                        {#if pagination && pagination.totalPages > 1}
+                            <div class="flex justify-center py-4">
+                                <Pagination {pagination} {incrementPage} {decrementPage} isPaginationLoading={isLoading} />
+                            </div>
+                        {/if}
+                    {:else}
+                        <section class="flex flex-col items-center justify-center gap-4 py-12 card-setup">
+                            <Icon icon="material-symbols:info-outline" class="text-4xl" style="color: var(--color-muted);" />
+                            <p class="text-lg" style="color: var(--color-muted);">No {activeTab} yet.</p>
                         </section>
                     {/if}
                 </div>
             </div>
         {:else}
-            <div class="flex h-[calc(100vh-10rem)] flex-col items-center justify-center gap-12">
-                <Icon icon="svg-spinners:blocks-shuffle-3" class="text-5xl text-[var(--color-primary)]" />
-                <p class="content text-2xl font-semibold">Loading profile...</p>
+            <div class="flex h-[calc(100vh-10rem)] flex-col items-center justify-center gap-4 card-setup p-8">
+                <Icon icon="material-symbols:error-outline" class="text-5xl" style="color: var(--color-error);" />
+                <p class="text-2xl font-semibold text-center" style="color: var(--color-error);">Profile not found or an error occurred.</p>
+                <button class="btn-small mt-4" onclick={() => window.location.reload()}>
+                    Reload Page
+                </button>
             </div>
         {/if}
     </div>

@@ -1,49 +1,49 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client.ts";
     import { page } from '$app/state';
-	import CommentClient from "$lib/tools/CommentClient.ts";
+    import CommentClient from "$lib/tools/CommentClient.ts";
     
     const session = authClient.useSession();
-	const postId = page.params.post;
+    const postId = page.params.post;
 
     const { handleAddComment } = $props()
 
     let body = $state('');
     let isFocused = $state(false);
-	let isSubmittingComment: boolean = $state(false);
+    let isSubmittingComment: boolean = $state(false);
 
     const MAX_CHARS = 800;
 
 
-    	/**
-	 * @param body
-	 * @returns Adds new comment to database and then refetches comments
-	 */
-	const addComment = async (body: string) => {
-		if (!$session.data?.user || !postId) {
-			return;
-		}
+        /**
+     * @param body
+     * @returns Adds new comment to database and then refetches comments
+     */
+    const addComment = async (body: string) => {
+        if (!$session.data?.user || !postId) {
+            return;
+        }
 
-		const user = $session.data.user;
+        const user = $session.data.user;
 
-		isSubmittingComment = true;
+        isSubmittingComment = true;
 
-		const data = {
-			userId: user.id,
-			postId: postId,
-			content: body
-		};
+        const data = {
+            userId: user.id,
+            postId: postId,
+            content: body
+        };
 
-		try {
-			const response = await CommentClient.createComment(data);
-			const newComment = { ...response[0], user: user };
+        try {
+            const response = await CommentClient.createComment(data);
+            const newComment = { ...response[0], user: user };
             handleAddComment(newComment)
         } catch (error) {
-			console.error('Failed to create comment:', error);
-		} finally {
-			isSubmittingComment = false;
-		}
-	};
+            console.error('Failed to create comment:', error);
+        } finally {
+            isSubmittingComment = false;
+        }
+    };
 
     function autoGrow(event: Event) {
         const textarea = event.target as HTMLTextAreaElement;
@@ -62,35 +62,32 @@
     }
 
     const handleSubmit = async (event: Event) => {
-		event?.preventDefault()
+        event?.preventDefault()
         await addComment(body)
         body = '';
-        isFocused = false;
+        isFocused = false; 
     }
 </script>
 
 <section class="space-y-4">
-	<p class="font-semibold text-xl">Create Comment</p>
+    <p class="font-semibold text-xl" style="color: var(--color-base-content);">Create Comment</p>
     <form class="card-setup p-6 space-y-4" onsubmit={handleSubmit}>
         <div class="relative">
             <textarea
                 placeholder="What's on your mind?"
                 aria-label="Create your post body"
-                class={`
-                    input w-full resize-none outline-none
-                    transition-all duration-200 ease-in-out
-                    border border-transparent
-                    focus:border-[var(--color-primary)]
-                    ${isFocused || body.length > 0 ? 'min-h-32' : 'min-h-12'} 
-                    ${body.length > MAX_CHARS ? 'border-[var(--color-error)] focus:border-[var(--color-error)]' : ''}
-                    ${isSubmittingComment ? 'opacity-50 cursor-not-allowed' : ''}
-                `}
+                class="input w-full resize-none"
                 bind:value={body}
                 onfocus={handleFocus}
                 onblur={handleBlur}
                 oninput={autoGrow}
                 maxlength={MAX_CHARS}
                 disabled={isSubmittingComment}
+                style={`
+                    ${isFocused || body.length > 0 ? 'min-height: 8rem;' : 'min-height: 3rem;'} /* Use min-h-32 (8rem) or min-h-12 (3rem) */
+                    ${body.length > MAX_CHARS ? 'border-color: var(--color-error);' : ''}
+                    ${isSubmittingComment ? 'opacity: 0.7; cursor: not-allowed;' : ''}
+                `}
             >
             </textarea>
 
@@ -100,12 +97,14 @@
                         absolute bottom-3 right-3 
                         px-2 py-1 text-xs font-medium
                         transition-all duration-200
-                        ${body.length > MAX_CHARS 
-                            ? 'color-error' 
+                    `}
+                    style={`
+                        color: ${body.length > MAX_CHARS 
+                            ? 'var(--color-error)' 
                             : body.length > MAX_CHARS * 0.8 
-                                ? 'text-orange-400' 
-                                : 'muted'
-                        }
+                                ? 'var(--color-warning)' 
+                                : 'var(--color-muted)'
+                        };
                     `}
                 >
                     {body.length}/{MAX_CHARS}
@@ -116,28 +115,30 @@
         <div class="flex justify-between items-center">
             <div class="text-sm">
                 {#if body.length > MAX_CHARS}
-                    <span class="color-error font-medium">Character limit exceeded</span>
+                    <span style="color: var(--color-error); font-weight: 500;">Character limit exceeded</span>
                 {:else if body.length > MAX_CHARS * 0.8}
-                    <span class="text-orange-400 font-medium">Approaching character limit</span>
+                    <span style="color: var(--color-warning); font-weight: 500;">Approaching character limit</span>
                 {/if}
             </div>
             
             <button
                 type="submit"
                 class={`
-                    font-bold text-sm flex items-center gap-2
-                    transition-all duration-200 ease-in-out
-                    focus:outline-none
                     ${body.length === 0 || body.length > MAX_CHARS || isSubmittingComment
-                        ? 'bg-[var(--color-input)] muted cursor-not-allowed opacity-50 border-muted p-2'
-                        : 'btn-small hover:transform hover:scale-[1.02] active:scale-[0.98]'
+                        ? 'btn-small' 
+                        : 'btn-small'
+                    }
+                `}
+                style={`
+                    ${body.length === 0 || body.length > MAX_CHARS || isSubmittingComment
+                        ? 'background-color: var(--color-disabled-background); color: var(--color-disabled-content); cursor: not-allowed; opacity: 0.8; box-shadow: none; transform: none;'
+                        : ''
                     }
                 `}
                 disabled={body.length === 0 || body.length > MAX_CHARS || isSubmittingComment}
             >
                 {#if isSubmittingComment}
-                    <div class="h-4 w-4 animate-spin rounded-full border-b-2 border-current"></div>
-                    Posting...
+                    <div class="pagination-spinner-icon"></div> Posting...
                 {:else}
                     Post Comment
                 {/if}
@@ -145,15 +146,3 @@
         </div>
     </form>
 </section>
-
-<style>
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    
-    .animate-spin {
-        animation: spin 1s linear infinite;
-    }
-</style>

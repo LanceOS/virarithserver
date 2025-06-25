@@ -1,0 +1,51 @@
+/* Add these to your existing global CSS file */
+
+/* Actions Menu Container */
+.actions-menu-container {
+    background-color: var(--color-background-elevated); /* Lighter background for popovers */
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 8px; /* Consistent rounding */
+    box-shadow: 0 4px 12px var(--color-shadow); /* Soft, modern shadow */
+    /* Add any other consistent styling for menu containers here (e.g., z-index, position if always relative to common parent) */
+}
+
+/* Actions Menu Item (Buttons/Links inside the menu) */
+.actions-menu-item {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.75rem; /* Space between icon and text */
+    padding: 0.75rem 1rem;
+    text-align: left;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    color: var(--color-text-secondary); /* Default text color for menu items */
+    background-color: transparent; /* Transparent background for smooth hover */
+    font-size: 0.9rem; /* Slightly smaller text for menu items */
+    font-weight: 500;
+}
+
+.actions-menu-item:hover {
+    background-color: var(--color-background-hover); /* A subtle hover background */
+    color: var(--color-base-content); /* Ensure text is readable on hover */
+}
+
+/* Icon within an Actions Menu Item */
+.actions-menu-item > .iconify { /* Target Iconify Svelte component's generated element */
+    font-size: 1.1rem; /* Adjust icon size within menu items */
+    color: var(--color-text-icon); /* Default icon color in menu items */
+}
+
+/* Specific styling for Danger/Delete Action Menu Item */
+.actions-menu-item.danger {
+    color: var(--color-error); /* Explicitly set text color for danger items */
+}
+
+.actions-menu-item.danger:hover {
+    background-color: var(--color-error-light); /* A softer red hover for danger */
+    color: var(--color-base); /* Text turns white on hover for danger */
+}
+
+.actions-menu-item.danger > .iconify {
+    color: var(--color-error); /* Error color for danger icons */
+}

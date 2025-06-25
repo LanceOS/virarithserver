@@ -7,9 +7,9 @@
 </script>
 
 <div>
-    <label for="file" class="content text-md mb-2 block font-medium">
+    <label for="file" class="mb-2 block text-md font-medium" style="color: var(--color-base-content);">
         Images
-        <span class="muted text-xs font-normal"
+        <span class="text-xs font-normal" style="color: var(--color-muted);"
             >(max {MAX_FILES} images, 3MB each, JPEG/PNG/GIF/WebP)</span
         >
     </label>
@@ -21,13 +21,16 @@
         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
         onchange={handleFileChange}
         readonly={imagePreviews.length >= MAX_FILES}
-        class={`input border-muted w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none ${
-            imagePreviews.length >= MAX_FILES
-                ? 'pointer-events-none cursor-not-allowed opacity-50'
-                : 'cursor-pointer'
-        }`}
+        class={`
+            input w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none
+            ${
+                imagePreviews.length >= MAX_FILES
+                    ? 'pointer-events-none cursor-not-allowed opacity-50'
+                    : 'cursor-pointer'
+            }
+        `}
     />
     {#if imagePreviews.length >= MAX_FILES}
-        <p class="mt-1 text-xs text-gray-500">Maximum number of images reached</p>
+        <p class="mt-1 text-xs" style="color: var(--color-muted);">Maximum number of images reached</p>
     {/if}
 </div>

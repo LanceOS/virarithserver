@@ -1,0 +1,77 @@
+/* Redesigned Pagination Button Styles */
+
+.pagination-button {
+    /* Base styling for a clean, modern look */
+    border: 1px solid var(--color-border-subtle); /* Thinner, subtle border */
+    border-radius: 8px; /* Consistent rounding with other elements */
+    padding: 0.75rem; /* Increased padding for a larger click area and better visual balance */
+    cursor: pointer;
+    display: inline-flex; /* Use inline-flex for proper alignment within a line */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem; /* Adjusted font size for icons */
+
+    /* Smoother, consistent transitions */
+    transition:
+        background-color 0.2s ease-in-out,
+        border-color 0.2s ease-in-out,
+        color 0.2s ease-in-out,
+        transform 0.2s ease-in-out,
+        box-shadow 0.2s ease-in-out;
+
+    /* Subtle initial shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-button:not(:disabled) {
+    color: var(--color-base-content);
+    background-color: var(--color-card); /* Card background for default state */
+}
+
+/* Hover state for interactive feedback */
+.pagination-button:not(:disabled):hover {
+    background-color: var(--color-primary); /* Vibrant primary color on hover */
+    border-color: var(--color-primary); /* Border matches background on hover */
+    color: var(--color-base); /* Darker text on the primary background for contrast */
+    transform: translateY(-2px); /* Gentle lift effect */
+    /* Enhanced, diffused shadow on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Active state for press feedback */
+.pagination-button:not(:disabled):active {
+    transform: translateY(0); /* Return to original position */
+    background-color: var(--color-primary-hover); /* Slightly darker primary on active */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow on active */
+}
+
+/* Disabled State - Clear and unobtrusive */
+.pagination-button:disabled {
+    background-color: var(--color-disabled-background); /* Disabled background color */
+    color: var(--color-disabled-content); /* Disabled text color */
+    border-color: var(--color-disabled-background); /* Border matches background for a unified look */
+    cursor: not-allowed;
+    opacity: 0.7; /* Slightly more opaque than original for better readability */
+    box-shadow: none; /* No shadow when disabled */
+    transform: none; /* No transform on hover for disabled state */
+}
+
+/* Focus state for accessibility */
+.pagination-button:focus-visible {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-ring); /* Clear focus ring */
+}
+
+/* Pagination Spinner Icon */
+.pagination-spinner-icon {
+    font-size: 1.1rem; /* Slightly larger spinner for better visibility */
+    color: var(--color-primary); /* Use primary color for loading spinner */
+    animation: spin 1s linear infinite; /* Keeps spin animation */
+}
+
+/* Keyframe animation remains the same */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

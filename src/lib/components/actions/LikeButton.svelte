@@ -1,57 +1,57 @@
 <script lang="ts">
-	import LikeClient from '$lib/tools/LikeClient.ts';
-	import Icon from '@iconify/svelte';
-	import ErrorModal from '../popups/ErrorModal.svelte';
-	import { authClient } from '$lib/auth-client.ts';
+    import LikeClient from '$lib/tools/LikeClient.ts';
+    import Icon from '@iconify/svelte';
+    import ErrorModal from '../popups/ErrorModal.svelte';
+    import { authClient } from '$lib/auth-client.ts';
 
-	const session = authClient.useSession();
+    const session = authClient.useSession();
 
-	let { object } = $props();
+    let { object } = $props();
 
-	let errorLog = $state('');
-	let sendingLike = $state(false);
+    let errorLog = $state('');
+    let sendingLike = $state(false);
 
-	const likePost = async (id: string) => {
-		if (!$session.data?.user) {
-			setError();
-			return;
-		}
+    const likePost = async (id: string) => {
+        if (!$session.data?.user) {
+            setError();
+            return;
+        }
 
-		const user = $session.data.user;
-		sendingLike = true;
-		let wasLiked: boolean = object.isLiked;
+        const user = $session.data.user;
+        sendingLike = true;
+        let wasLiked: boolean = object.isLiked;
 
-		try {
-			if (wasLiked) {
-				await LikeClient.unlikeObject({ userId: user.id, objectId: object.id, objectType: object.type });
-			} else {
-				await LikeClient.likeObject({ userId: user.id, objectId: object.id, objectType: object.type });
-			}
+        try {
+            if (wasLiked) {
+                await LikeClient.unlikeObject({ userId: user.id, objectId: object.id, objectType: object.type });
+            } else {
+                await LikeClient.likeObject({ userId: user.id, objectId: object.id, objectType: object.type });
+            }
 
-			object = {
-				...object,
-				isLiked: !wasLiked,
-				likeCount: wasLiked ? object.likeCount - 1 : object.likeCount + 1
-			};
-		} catch (error) {
-			errorLog = 'Failed to like post';
-		} finally {
-			sendingLike = false;
-		}
-	};
+            object = {
+                ...object,
+                isLiked: !wasLiked,
+                likeCount: wasLiked ? object.likeCount - 1 : object.likeCount + 1
+            };
+        } catch (error) {
+            errorLog = 'Failed to like post';
+        } finally {
+            sendingLike = false;
+        }
+    };
 
-	const setError = () => {
-		errorLog = 'Must log in to like.';
-		sendingLike = true;
-		setTimeout(() => {
-			errorLog = '';
-			sendingLike = false;
-		}, 2000);
-	};
+    const setError = () => {
+        errorLog = 'Must log in to like.';
+        sendingLike = true; // Indicate action is pending, visually disabling the button
+        setTimeout(() => {
+            errorLog = '';
+            sendingLike = false; // Re-enable button after error message disappears
+        }, 2000);
+    };
 </script>
 
 {#if errorLog}
-	<ErrorModal {errorLog} />
+    <ErrorModal {errorLog} />
 {/if}
 
 <button
@@ -62,9 +62,10 @@
 >
     <Icon
         icon="material-symbols:thumb-up"
-        class={`stat-icon ${object.isLiked ? "content" : ""}`}
+        class="stat-icon"
+        style={`color: ${object.isLiked ? 'var(--color-primary)' : 'var(--color-muted)'};`}
     />
-    <span class=" lg:text-sm font-medium">
+    <span class="text-sm font-medium" style="color: var(--color-base-content);">
         {object.likeCount || 0} Likes
     </span>
 </button>

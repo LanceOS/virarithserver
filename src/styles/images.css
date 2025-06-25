@@ -1,0 +1,93 @@
+/* --- Image Preview Component --- */
+
+/* Text for image count/info */
+.image-preview-info-text {
+    color: var(--color-base-content);
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+}
+
+/* Button to remove all images */
+.btn-remove-all {
+    cursor: pointer;
+    color: var(--color-error);
+    font-size: 0.875rem; /* text-sm */
+    transition: color 0.2s ease;
+    font-weight: 500; /* font-medium */
+}
+
+.btn-remove-all:hover {
+    color: var(--color-error-dark); /* Deeper red on hover */
+}
+
+/* Button to remove a single image */
+.btn-remove-image {
+    position: absolute;
+    right: 0.5rem; /* right-2 */
+    top: 0.5rem; /* top-2 */
+    cursor: pointer;
+    border-radius: 9999px; /* rounded-full */
+    background-color: var(--color-error);
+    padding: 0.5rem; /* p-2 */
+    color: var(--color-base); /* text-color-base-content (assuming base is white/light on dark error) */
+    opacity: 0; /* hidden by default, show on group-hover */
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-remove-image:hover {
+    background-color: var(--color-error-dark); /* hover:bg-red-700 */
+}
+
+/* Navigation buttons (chevrons) for image gallery */
+.image-nav-button {
+    background-color: var(--color-card); /* Card background for buttons */
+    padding: 0.5rem; /* p-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: var(--shadow-sm); /* subtle shadow */
+    transition: all 0.2s ease;
+    color: var(--color-base-content); /* Icon color */
+    display: flex; /* For centering icon */
+    align-items: center;
+    justify-content: center;
+}
+
+.image-nav-button:hover {
+    background-color: var(--color-card-hover); /* Slightly darker on hover */
+    transform: scale(1.05); /* Gentle zoom on hover */
+}
+
+.image-nav-button:disabled {
+    opacity: 0.6; /* More distinct disabled state */
+    cursor: not-allowed;
+    background-color: var(--color-disabled-background);
+    color: var(--color-disabled-content);
+    box-shadow: none;
+    transform: none;
+}
+
+.image-nav-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring); /* Focus ring consistent with btn-primary */
+}
+
+/* Image thumbnail borders */
+.thumbnail-active-border {
+    border-color: var(--color-primary); /* Active border color */
+    box-shadow: 0 0 0 2px var(--color-primary-light); /* Subtle glow for active thumbnail */
+}
+
+.thumbnail-inactive-border {
+    border-color: var(--color-border-subtle); /* Inactive border color */
+}
+
+/* Overlay for inactive thumbnails */
+.thumbnail-overlay-inactive {
+    background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
+    opacity: 1; /* Always visible if inactive */
+    transition: opacity 0.2s ease;
+}
+
+.thumbnail-overlay-active {
+    opacity: 0; /* Hidden if active */
+}
+
