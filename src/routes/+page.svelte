@@ -11,7 +11,6 @@
 
 	const staffUsers = data.staff;
 
-	// Animation states (keeping them for consistency if you use them elsewhere)
 	let discordVisible = false;
 	let featuresVisible = false;
 	let communityVisible = false;

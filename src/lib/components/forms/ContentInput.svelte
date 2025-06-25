@@ -6,28 +6,26 @@
 
     let content = $state(currentBody || "");
 
-    // This effect ensures the textarea content updates if currentBody changes externally
+
+    const autoGrow = (textarea: HTMLTextAreaElement) => {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    };
+
+    let isContentFocused = $state(false);
+    let contentRef: HTMLTextAreaElement;
+
     $effect(() => {
-        content = currentBody;
-        // Also call autoGrow if content changes, to adjust height
+        content = currentBody || "";
         if (contentRef) {
-            autoGrow({ target: contentRef } as Event); // Cast to Event for autoGrow
+            autoGrow(contentRef);
         }
     });
 
-    let isContentFocused = $state(false);
-    let contentRef: HTMLTextAreaElement; 
-
-    const autoGrow = (event: Event) => {
-        const textarea = event.target as HTMLTextAreaElement;
-        textarea.style.height = 'auto'; 
-        textarea.style.height = textarea.scrollHeight + 'px'; 
-    };
-
-    const handleContentFocus = () => {
+    const handleContentFocus = (event: FocusEvent) => {
         isContentFocused = true;
         if (contentRef) {
-            autoGrow({ target: contentRef } as Event);
+            autoGrow(contentRef);
         }
     };
 
@@ -37,9 +35,13 @@
         }
     };
 
+    const handleContentInput = (event: Event) => {
+        autoGrow(event.target as HTMLTextAreaElement);
+    };
+
     $effect(() => {
-        if (contentRef && content) {
-            autoGrow({ target: contentRef } as Event);
+        if (contentRef) {
+            autoGrow(contentRef);
         }
     });
 </script>
@@ -61,7 +63,7 @@
         bind:this={contentRef}
         onfocus={handleContentFocus}
         onblur={handleContentBlur}
-        oninput={autoGrow}
+        oninput={handleContentInput}
         maxlength={MAX_CONTENT_CHARS}
         id="content"
         name="content"

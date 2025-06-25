@@ -1,5 +1,4 @@
 
-import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { comments, type CommentSchema } from '$lib/schemas/Comments.ts';
 import { marked } from 'marked';

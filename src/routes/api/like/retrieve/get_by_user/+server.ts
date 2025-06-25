@@ -5,9 +5,9 @@ import { postPageLimit } from '../../../posts/retrieve/retrieval.config.ts';
 import { posts } from '$lib/schemas/Posts.ts';
 import { likes } from '$lib/schemas/Likes.ts'; 
 import { isLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
-import PostSerializer from '$lib/serializers/PostSerializer.ts';
 import ImageService from '$lib/server/ImageService.ts';
 import { user } from '$lib/schemas/authentication.ts';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 
 
 export const GET = async ({ request }): Promise<Response> => {
@@ -86,7 +86,7 @@ export const GET = async ({ request }): Promise<Response> => {
         const totalPages = Math.ceil(Number(totalCount) / postPageLimit);
 
         const images = await ImageService.getS3Objects(postData);
-        const conformedPostData = PostSerializer.serializedPostDataAndAlignImages(postData, images);
+        const conformedPostData = Generalizer.serializedPostDataAndAlignImages(postData, images);
 
 
         return new Response(JSON.stringify({
