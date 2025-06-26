@@ -40,8 +40,8 @@
 
 /* User Avatar */
 .user-avatar {
-    width: 2.25rem; /* Slightly larger avatar for presence */
-    height: 2.25rem; /* Consistent size */
+    width: 3.25rem; /* Slightly larger avatar for presence */
+    height: 3.25rem; /* Consistent size */
     border-radius: 12px; /* Softer, slightly more rounded corners for the container */
     border: 2px solid var(--color-card-border); /* Thinner, more modern border */
     background-color: var(--color-card); /* Background for consistency */

@@ -113,9 +113,12 @@
 		event.preventDefault();
 		const formElement = event.target as HTMLFormElement;
 
+		console.log(formElement)
+
 		const titleInput = formElement.elements.namedItem('title') as HTMLInputElement;
 		const contentInput = formElement.elements.namedItem('content') as HTMLInputElement;
 		const categoryInput = formElement.elements.namedItem('category') as HTMLInputElement;
+
 
 		try {
 			isSubmitting = true;

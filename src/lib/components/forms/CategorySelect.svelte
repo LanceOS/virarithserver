@@ -24,7 +24,7 @@
         name="category"
         bind:value={selectedCategory}
         required
-        class="input w-full cursor-pointer transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
+        class="dropdown-selector w-full"
     >
         <option value="Select a category" disabled selected>Select a category</option>
 

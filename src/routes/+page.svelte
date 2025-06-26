@@ -5,7 +5,6 @@
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types.js';
 	import Footer from '$lib/components/landing/Footer.svelte';
-	import { goto } from '$app/navigation';
 
 	const { data } = $props<{ data: PageData }>();
 
@@ -14,6 +13,20 @@
 	let discordVisible = false;
 	let featuresVisible = false;
 	let communityVisible = false;
+
+	const serverIp = '54.39.250.197:25598';
+    let copied = $state(false);
+
+    const copyIpToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(serverIp);
+            copied = true;
+            setTimeout(() => copied = false, 2000);
+        } catch (err) {
+            console.error('Failed to copy IP: ', err);
+            alert('Failed to copy IP. Please copy it manually: ' + serverIp);
+        }
+    }
 </script>
 
 <Header />
@@ -33,12 +46,25 @@
 
 				<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
 					<button class="btn-big"> Join Server Now </button>
-					<button class="btn-big-active"> Vote </button>
+					<a href="/pages/vote" class="btn-big-active"> Vote </a>
 				</div>
 
-				<div class="bg-base inline-block p-6 w-1/2 mx-auto">
-					<p class="muted mb-2 text-sm">Server IP:</p>
-					<p class="content font-mono text-xl font-semibold">54.39.250.197:25598</p>
+				<div class="p-8 border-muted w-full max-w-1/2 mx-auto">
+					<div class="flex items-center justify-between gap-4">
+						<code class="text-lg flex-1 text-left">
+							{serverIp}
+						</code>
+						<button onclick={copyIpToClipboard}
+								class="btn-small {copied ? 'btn-small-active' : ''}">
+							{#if copied}
+								<Icon icon="lucide:check" class="w-4 h-4 mr-2" />
+								Copied
+							{:else}
+								<Icon icon="lucide:copy" class="w-4 h-4 mr-2" />
+								Copy
+							{/if}
+						</button>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -47,7 +73,7 @@
 			<h3 class="content text-2xl font-semibold">Our Staff</h3>
 			<div class="max-h-60 flex flex-wrap gap-4 overflow-y-auto pr-2">
 				{#each staffUsers as staff}
-					<div class="flex items-center gap-3">
+					<div class="flex items-center gap-3 py-2">
 						{#if staff.image && staff.image !== 'placeholder'}
 							<div class="user-avatar h-10 w-10 flex-shrink-0">
 								<img
@@ -58,7 +84,7 @@
 							</div>
 						{/if}
 						<div class="flex flex-col gap-0.5">
-							<button class="btn-nav text-base font-medium" onclick={() => goto(`/pages/profile/${staff.id}`)}>{staff.name}</button>
+							<a class="btn-nav text-base font-medium" href={`/pages/profile/${staff.id}`}>{staff.name}</a>
 							<p class="text-muted text-xs">{staff.role.toUpperCase()}</p>
 						</div>
 					</div>
@@ -83,10 +109,10 @@
 					<p class="muted mb-4 text-sm">
 						Support the server and earn rewards by voting on server lists
 					</p>
-					<button class="read-more-btn">
+					<a href="/pages/vote" class="read-more-btn">
 						Vote Now
 						<Icon icon="lucide:arrow-right" class="h-4 w-4" />
-					</button>
+					</a>
 				</div>
 			</div>
 		</section>

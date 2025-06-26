@@ -6,7 +6,7 @@ import { bucketName, minioClient } from "./MinIO.ts";
 
 
 type PostedObject = NewPost | NewComment;
-type PostedObjectArray = NewPost[] | NewComment[];
+type PostedObjectArray = (NewPost | NewComment)[];
 
 
 class AvatarService {
@@ -48,6 +48,7 @@ class AvatarService {
         }
         catch (error) {
             console.log(error)
+            throw new Error("Failed to align user avatars");
         }
     }
 }

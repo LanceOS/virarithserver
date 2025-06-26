@@ -87,7 +87,7 @@
             />
         {:else}
             <p class="text-[var(--color-base-content)] text-sm">
-                {profile.minecraftName || 'Not set'}
+                {@html profile.minecraftName || 'Not set'}
             </p>
         {/if}
     </div>
@@ -106,7 +106,7 @@
             />
         {:else}
             <p class="text-[var(--color-base-content)] text-sm">
-                {profile.discordName || 'Not set'}
+                {@html profile.discordName || 'Not set'}
             </p>
         {/if}
     </div>

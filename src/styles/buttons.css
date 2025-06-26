@@ -2,17 +2,18 @@
 
 /* Base Button Styles - Applied to all main button types for consistency */
 .btn-small,
-.btn-small-active, /* Added to base styles */
+.btn-small-active,
 .btn-big,
-.btn-big-active, /* Added to base styles */
+.btn-big-active,
 .btn-discord,
 .btn-google,
-.read-more-btn {
-    border: none; /* Remove default borders for a cleaner look */
-    border-radius: 8px; /* Consistent rounded corners */
+.read-more-btn,
+.btn-delete {
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out; /* Smoother transitions for all states */
-    font-weight: 600; /* Modern font weight */
+    transition: all 0.2s ease-in-out;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     display: inline-flex;
@@ -22,19 +23,19 @@
     overflow: hidden;
 }
 
-/* Focus state for accessibility - Applied universally */
+/* Add to focus state for accessibility */
 .btn-small:focus-visible,
-.btn-small-active:focus-visible, /* Ensured focus for active small button */
+.btn-small-active:focus-visible,
 .btn-big:focus-visible,
-.btn-big-active:focus-visible, /* Ensured focus for active big button */
+.btn-big-active:focus-visible,
 .btn-discord:focus-visible,
 .btn-google:focus-visible,
 .read-more-btn:focus-visible,
-.btn-nav:focus-visible {
-    outline: 3px solid var(--color-focus-ring); /* Strong, accessible focus ring */
+.btn-nav:focus-visible,
+.btn-delete:focus-visible {
+    outline: 3px solid var(--color-focus-ring);
     outline-offset: 2px;
 }
-
 
 /* Small Buttons */
 .btn-small {
@@ -236,14 +237,35 @@
     color: var(--color-base);
 }
 
-/* Disabled State - Applied universally */
+.btn-delete {
+    background-color: var(--color-error); /* Assuming a --color-danger variable for red */
+    color: var(--color-base-content); /* Assuming light text for contrast */
+    padding: 0.75rem 1.75rem; /* Matches btn-small padding */
+    font-size: 0.875rem; /* Matches btn-small font size */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08); /* Matches btn-small shadow */
+}
+
+.btn-delete:hover {
+    background-color: var(--color-error-dark); /* A darker red for hover state */
+    transform: translateY(-2px); /* Matches btn-small hover effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); /* Matches btn-small hover shadow */
+}
+
+.btn-delete:active {
+    transform: translateY(0); /* Matches btn-small active effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Matches btn-small active shadow */
+    background-color: var(--color-error-dark); /* Keep hover background on active */
+}
+
+/* Add to disabled state */
 .btn-small:disabled,
-.btn-small-active:disabled, /* Ensured disabled for active small button */
+.btn-small-active:disabled,
 .btn-big:disabled,
-.btn-big-active:disabled, /* Ensured disabled for active big button */
+.btn-big-active:disabled,
 .btn-discord:disabled,
 .btn-google:disabled,
-.read-more-btn:disabled {
+.read-more-btn:disabled,
+.btn-delete:disabled {
     background-color: var(--color-disabled-background);
     color: var(--color-disabled-content);
     cursor: not-allowed;
@@ -253,12 +275,13 @@
 }
 
 .btn-small:disabled:hover,
-.btn-small-active:disabled:hover, /* Ensured disabled hover for active small button */
+.btn-small-active:disabled:hover,
 .btn-big:disabled:hover,
-.btn-big-active:disabled:hover, /* Ensured disabled hover for active big button */
+.btn-big-active:disabled:hover,
 .btn-discord:disabled:hover,
 .btn-google:disabled:hover,
-.read-more-btn:disabled:hover {
+.read-more-btn:disabled:hover,
+.btn-delete:disabled:hover {
     background-color: var(--color-disabled-background);
     color: var(--color-disabled-content);
 }

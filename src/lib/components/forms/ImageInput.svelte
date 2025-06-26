@@ -22,7 +22,7 @@
         onchange={handleFileChange}
         readonly={imagePreviews.length >= MAX_FILES}
         class={`
-            input w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none
+            dropdown-selector w-full transition-all duration-200 focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none
             ${
                 imagePreviews.length >= MAX_FILES
                     ? 'pointer-events-none cursor-not-allowed opacity-50'

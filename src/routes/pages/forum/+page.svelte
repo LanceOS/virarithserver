@@ -111,14 +111,14 @@
 
 <Header />
 <main class="mx-auto max-w-7xl px-4 py-8">
-    <section class="mb-8 pb-6 card-border-subtle border-b">
+    <section class="mb-8 pb-6 border-b">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
                 <h1 class="text-3xl font-semibold" style="color: var(--color-base-content);">Forums</h1>
                 <p class="font-regular" style="color: var(--color-text-secondary);">Discuss the latest and greatest happening on Virarith!</p>
             </div>
             {#if $session.data?.user}
-                <button class="btn-primary btn-medium" onclick={() => goto('/pages/create_post')}>
+                <button class="btn-small" onclick={() => goto('/pages/create_post')}>
                     Create Post
                 </button>
             {/if}

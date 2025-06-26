@@ -9,12 +9,12 @@
 </script>
 
 <div class="flex items-center gap-4">
-    <label for="postFilter" class="text-xl" style="color: var(--color-base-content);">Sort By:</label>
+    <label for="postFilter" class="text-xl w-full" style="color: var(--color-base-content);">Sort By:</label>
 
     <select
         name="postFilter"
         id="postFilter"
-        class="input cursor-pointer"
+        class="dropdown-selector w-fit"
         bind:value={selected}
     >
         <option value="desc">Newest</option>

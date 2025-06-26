@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ request }) => {
   
         filteredCategories.push(response[i].topic);
       }
-  
+      
       return {
         categories: filteredCategories
       }
@@ -63,6 +63,8 @@ export const actions: Actions = {
                 console.log("failed")
                 return fail(400, { session, missing: true });
             };
+
+            console.log(data)
 
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
@@ -138,7 +140,6 @@ export const actions: Actions = {
             return { success: true, message: 'Form submitted successfully!' };
         }
         catch (error) {
-            console.log(error)
             return fail(500, {
                 message: `Failed to upload data ${error}`,
                 error: true,

@@ -76,12 +76,12 @@
 <section class="flex flex-col justify-center gap-4 lg:w-64 lg:justify-end">
     <div class="h-48 lg:h-64">
         {#if !avatar && !avatarPreviewUrl}
-            <div class="user-avatar flex h-full w-full items-center justify-center">
+            <div class="flex h-full w-full items-center justify-center">
                 <Icon icon="mdi:account-circle" class="text-6xl text-gray-400" />
             </div>
         {:else}
-            <div class="user-avatar h-full p-2">
-                <img src={avatarPreviewUrl || avatar} alt="Profile Avatar" class="h-full w-full object-cover" />
+            <div class="h-full p-2">
+                <img src={avatarPreviewUrl || avatar} alt="Profile Avatar" class="h-full w-full object-cover rounded-lg" />
             </div>
         {/if}
     </div>

@@ -47,25 +47,28 @@ class ProfileService {
             if (!body.id || !body.userId) {
                 throw new Error(`Post information was not provided ${body}`);
             }
+            
+            const newFields = {
+                bio: "",
+                minecraftName: "",
+                discordName: ""
+            };
 
             if (body.bio) {
-                body.bio = await Generalizer.serializeRawText(body.bio)
+                newFields.bio = await Generalizer.serializeRawText(body.bio)
             }
             if (body.minecraftName) {
-                body.minecraftName = await Generalizer.serializeRawText(body.minecraftName)
+                newFields.minecraftName = await Generalizer.serializeRawText(body.minecraftName)
             }
             if (body.discordName) {
-                body.discordName = await Generalizer.serializeRawText(body.discordName)
+                newFields.discordName = await Generalizer.serializeRawText(body.discordName)
             }
 
-
             const response = await DrizzleDB.update(profile).set({
-                bio: body.bio,
-                minecraftName: body.minecraftName,
-                discordName: body.discordName
-            })
-                .where(and(eq(profile.id, body.id), eq(profile.userId, body.userId)))
-                .returning()
+                bio: newFields.bio,
+                minecraftName: newFields.minecraftName,
+                discordName: newFields.discordName
+            }).where(and(eq(profile.id, body.id), eq(profile.userId, body.userId))).returning()
 
             if (response.length === 0) {
                 throw new Error(`Failed to update profile. It may not exist or you may not have permission.`);
@@ -74,7 +77,7 @@ class ProfileService {
             return response[0];
         }
         catch (error) {
-            throw new Error(error)
+            throw new Error(`Failed to update profile due to: ${error.message}`)
         }
     }
 
