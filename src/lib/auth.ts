@@ -20,7 +20,7 @@ export const auth = betterAuth({
                 type: "string",
                 defaultValue: "user"
             }
-        }
+        },
     },
     emailAndPassword: {
         enabled: true,

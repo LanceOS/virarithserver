@@ -1,14 +1,13 @@
-import { PUBLIC_URL } from "$env/static/public";
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import { posts, type PostSchema } from "$lib/schemas/Posts.ts";
-import { marked } from 'marked';
-import sanitizeHtml from 'sanitize-html';
+import Generalizer from "$lib/serializers/Generalizer.ts";
+import { and, eq } from "drizzle-orm";
 
 class PostService {
     interface: PostService | null = null;
 
     constructor() {
-        if(this.interface) return this.interface;
+        if (this.interface) return this.interface;
         this.interface = this;
     }
 
@@ -19,37 +18,14 @@ class PostService {
      */
     static async createPost(post: PostSchema) {
         try {
-            const rawHtmlTitle = await marked(post.title);
-            const rawHtmlContent = await marked(post.content);
-    
-            const cleanContent = sanitizeHtml(rawHtmlContent, {
-                allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-                    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 's', 'u', 'sub', 'sup', 'cite', 'abbr', 'p', 'a'
-                ]),
-                allowedAttributes: {
-                    a: ['href', 'name', 'target'],
-                    img: ['src', 'alt', 'title', 'width', 'height'],
-                },
-            });
-    
-            const cleanTitle = sanitizeHtml(rawHtmlTitle, {
-                allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-                    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a'
-                ]),
-                allowedAttributes: {
-                    a: ['href', 'name', 'target'],
-                    img: ['src', 'alt', 'title', 'width', 'height'],
-                },
-            });
-    
             const cleanPost = {
-                title: cleanTitle,
-                content: cleanContent,
+                title: await Generalizer.serializeRawText(post.title),
+                content: await Generalizer.serializeRawText(post.content),
                 userId: post.userId,
                 category: post.category,
                 type: "post"
             };
-    
+
             /**
              * Creating new post with drizzle
              */
@@ -64,18 +40,21 @@ class PostService {
 
     static async updatePost(post: PostSchema) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/edit`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(post)
-            })
 
-            const data = await response.json()
-            return data;
+            if(!post.id) {
+                throw new Error("Failed to recieve post id.")
+            }
+
+            const response = await DrizzleDB.update(posts).set({
+                title: await Generalizer.serializeRawText(post.title),
+                content: await Generalizer.serializeRawText(post.content),
+                category: post.category,
+                isEdited: true
+            }).where(and(eq(posts.id, post.id), eq(posts.userId, post.userId))).returning()
+
+            return response;
         }
-        catch(error: unknown) {
+        catch (error: unknown) {
             throw new Error(`Failed to update post ${error}`)
         }
     }

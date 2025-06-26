@@ -1,3 +1,4 @@
+import { PUBLIC_URL } from "$env/static/public";
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import { user } from "$lib/schemas/authentication.ts";
 import { eq, or } from "drizzle-orm";
@@ -44,6 +45,25 @@ class UserService {
         }
         catch(error) {
             throw new Error(`Failed to get staff members: ${error}`)
+        }
+    }
+
+
+    static async deleteUser() {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/user/delete`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+
+            if(response) {
+                return true;
+            }
+        }
+        catch(error) {
+            throw new Error(`Failed to delete user ${error}`)
         }
     }
 

@@ -68,7 +68,7 @@ export const actions: Actions = {
 
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
-
+            console.log(updatedPost)
             await PostService.updatePost(updatedPost)
 
             if (!updatedPost) {
