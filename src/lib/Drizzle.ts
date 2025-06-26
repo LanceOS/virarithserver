@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { PRIVATE_POSTGRES_DB, PRIVATE_POSTGRES_PASSWORD, PRIVATE_POSTGRES_URL, PRIVATE_POSTGRES_USER } from '$env/static/private';
 import { Pool } from 'pg';
 
 
@@ -15,7 +16,7 @@ import * as notifications from "./schemas/Notifications.ts"
 import * as images from "./schemas/Images.ts"
 import * as likes from "./schemas/Likes.ts"
 
-const databaseUrl = `postgresql://${process.env.POSTGRES_USER!}:${process.env.POSTGRES_PASSWORD!}@localhost:5432/${process.env.POSTGRES_DB!}`;
+const databaseUrl = `postgresql://${PRIVATE_POSTGRES_USER}:${PRIVATE_POSTGRES_PASSWORD}@${PRIVATE_POSTGRES_URL}/${PRIVATE_POSTGRES_DB}`;
 
 
 const pool = new Pool({
@@ -25,6 +26,30 @@ const pool = new Pool({
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
     connectionTimeoutMillis: 2000, // how long to wait to acquire a client before timing out
 });
+    
+pool.on("connect", (client) => {
+    console.log("New client connected")
+})
+pool.on("error", (fuckers, client) => {
+    console.error("Refused to connect to client:", fuckers)
+    console.error("Database URL:", databaseUrl)
+})
+pool.on("acquire", (client) => {
+    console.log("Client has been acquired from the pool")
+})
+
+async function testConnection() {
+    try {
+        const client = await pool.connect();
+        console.log("Database connection test successful");
+        client.release()
+    }
+    catch(error) {
+        console.error(error)
+    }
+}
+
+testConnection()
 
 /**
  * importing all schemas and combining them into an object
@@ -42,5 +67,6 @@ const schemas = {
     ...images,
     ...likes
 }
+
 
 export const DrizzleDB = drizzle(pool, { schema: schemas })

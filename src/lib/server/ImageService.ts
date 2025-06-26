@@ -6,6 +6,7 @@ import type { PostSchema } from "$lib/schemas/Posts.ts";
 import { bucketName, minioClient } from "$lib/server/MinIO.ts";
 import { and, eq } from "drizzle-orm";
 import type { ImageWithUrl } from "$lib/@types/IImage.ts";
+import { PUBLIC_MINIO_ENDPOINT } from "$env/static/public";
 
 type PostedObject = PostSchema | CommentSchema | CommentReplySchema;
 type PostedObjectArray = PostSchema[] | CommentSchema[] | CommentReplySchema[];
@@ -65,12 +66,13 @@ class ImageService {
         const imagePromises = drizzleImageObjects.map(async (imageObj: ImageSchema): Promise<ImageWithUrl> => {
             try {
                 const url = await minioClient.presignedGetObject(bucketName, imageObj.bucketObjectId, expirySeconds);
-
+                let _url = new URL(url);
+                _url.host = PUBLIC_MINIO_ENDPOINT
                 return {
                     id: imageObj.id!,
                     objectId: imageObj.objectId,
                     objectType: imageObj.objectType,
-                    url: url,
+                    url: _url.toString(),
                     bucketObjectId: imageObj.bucketObjectId
                 };
             } catch (error) {

@@ -82,11 +82,14 @@ class UserService {
     //             if (typedObject.user?.image && typedObject.user.image !== 'placeholder' && !typedObject.user.image.includes("https")) {
     //                 try {
     //                     const userAvatarUrl = await minioClient.presignedGetObject(bucketName, typedObject.user.image, 3600);
+
+                    // let _url = new URL(userAvatarUrl);
+                    // _url.host = PUBLIC_MINIO_ENDPOINT
     //                     return {
     //                         ...typedObject,
     //                         user: {
     //                             ...typedObject.user,
-    //                             image: userAvatarUrl
+    //                             image: _url
     //                         }
     //                     };
     //                 } catch (presignError) {

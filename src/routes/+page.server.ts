@@ -12,9 +12,7 @@ export const load: PageServerLoad = async ({ request }) => {
         }
     }
     catch(error) {
-        return fail(500, {
-            message: `Failed to get data for page ${error}`,
-            error: true,
-            details: error instanceof Error ? error.message : String(error)
-          });    }
+        console.error(error)
+        return []
+    }
 }

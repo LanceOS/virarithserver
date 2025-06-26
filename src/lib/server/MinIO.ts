@@ -1,15 +1,16 @@
-import { PRIVATE_BUCKET_ACCESS_KEY, PRIVATE_BUCKET_SECRET_KEY } from '$env/static/private';
+import { PRIVATE_BUCKET_ACCESS_KEY, PRIVATE_BUCKET_SECRET_KEY, PRIVATE_MINIO_ENDPOINT } from '$env/static/private';
 import * as Minio from 'minio'
 import { v4 as uuidv4 } from 'uuid';
 
 
 
 export const minioClient = new Minio.Client({
-    endPoint: "localhost",
+    endPoint: PRIVATE_MINIO_ENDPOINT,
     port: 9000,
     useSSL: false,
     accessKey: PRIVATE_BUCKET_ACCESS_KEY,
-    secretKey: PRIVATE_BUCKET_SECRET_KEY
+    secretKey: PRIVATE_BUCKET_SECRET_KEY,
+    region: "us-east-1"
 });
 
 export const bucketName = "virarithbucket"
