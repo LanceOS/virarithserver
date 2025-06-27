@@ -50,6 +50,7 @@
     display: flex; /* For centering icon */
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .image-nav-button:hover {

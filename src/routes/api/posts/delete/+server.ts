@@ -3,6 +3,7 @@ import { DrizzleDB } from '$lib/Drizzle.ts'
 import { commentReply } from '$lib/schemas/CommentReply.ts'
 import { comments } from '$lib/schemas/Comments.ts'
 import { images } from '$lib/schemas/Images.ts'
+import { notifications } from '$lib/schemas/Notifications.ts'
 import { posts, type PostSchema } from '$lib/schemas/Posts.ts'
 import ImageService from '$lib/server/ImageService.ts'
 import S3Service from '$lib/server/S3Service.ts'
@@ -40,6 +41,8 @@ export const PUT = async ({ request }) => {
             await tx.update(commentReply).set({ isDeleted: true }).where(eq(commentReply.postId, post.id!)).execute();
             await tx.delete(images).where(and(eq(images.objectId, post.id!), eq(images.objectType, post.type!), eq(images.userId, userId)))
         })
+        
+        await DrizzleDB.delete(notifications).where(eq(notifications.objectId, post.id!))
 
         await S3Service.deleteImages(drizzleImagesForPosts)
 

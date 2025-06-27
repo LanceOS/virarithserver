@@ -4,7 +4,9 @@ import { DrizzleDB } from '$lib/Drizzle.ts'
 import { user } from '$lib/schemas/authentication.ts'
 import { commentReply } from '$lib/schemas/CommentReply.ts'
 import { comments } from '$lib/schemas/Comments.ts'
+import { followers } from '$lib/schemas/Followers.ts'
 import { images } from '$lib/schemas/Images.ts'
+import { notifications } from '$lib/schemas/Notifications.ts'
 import { posts } from '$lib/schemas/Posts.ts'
 import { profile } from '$lib/schemas/Profile.ts'
 import { and, eq } from 'drizzle-orm'
@@ -27,10 +29,12 @@ export const DELETE = async ({ request }) => {
             await tx.update(posts).set({ userId: "ghost" }).where(eq(posts.userId, currentUser.id)).execute();
             await tx.update(comments).set({ userId: "ghost" }).where(eq(comments.userId, currentUser.id)).execute();
             await tx.update(commentReply).set({ userId: "ghost" }).where(eq(commentReply.userId, currentUser.id)).execute();
-            await tx.update(images).set({ userId: "ghost" }).where(eq(images.userId, currentUser.id))
+            await tx.update(images).set({ userId: "ghost" }).where(eq(images.userId, currentUser.id)).execute();
         })
 
         await DrizzleDB.transaction(async (tx) => {
+            await tx.delete(followers).where(eq(followers.followingUserId, currentUser.id)).execute();
+            await tx.delete(notifications).where(eq(notifications.senderId, currentUser.id)).execute();
             await tx.delete(profile).where(eq(profile.userId, currentUser.id)).execute();
             await tx.delete(user).where(and(eq(user.id, currentUser.id), eq(user.email, currentUser.email))).execute();
         })

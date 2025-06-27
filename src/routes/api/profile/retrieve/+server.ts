@@ -1,4 +1,6 @@
+import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
+import { isFollowing } from '$lib/subqueries/FollowQueries.ts';
 import { and } from 'drizzle-orm';
 
 
@@ -7,12 +9,19 @@ export const GET = async ({ request }): Promise<Response>  => {
         const url = new URL(request.url);
         const userId = url.searchParams.get('userId');
 
+        const session = await auth.api.getSession({
+            headers: request.headers
+        })
+
         if(!userId) {
             throw new Error("User Id must be passed to get profile.")
         }
 
         const profile = await DrizzleDB.query.profile.findFirst({
             where: (profile, { eq }) => and(eq(profile.isDeleted, false), eq(profile.userId, userId)),
+            extras: {
+                isFollowed: isFollowing(userId, session?.user.id).as("is_followed")
+            },
             with: {
                 user: true,
             },

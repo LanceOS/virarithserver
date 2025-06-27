@@ -36,7 +36,7 @@ export const auth = betterAuth({
         google: {
             clientId: PRIVATE_GOOGLE_CLIENT as string,
             clientSecret: PRIVATE_GOOGLE_SECRET as string,
-            redirectURI: `${PUBLIC_URL}/api/auth/callback/discord`
+            redirectURI: `${PUBLIC_URL}/api/auth/callback/google`
         }
     },
     databaseHooks: {

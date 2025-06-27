@@ -1,6 +1,5 @@
 import { auth } from '$lib/auth.ts';
-import { DrizzleDB } from '$lib/Drizzle.ts'
-import { likes } from '$lib/schemas/Likes.ts';
+import { DrizzleDB } from '$lib/Drizzle.ts';
 import NotificationService from '$lib/server/NotificationService.ts';
 
 
@@ -23,7 +22,7 @@ export const POST = async ({ request }) => {
         }
 
         const notification = await NotificationService.generateUserNotification(body);
-        const response = await DrizzleDB.insert(likes).values({ userId: user.id, objectId: body.objectId, objectType: body.objectType }).returning();
+        const response = await DrizzleDB.insert(followers).values({ userId: user.id, objectId: body.objectId, objectType: body.objectType }).returning();
 
         return new Response(JSON.stringify({
             notification: notification,

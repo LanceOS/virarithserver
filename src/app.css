@@ -27,6 +27,11 @@
     --color-primary: #50B050; /* Vibrant Grass Block Green (buttons, links) */
     --color-secondary: #8B8B8B; /* Stone/Andesite Grey (secondary actions) */
 
+    /* Button Text Colors */
+    /* Button Text Colors */
+    --color-button-primary-content: #FFFFFF; /* White text for primary/secondary buttons */
+    --color-button-secondary-content: #E0E0E0; /* Darker text for outlined/ghost buttons */
+
     /* Status */
     --color-error: #D04040; /* Redstone Dust Red (errors) */
     --color-muted: #6A6A6A; /* Mossy Cobblestone Grey (disabled/inactive) */

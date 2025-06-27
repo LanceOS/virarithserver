@@ -1,6 +1,6 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { likes } from '$lib/schemas/Likes.ts';
-import UserService from '$lib/server/UserService.ts';
+import NotificationService from '$lib/server/NotificationService.ts';
 import { eq } from 'drizzle-orm';
 
 
@@ -13,7 +13,7 @@ export const DELETE = async ({ request }) => {
         }
 
 
-        await UserService.removeUserNotification(body)
+        await NotificationService.removeUserNotification(body)
         const response = await DrizzleDB.delete(likes).where(eq(likes.objectId, body.objectId))
 
         return new Response(JSON.stringify(response), {

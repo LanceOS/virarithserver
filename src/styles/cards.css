@@ -3,8 +3,7 @@
 /* Base Card Background - for simpler card-like elements */
 .bg-card {
     background-color: var(--color-card);
-    /* Retaining a subtle shadow for depth, but modernizing it */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    /* box-shadow removed */
     border-radius: 8px; /* Consistent with button rounding */
 }
 
@@ -14,17 +13,14 @@
     border-radius: 12px; /* A bit more pronounced rounding for cards */
     padding: 2rem;
     /* Smoother, slightly slower transition for a more refined feel */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out; /* box-shadow transition removed */
     border: 1px solid var(--color-border-subtle); /* Thinner, more subtle border */
-    /* Modern, softer shadow for initial state */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* box-shadow removed */
 }
 
 .card-setup:hover {
-    /* Enhanced, more pronounced shadow on hover for depth */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* box-shadow removed */
 }
-
 
 /* Role Card - for smaller, informational tags/pills */
 .role-card {
@@ -40,9 +36,8 @@
     color: var(--color-base-content); /* Use base content color for versatility */
     background-color: var(--color-primary); /* Default to primary for visibility */
     border: none; /* Remove border for a cleaner, filled-pill look */
-    /* Small, diffused shadow for subtle elevation */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transitions */
+    /* box-shadow removed */
+    transition: background-color 0.2s ease-in-out; /* box-shadow transition removed */
 }
 
 /* Optional: Add specific colors for different role types if needed, e.g.: */
@@ -61,5 +56,5 @@
 .role-card:hover {
     /* Slight darkening or lightening on hover for interactivity */
     background-color: var(--color-primary-hover);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    /* box-shadow removed */
 }

@@ -17,6 +17,7 @@
 	import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import RoleCard from '$lib/components/cards/RoleCard.svelte';
+	import FollowButton from '$lib/components/actions/FollowButton.svelte';
 
 	const userPage = page.params.user;
 
@@ -37,7 +38,6 @@
 
 	let activeTab: 'posts' | 'comments' = $state('posts');
 
-	let isFollowing: boolean = $state(false);
 	let isEditing: boolean = $state(false);
 	let isLoading: boolean = $state(false);
 	let newProfileInfo = $state({
@@ -105,10 +105,6 @@
 		} else if (activeTab === 'comments') {
 			await fetchComments(pagination.currentPage - 1);
 		}
-	};
-
-	const handleFollow = () => {
-		isFollowing = !isFollowing;
 	};
 
 	const handleEdit = () => {
@@ -243,16 +239,7 @@
 									</button>
 								{:else}
 									{#if !isEditing && profile.userId !== $session.data?.user.id}
-										<button
-											onclick={handleFollow}
-											class={isFollowing ? 'btn-small-active' : 'btn-small'}
-										>
-											<Icon
-												icon={isFollowing ? 'mdi:account-check' : 'mdi:account-plus'}
-												class="iconify"
-											></Icon>
-											{isFollowing ? 'Following' : 'Follow'}
-										</button>
+										<FollowButton bind:profile />
 									{/if}
 
 									{#if profile.userId === $session.data?.user.id}

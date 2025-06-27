@@ -118,9 +118,9 @@
                 <p class="font-regular" style="color: var(--color-text-secondary);">Discuss the latest and greatest happening on Virarith!</p>
             </div>
             {#if $session.data?.user}
-                <button class="btn-small" onclick={() => goto('/pages/create_post')}>
+                <a class="btn-small" href="/pages/create_post">
                     Create Post
-                </button>
+                </a>
             {/if}
         </div>
     </section>
@@ -165,9 +165,9 @@
                     <Icon icon="material-symbols:info-outline" class="text-5xl" style="color: var(--color-muted);" />
                     <p class="text-base" style="color: var(--color-base-content);">No posts found. Be the first to create one!</p>
                     {#if $session.data?.user}
-                        <button class="btn-primary btn-medium" onclick={() => goto('/pages/create_post')}>
+                        <a class="btn-small btn-medium" href="/pages/create_post">
                             Create Post
-                        </button>
+                        </a>
                     {/if}
                 </section>
             {/if}

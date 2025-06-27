@@ -121,13 +121,13 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 export const followersRelations = relations(followers, ({ one }) => ({
     // The user who is doing the following
     followerUser: one(user, {
-        fields: [followers.userId],
+        fields: [followers.followingUserId],
         references: [user.id],
         relationName: "user_following"
     }),
     // The user or entity being followed
-    followedEntity: one(user, { 
-        fields: [followers.objectId],
+    followedUser: one(user, { 
+        fields: [followers.followedUserId],
         references: [user.id],
         relationName: "user_followers" 
     }),
