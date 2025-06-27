@@ -14,14 +14,14 @@ class LikeClient {
     instance: LikeClient | null = null;
 
     constructor() {
-        if(this.instance) return this.instance;
+        if (this.instance) return this.instance;
         this.instance = this;
     }
 
 
     static async likeObject(data: {
-        userId: string;
-        recievingUser: string;
+        senderId: string;
+        recieverId: string;
         objectId: string;
         objectType: string;
     }) {
@@ -36,12 +36,18 @@ class LikeClient {
 
             return true;
         }
-        catch(error) {
+        catch (error) {
+            console.error(`Failed to like object: ${error}`)
             throw new Error(`Failed to like object: ${error}`)
         }
     }
 
-    static async unlikeObject(data: LikeSchema) {
+    static async unlikeObject(data: {
+        senderId: string;
+        recieverId: string;
+        objectId: string;
+        objectType: string;
+    }) {
         try {
             await fetch(`${PUBLIC_URL}/api/like/unlike`, {
                 method: "DELETE",
@@ -53,7 +59,7 @@ class LikeClient {
 
             return true;
         }
-        catch(error) {
+        catch (error) {
             throw new Error(`Failed to like object: ${error}`)
         }
     }
@@ -66,7 +72,7 @@ class LikeClient {
                 },
             })
 
-            const data = await response.json(); 
+            const data = await response.json();
             return data;
         }
         catch (error) {

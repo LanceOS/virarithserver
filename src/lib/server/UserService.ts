@@ -10,8 +10,8 @@ import { and, eq, or } from "drizzle-orm";
 interface INotification {
     objectId: string;
     objectType: string;
-    recievingUser: string;
-    userId: string;
+    recieverId: string;
+    senderId: string;
 }
 
 class UserService {
@@ -78,14 +78,14 @@ class UserService {
 
     static async generateUserNotification(object: INotification): Promise<NotificationSchema> {
         try {
-            if (!object.userId || !object.recievingUser || !object.objectId) {
+            if (!object.senderId || !object.recieverId || !object.objectId) {
                 throw new Error(`Missing required data to create new notification: ${object}`)
             }
-
+            
             const response = await DrizzleDB.insert(notifications)
                 .values({
-                    senderId: object.userId,
-                    recieverId: object.recievingUser,
+                    senderId: object.senderId,
+                    recieverId: object.recieverId,
                     objectId: object.objectId,
                     objectType: object.objectType
                 })
@@ -98,16 +98,29 @@ class UserService {
             return response[0]
         }
         catch (error) {
-            console.error(`Failed to create new notification: ${error}`);
+            console.error(`Failed to create new notification: ${error} due to ${object}`);
             throw new Error(`Failed to create new notification: ${error}`)
         }
 
     }
 
+    static async removeUserNotification(object: INotification): Promise<boolean> {
+        try {
+
+            await DrizzleDB.delete(notifications)
+                .where(and(eq(notifications.objectId, object.objectId), eq(notifications.objectType, object.objectType), eq(notifications.senderId, object.senderId)))
+
+            return true;
+        }
+        catch (error) {
+            throw new Error(`Failed to remove user notification: ${error}`)
+        }
+    }
+
     static async getUserNotification(userId: string) {
         try {
 
-            if(!userId) {
+            if (!userId) {
                 throw new Error(`Failed to get user Id required for recieving notifications: ${userId}`)
             }
 
@@ -117,7 +130,7 @@ class UserService {
                     sender: true
                 }
             });
-            
+
             return response;
         }
         catch (error) {

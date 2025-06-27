@@ -18,6 +18,19 @@
     transform: translateY(-2px); /* Gentle lift on hover */
 }
 
+.stat-icon:disabled {
+    background-color: var(--color-disabled-background);
+    color: var(--color-disabled-content);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.stat-icon:disabled:hover {
+    background-color: var(--color-disabled-background);
+    color: var(--color-disabled-content);
+}
+
 .stat-icon {
     width: 20px; /* Slightly larger icon for better visibility */
     height: 20px; /* Consistent size */

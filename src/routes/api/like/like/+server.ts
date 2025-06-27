@@ -16,12 +16,14 @@ export const POST = async ({ request }) => {
             throw new Error("Must be logged in to like.")
         }
 
+        const user = session.user
+
         if(!body.objectId || !body.objectType) {
             throw new Error("Failed to data to like object")
         }
 
-        const notification = await UserService.generateUserNotification(body)
-        const response = await DrizzleDB.insert(likes).values(body).returning();
+        const notification = await UserService.generateUserNotification(body);
+        const response = await DrizzleDB.insert(likes).values({ userId: user.id, objectId: body.objectId, objectType: body.objectType }).returning();
 
         return new Response(JSON.stringify({
             notification: notification,
