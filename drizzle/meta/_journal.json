@@ -337,6 +337,13 @@
       "when": 1750992998553,
       "tag": "0047_dizzy_charles_xavier",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1750995880756,
+      "tag": "0048_gigantic_naoko",
+      "breakpoints": true
     }
   ]
 }

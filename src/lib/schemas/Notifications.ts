@@ -1,4 +1,4 @@
-import { pgTable, timestamp, text, boolean, uuid } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, text, boolean, uuid, index } from "drizzle-orm/pg-core";
 import { user } from "./authentication.ts";
 import { sql, type InferInsertModel } from "drizzle-orm";
 
@@ -14,6 +14,8 @@ export const notifications = pgTable('notifications', {
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
-})
+}, (table) => [
+    index("notifications_sender_created_at_desc").on(table.senderId.desc()),
+])
 
 export type NotificationSchema = InferInsertModel<typeof notifications>;

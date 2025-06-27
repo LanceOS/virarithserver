@@ -15,6 +15,7 @@ import * as authentication from "./schemas/authentication.ts"
 import * as notifications from "./schemas/Notifications.ts"
 import * as images from "./schemas/Images.ts"
 import * as likes from "./schemas/Likes.ts"
+import * as followers from "./schemas/Followers.ts"
 
 const databaseUrl = `postgresql://${PRIVATE_POSTGRES_USER}:${PRIVATE_POSTGRES_PASSWORD}@${PRIVATE_POSTGRES_URL}/${PRIVATE_POSTGRES_DB}`;
 
@@ -65,7 +66,8 @@ const schemas = {
     ...authentication,
     ...notifications,
     ...images,
-    ...likes
+    ...likes,
+    ...followers
 }
 
 

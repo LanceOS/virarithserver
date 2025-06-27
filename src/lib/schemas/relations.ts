@@ -9,6 +9,7 @@ import { likes } from "./Likes.ts";
 import { profile } from "./Profile.ts";
 import { images } from "./Images.ts";
 import { notifications } from "./Notifications.ts";
+import { followers } from "./Followers.ts";
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
     user: one(user, {
@@ -41,6 +42,15 @@ export const usersRelations = relations(user, ({ many, one }) => ({
     // A user can receive many notifications
     receivedNotifications: many(notifications, {
         relationName: "received_notifications"
+    }),
+
+    // A user can follow many entities
+    following: many(followers, {
+        relationName: "user_following"
+    }),
+
+    followers: many(followers, {
+        relationName: "user_followers"
     }),
 }));
 
@@ -96,14 +106,29 @@ export const imagesRelations = relations(images, ({ one }) => ({
 export const notificationsRelations = relations(notifications, ({ one }) => ({
     // 'sender' relation: A notification has one sender (a user)
     sender: one(user, {
-        fields: [notifications.senderId], // The foreign key in notifications
-        references: [user.id],       // The primary key in user
-        relationName: "sent_notifications" // Name the relation to distinguish from receiver
+        fields: [notifications.senderId],
+        references: [user.id],       
+        relationName: "sent_notifications" 
     }),
     // 'receiver' relation: A notification has one receiver (another user)
     receiver: one(user, {
-        fields: [notifications.recieverId], // The foreign key in notifications
-        references: [user.id],               // The primary key in user
-        relationName: "received_notifications" // Name the relation to distinguish from sender
+        fields: [notifications.recieverId],
+        references: [user.id],               
+        relationName: "received_notifications" 
+    }),
+}));
+
+export const followersRelations = relations(followers, ({ one }) => ({
+    // The user who is doing the following
+    followerUser: one(user, {
+        fields: [followers.userId],
+        references: [user.id],
+        relationName: "user_following"
+    }),
+    // The user or entity being followed
+    followedEntity: one(user, { 
+        fields: [followers.objectId],
+        references: [user.id],
+        relationName: "user_followers" 
     }),
 }));
