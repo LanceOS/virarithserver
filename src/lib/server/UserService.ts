@@ -4,7 +4,7 @@ import { user } from "$lib/schemas/authentication.ts";
 import { eq, or } from "drizzle-orm";
 
 
-// type ContentWithAvatar = NewPost | NewComment | IProfileWithUser;
+// type ContentWithAvatar = NewPost | SerializedComment | IProfileWithUser;
 
 
 class UserService {

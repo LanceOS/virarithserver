@@ -1,4 +1,4 @@
-import UserService from "$lib/server/UserService.ts";
+import NotificationService from "$lib/server/NotificationService.ts";
 import type { PageServerLoad } from "./$types.js";
 
 
@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ params }) => {
     try {
         const userId = params.user;
 
-        const notifications = await UserService.getUserNotification(userId)
+        const notifications = await NotificationService.getUserNotification(userId)
         return {
             notifications: notifications
         }

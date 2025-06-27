@@ -7,6 +7,7 @@
     import CommentEdit from './CommentEdit.svelte';
     import type { CommentSchema } from '$lib/schemas/Comments.ts';
     import RoleCard from '../cards/RoleCard.svelte';
+	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
 
     let { comments, isLoadingComments, handleCommentDelete } = $props<{
         comments: CommentSchema[];
@@ -52,7 +53,7 @@
         editingCommentId = null;
     };
 
-    const deleteComment = async (comment: any) => {
+    const deleteComment = async (comment: SerializedComment) => {
         try {
             await CommentClient.deleteComment(comment);
             handleCommentDelete(comment.id);

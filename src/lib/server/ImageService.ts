@@ -7,9 +7,10 @@ import { bucketName, minioClient } from "$lib/server/MinIO.ts";
 import { and, eq } from "drizzle-orm";
 import type { ImageWithUrl } from "$lib/@types/IImage.ts";
 import { PUBLIC_MINIO_ENDPOINT } from "$env/static/public";
+import type { PostWithImage } from "$lib/@types/IPostSerializer.ts";
 
-type PostedObject = PostSchema | CommentSchema | CommentReplySchema;
-type PostedObjectArray = PostSchema[] | CommentSchema[] | CommentReplySchema[];
+type PostedObject = PostSchema | CommentSchema | CommentReplySchema | PostWithImage;
+type PostedObjectArray = PostSchema[] | CommentSchema[] | CommentReplySchema[] | PostWithImage[];
 
 class ImageService {
     instance: ImageService | null = null;

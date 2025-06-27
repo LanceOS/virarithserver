@@ -22,6 +22,7 @@
 		try {
 			await navigator.clipboard.writeText(serverIp);
 			copied = true;
+			
 			setTimeout(() => (copied = false), 2000);
 		} catch (err) {
 			console.error('Failed to copy IP: ', err);

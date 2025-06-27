@@ -1,6 +1,6 @@
 import type { UserSchema } from "$lib/schemas/authentication.ts";
 
-export interface NewComment {
+export interface SerializedComment {
     id: string;
     createdAt: Date;
     updatedAt: Date | null;

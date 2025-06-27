@@ -1,4 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
+import type { SerializedComment } from "$lib/@types/ICommentSerializer.ts";
 import type { CommentSchema } from "$lib/schemas/Comments.ts";
 
 interface ICommentsParams {
@@ -51,7 +52,7 @@ class CommentClient {
         }
     }
 
-    static async deleteComment(comment: CommentSchema) {
+    static async deleteComment(comment: SerializedComment) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/comments/delete`, {
                 method: "PUT",

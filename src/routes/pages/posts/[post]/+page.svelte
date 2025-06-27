@@ -13,14 +13,14 @@
 	import { page } from '$app/state';
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
-	import type { NewComment } from '$lib/@types/ICommentSerializer.ts';
 	import RoleCard from '$lib/components/cards/RoleCard.svelte';
+	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
 
 	let post: PostWithImage | undefined = $state();
-	let comments: NewComment[] | undefined = $state();
+	let comments: SerializedComment[] | undefined = $state();
 	let isLoadingPost: boolean = $state(true);
 	let isLoadingComments: boolean = $state(false);
 
@@ -55,13 +55,13 @@
 
 	const handleCommentDelete = (commentId: string) => {
 		if (!comments) return;
-		comments = comments.filter((comment: NewComment) => comment.id !== commentId);
+		comments = comments.filter((comment: SerializedComment) => comment.id !== commentId);
 		if (post) {
 			post.commentCount = post.commentCount - 1;
 		}
 	};
 
-	const handleAddComment = (comment: NewComment) => {
+	const handleAddComment = (comment: SerializedComment) => {
 		if (!comments) return;
 		comments = [comment, ...comments];
 		if (post) {

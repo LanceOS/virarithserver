@@ -1,4 +1,4 @@
-import type { NewComment } from "$lib/@types/ICommentSerializer.ts";
+import type { SerializedComment } from "$lib/@types/ICommentSerializer.ts";
 import type { ImageWithUrl } from "$lib/@types/IImage.ts";
 import type { NewPost, PostWithImage } from "$lib/@types/IPostSerializer.ts";
 import { marked } from "marked";
@@ -47,14 +47,14 @@ class Generalizer {
 
     /**
  * @function serializeComment
- * @description Serializes a `NewComment` object into a standardized format.
- * This function ensures that the output conforms to the `NewComment` type,
+ * @description Serializes a `SerializedComment` object into a standardized format.
+ * This function ensures that the output conforms to the `SerializedComment` type,
  * providing a consistent structure for comment data.
  *
- * @param comment - The `NewComment` object to be serialized.
- * @returns A new object with the properties of the `NewComment` in a consistent order and format.
+ * @param comment - The `SerializedComment` object to be serialized.
+ * @returns A new object with the properties of the `SerializedComment` in a consistent order and format.
  */
-    static serializeComment = (comment: NewComment) => {
+    static serializeComment = (comment: SerializedComment) => {
         return {
             id: comment.id,
             content: comment.content,

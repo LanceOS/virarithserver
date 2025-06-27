@@ -1,12 +1,12 @@
-import type { NewComment } from "$lib/@types/ICommentSerializer.ts";
+import type { SerializedComment } from "$lib/@types/ICommentSerializer.ts";
 import type { NewPost } from "$lib/@types/IPostSerializer.ts";
 import { bucketName, minioClient } from "./MinIO.ts";
 
 
 
 
-type PostedObject = NewPost | NewComment;
-type PostedObjectArray = (NewPost | NewComment)[];
+type PostedObject = NewPost | SerializedComment;
+type PostedObjectArray = (NewPost | SerializedComment)[];
 
 
 class AvatarService {
