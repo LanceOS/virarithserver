@@ -6,12 +6,7 @@
     let isSubmitting = $state(profile.isFollowed);
 
     const handleFollow = async () => {
-        if(profile.isFollowed) {
-            profile.isFollowed = false
-        }
-        else {
-            profile.isFollowed = true
-        }
+        
     }
 
 </script>

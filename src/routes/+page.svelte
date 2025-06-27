@@ -5,6 +5,7 @@
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types.js';
 	import Footer from '$lib/components/landing/Footer.svelte';
+	import RoleCard from '$lib/components/cards/RoleCard.svelte';
 
 	const { data } = $props<{ data: PageData }>();
 
@@ -48,15 +49,14 @@
 					<button class="btn-big"> Join Server Now </button>
 					<a href="/pages/vote" class="btn-big-active"> Vote </a>
 				</div>
-
-				<div class="border-muted mx-auto w-full max-w-1/2 p-8">
-					<div class="flex items-center justify-between gap-4">
-						<code class="flex-1 text-left text-lg">
+				<div class="border-muted mx-auto w-full p-4 sm:max-w-1/2 sm:p-8">
+					<div class="flex items-center justify-between gap-2 sm:gap-4">
+						<code class="flex-1 overflow-auto text-left text-base whitespace-nowrap sm:text-lg">
 							{serverIp}
 						</code>
 						<button
 							onclick={copyIpToClipboard}
-							class="btn-small {copied ? 'btn-small-active' : ''}"
+							class="btn-small {copied ? 'btn-small-active' : ''} flex-shrink-0"
 						>
 							{#if copied}
 								<Icon icon="lucide:check" class="mr-2 h-4 w-4" />
@@ -85,11 +85,15 @@
 									/>
 								</div>
 							{/if}
-							<div class="flex flex-col gap-0.5">
-								<a class="btn-nav text-base font-medium" href={`/pages/profile/${staff.id}`}
-									>{staff.name}</a
+							<div class="flex flex-col items-center gap-2">
+								<a
+									class="btn-nav text-base font-medium"
+									style="color: var(--color-base-content)"
+									href={`/pages/profile/${staff.id}`}
 								>
-								<p class="text-muted text-xs">{staff.role.toUpperCase()}</p>
+									{staff.name}
+								</a>
+								<RoleCard role={staff.role} />
 							</div>
 						</div>
 					{/each}

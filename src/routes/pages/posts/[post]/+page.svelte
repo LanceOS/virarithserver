@@ -128,17 +128,16 @@
 			<header class="relative flex items-center justify-between gap-3">
 				<div class="flex items-center gap-2">
 					{#if post.user.image && post.user.image !== 'placeholder'}
-						<img
-							src={post.user.image}
-							alt={post.user.name || 'User avatar'}
-							class="user-avatar"
-						/>
+						<img src={post.user.image} alt={post.user.name || 'User avatar'} class="user-avatar" />
 					{/if}
 					<div class="flex flex-col">
-						<button
+						<a
 							class="btn-nav font-semibold sm:text-lg"
-							onclick={() => goto(`/pages/profile/${post?.user.id}`)}>{post.user.name}</button
+							style="color: var(--color-base-content)"
+							href={`/pages/profile/${post?.user.id}`}
 						>
+							{post.user.name}
+						</a>
 						<time
 							class="text-xs font-light sm:text-sm"
 							datetime={formatDate(post.createdAt)}

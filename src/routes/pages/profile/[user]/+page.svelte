@@ -217,7 +217,7 @@
 						<ProfileAvatar {isEditing} bind:newAvatar avatar={profile?.user.image || undefined} />
 
 						<div class="flex-1 space-y-6 text-center lg:text-left">
-							<div class="flex h-fit items-center gap-4">
+							<div class="flex flex-col h-fit items-center gap-4 sm:flex-row">
 								<h1
 									class="text-3xl font-bold tracking-tight sm:text-4xl"
 									style="color: var(--color-base-content);"
@@ -259,11 +259,11 @@
 												</button>
 											</div>
 										{:else}
-											<button onclick={handleEdit} class="btn-small">
+											<button onclick={handleEdit} class="btn-small flex items-center gap-2">
 												<Icon icon="mdi:account-edit" class="iconify"></Icon>
 												Edit Profile
 											</button>
-											<a href={`/pages/delete_user/${userPage}`} class="btn-delete">
+											<a href={`/pages/delete_user/${userPage}`} class="btn-delete flex items-center gap-2">
 												<Icon icon="mdi:account-edit" class="iconify"></Icon>
 												Delete Account
 											</a>
@@ -275,7 +275,7 @@
 					</div>
 				</div>
 
-				<div class="card-setup p-6">
+				<div class="">
 					<div class="card-border-subtle mb-6 border-b">
 						<nav class="-mb-px flex space-x-6">
 							<button
