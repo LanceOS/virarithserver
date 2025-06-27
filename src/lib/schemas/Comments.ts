@@ -14,8 +14,8 @@ export const comments = pgTable("comments", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 }, (table) => [
-    index("comments_post_id_created_at_index").on(table.postId.desc()).concurrently(),
-    index("comments_created_at_index").on(table.createdAt.desc()).concurrently()
+    index("comments_post_id_created_at_index").on(table.postId.desc()),
+    index("comments_created_at_index").on(table.createdAt.desc())
 ]);
 
 export type CommentSchema = InferInsertModel<typeof comments>;

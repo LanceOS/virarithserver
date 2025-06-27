@@ -13,7 +13,7 @@ export const likes = pgTable("likes", {
     objectType: text("object_type").notNull(),
     createdAt: timestamp("created_at").defaultNow()
 }, (table) => [
-    index("likes_created_at_desc").on(table.createdAt.desc()).concurrently()
+    index("likes_created_at_desc").on(table.createdAt.desc())
 ])
 
 export type LikeSchema = InferInsertModel<typeof likes>;

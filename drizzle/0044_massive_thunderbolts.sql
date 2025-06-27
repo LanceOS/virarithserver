@@ -1,0 +1,2 @@
+ALTER TABLE "notifications" ADD COLUMN "recievingUser" text;--> statement-breakpoint
+ALTER TABLE "notifications" ADD CONSTRAINT "notifications_recievingUser_user_id_fk" FOREIGN KEY ("recievingUser") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;

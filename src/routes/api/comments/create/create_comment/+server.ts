@@ -1,8 +1,7 @@
 
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { comments, type CommentSchema } from '$lib/schemas/Comments.ts';
-import { marked } from 'marked';
-import sanitizeHtml from 'sanitize-html';
+import Generalizer from '$lib/serializers/Generalizer.ts';
 
 
 export const GET = async () => {
@@ -29,20 +28,8 @@ export const POST = async ({ request }): Promise<Response> => {
             throw new Error("Failed to get data for comment")
         }
 
-        const rawHtmlContent = await marked(body.content);
-
-        const cleanContent = sanitizeHtml(rawHtmlContent, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-                'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 's', 'u', 'sub', 'sup', 'cite', 'abbr', 'p', 'br', 'a'
-            ]),
-            allowedAttributes: {
-                a: ['href', 'name', 'target'],
-                img: ['src', 'alt', 'title', 'width', 'height'],
-            },
-        });
-
         const cleanBody = {
-            content: cleanContent,
+            content: await Generalizer.serializeRawText(body.content),
             userId: body.userId,
             postId: body.postId,
             type: "comment"

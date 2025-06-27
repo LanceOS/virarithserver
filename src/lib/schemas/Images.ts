@@ -12,8 +12,8 @@ export const images = pgTable("images", {
     objectType: text("object_type").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (table) => [
-    index("images_created_at_index").on(table.createdAt.desc()).concurrently(),
-    index("images_user_id_index").on(table.userId).concurrently()
+    index("images_created_at_index").on(table.createdAt.desc()),
+    index("images_user_id_index").on(table.userId)
 ])
 
 export type ImageSchema = InferInsertModel<typeof images>

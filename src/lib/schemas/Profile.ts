@@ -13,8 +13,8 @@ export const profile = pgTable('profile', {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 }, (table) => [
-    index("profile_create_at_index").on(table.createdAt).concurrently(),
-    index("profile_user_id_index").on(table.userId).concurrently()
+    index("profile_create_at_index").on(table.createdAt),
+    index("profile_user_id_index").on(table.userId)
 ])
 
 

@@ -1,16 +1,24 @@
 import { PUBLIC_URL } from "$env/static/public";
 import { DrizzleDB } from "$lib/Drizzle.ts";
 import { user } from "$lib/schemas/authentication.ts";
-import { eq, or } from "drizzle-orm";
+import { notifications, type NotificationSchema } from "$lib/schemas/Notifications.ts";
+import { and, eq, or } from "drizzle-orm";
 
 
 // type ContentWithAvatar = NewPost | NewComment | IProfileWithUser;
+
+interface INotification {
+    objectId: string;
+    objectType: string;
+    recievingUser: string;
+    userId: string;
+}
 
 class UserService {
     instance: UserService | null = null;
 
     constructor() {
-        if(this.instance) return this.instance;
+        if (this.instance) return this.instance;
         this.instance = this;
     }
 
@@ -20,11 +28,11 @@ class UserService {
             const updatedUser = await DrizzleDB.update(user).set({
                 image: image
             }).where(eq(user.id, userId))
-            .returning()
+                .returning()
 
             return updatedUser;
         }
-        catch(error) {
+        catch (error) {
             throw new Error(`Failed to updated user avatar: ${error}`)
         }
     }
@@ -43,7 +51,7 @@ class UserService {
 
             return users;
         }
-        catch(error) {
+        catch (error) {
             throw new Error(`Failed to get staff members: ${error}`)
         }
     }
@@ -58,12 +66,62 @@ class UserService {
                 }
             })
 
-            if(response) {
+            if (response) {
                 return true;
             }
         }
-        catch(error) {
+        catch (error) {
             throw new Error(`Failed to delete user ${error}`)
+        }
+    }
+
+
+    static async generateUserNotification(object: INotification): Promise<NotificationSchema> {
+        try {
+            if (!object.userId || !object.recievingUser || !object.objectId) {
+                throw new Error(`Missing required data to create new notification: ${object}`)
+            }
+
+            const response = await DrizzleDB.insert(notifications)
+                .values({
+                    senderId: object.userId,
+                    recieverId: object.recievingUser,
+                    objectId: object.objectId,
+                    objectType: object.objectType
+                })
+                .returning();
+
+            if (!response) {
+                throw new Error(`Failed to create new user notification: ${response} with notification data: ${object}`)
+            }
+
+            return response[0]
+        }
+        catch (error) {
+            console.error(`Failed to create new notification: ${error}`);
+            throw new Error(`Failed to create new notification: ${error}`)
+        }
+
+    }
+
+    static async getUserNotification(userId: string) {
+        try {
+
+            if(!userId) {
+                throw new Error(`Failed to get user Id required for recieving notifications: ${userId}`)
+            }
+
+            const response = await DrizzleDB.query.notifications.findMany({
+                where: and(eq(notifications.recieverId, userId), eq(notifications.type, "notification")),
+                with: {
+                    sender: true
+                }
+            });
+            
+            return response;
+        }
+        catch (error) {
+            console.error(`Failed to retrieve user notifications: ${error}`)
         }
     }
 
@@ -83,8 +141,8 @@ class UserService {
     //                 try {
     //                     const userAvatarUrl = await minioClient.presignedGetObject(bucketName, typedObject.user.image, 3600);
 
-                    // let _url = new URL(userAvatarUrl);
-                    // _url.host = PUBLIC_MINIO_ENDPOINT
+    // let _url = new URL(userAvatarUrl);
+    // _url.host = PUBLIC_MINIO_ENDPOINT
     //                     return {
     //                         ...typedObject,
     //                         user: {

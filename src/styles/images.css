@@ -25,11 +25,12 @@
     position: absolute;
     right: 0.5rem; /* right-2 */
     top: 0.5rem; /* top-2 */
+    z-index: 10;
     cursor: pointer;
     border-radius: 9999px; /* rounded-full */
     background-color: var(--color-error);
     padding: 0.5rem; /* p-2 */
-    color: var(--color-base); /* text-color-base-content (assuming base is white/light on dark error) */
+    color: var(--color-base-content); /* text-color-base-content (assuming base is white/light on dark error) */
     opacity: 0; /* hidden by default, show on group-hover */
     transition: background-color 0.2s ease, opacity 0.2s ease;
 }
@@ -91,3 +92,6 @@
     opacity: 0; /* Hidden if active */
 }
 
+.group:hover .btn-remove-image {
+    opacity: 1; /* Make it visible on group hover */
+}

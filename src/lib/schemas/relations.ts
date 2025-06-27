@@ -8,6 +8,7 @@ import { commentReply } from "./CommentReply.ts";
 import { likes } from "./Likes.ts";
 import { profile } from "./Profile.ts";
 import { images } from "./Images.ts";
+import { notifications } from "./Notifications.ts";
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
     user: one(user, {
@@ -32,6 +33,14 @@ export const usersRelations = relations(user, ({ many, one }) => ({
     profile: one(profile, {
         fields: [user.id],
         references: [profile.userId],
+    }),
+    // A user can send many notifications
+    sentNotifications: many(notifications, {
+        relationName: "sent_notifications"
+    }),
+    // A user can receive many notifications
+    receivedNotifications: many(notifications, {
+        relationName: "received_notifications"
     }),
 }));
 
@@ -81,5 +90,20 @@ export const imagesRelations = relations(images, ({ one }) => ({
     user: one(user, {
         fields: [images.userId],
         references: [user.id],
+    }),
+}));
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+    // 'sender' relation: A notification has one sender (a user)
+    sender: one(user, {
+        fields: [notifications.senderId], // The foreign key in notifications
+        references: [user.id],       // The primary key in user
+        relationName: "sent_notifications" // Name the relation to distinguish from receiver
+    }),
+    // 'receiver' relation: A notification has one receiver (another user)
+    receiver: one(user, {
+        fields: [notifications.recieverId], // The foreign key in notifications
+        references: [user.id],               // The primary key in user
+        relationName: "received_notifications" // Name the relation to distinguish from sender
     }),
 }));

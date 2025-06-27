@@ -35,7 +35,7 @@ pool.on("error", (fuckers, client) => {
     console.error("Database URL:", databaseUrl)
 })
 pool.on("acquire", (client) => {
-    console.log("Client has been acquired from the pool")
+    // console.log("Client has been acquired from the pool")
 })
 
 async function testConnection() {

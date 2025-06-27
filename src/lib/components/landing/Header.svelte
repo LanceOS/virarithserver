@@ -41,42 +41,42 @@
 	<div class="mx-auto flex w-full max-w-7xl items-center justify-end">
 		<nav class="hidden items-center gap-6 md:flex">
 			{#each navigationItems as item}
-				<button
+				<a
 					type="button"
 					aria-label={item.ariaLabel}
 					class="btn-nav"
-					onclick={() => goto(item.path)}
+					href={item.path}
 				>
 					{item.label}
-				</button>
+				</a>
 			{/each}
 
 			{#if !$session.data}
-				<button
+				<a
 					type="button"
 					aria-label="Log In"
 					class="btn-small cursor-pointer px-4 py-2 duration-200"
-					onclick={() => goto('/pages/login')}
+					href="/pages/login"
 				>
 					Log In
-				</button>
+				</a>
 			{:else}
-				<button
+				<a
 					type="button"
 					aria-label="View notifications"
 					class="btn-small cursor-pointer px-4 py-2 duration-200"
-					onclick={() => goto('/pages/notifications')}
+					href={`/pages/notifications/${$session.data.user.id}`}
 				>
 					<Icon icon="material-symbols:notifications-outline" class="h-6 w-6" />
-				</button>
-				<button
+				</a>
+				<a
 					type="button"
 					aria-label="View profile"
 					class="btn-small cursor-pointer px-4 py-2 duration-200"
-					onclick={() => goto(`/pages/profile/${$session.data?.user.id}`)}
+					href={`/pages/profile/${$session.data.user.id}`}
 				>
 					<Icon icon="material-symbols:person-outline" class="h-6 w-6" />
-				</button>
+				</a>
 				<button
 					type="button"
 					aria-label="Log Out"
@@ -104,43 +104,43 @@
 			<div class="bg-base absolute top-16 right-0 left-0 z-50 border-t md:hidden">
 				<nav class="flex flex-col gap-6 px-4 py-8">
 					{#each navigationItems as item}
-						<button
+						<a
 							type="button"
 							aria-label={item.ariaLabel}
 							class="btn-nav w-full px-4 py-2 text-left transition-colors"
-							onclick={() => handleNavigation(item.path)}
+							href={item.path}
 						>
 							{item.label}
-						</button>
+						</a>
 					{/each}
 
 					<div class="flex flex-col gap-4">
 						{#if !$session.data}
-							<button
+							<a
 								type="button"
 								aria-label="Log In"
 								class="btn-small w-full cursor-pointer px-4 py-2 duration-200"
-								onclick={() => handleNavigation('/pages/login')}
+								href="/pages/login"
 							>
 								Log In
-							</button>
+							</a>
 						{:else}
-							<button
+							<a
 								type="button"
 								aria-label="View notifications"
 								class="btn-small w-full cursor-pointer px-4 py-2 duration-200"
-								onclick={() => handleNavigation('/pages/notifications')}
+								href={`/pages/notifications/${$session.data.user.id}`}
 							>
 								Notifications
-							</button>
-							<button
+							</a>
+							<a
 								type="button"
 								aria-label="View profile"
 								class="btn-small w-full px-4 py-2"
-								onclick={() => handleNavigation(`/pages/profile/${$session.data?.user.id}`)}
+								href={`/pages/profile/${$session.data?.user.id}`}
 							>
 								Profile
-							</button>
+							</a>
 							<button
 								type="button"
 								aria-label="Log Out"

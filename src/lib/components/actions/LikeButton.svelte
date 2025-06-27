@@ -21,11 +21,18 @@
         sendingLike = true;
         let wasLiked: boolean = object.isLiked;
 
+        const newObject = {
+            userId: user.id,
+            recievingUser: object.user.id,
+            objectId: object.id,
+            objectType: object.type,
+        }
+
         try {
             if (wasLiked) {
-                await LikeClient.unlikeObject({ userId: user.id, objectId: object.id, objectType: object.type });
+                await LikeClient.unlikeObject(newObject);
             } else {
-                await LikeClient.likeObject({ userId: user.id, objectId: object.id, objectType: object.type });
+                await LikeClient.likeObject(newObject);
             }
 
             object = {

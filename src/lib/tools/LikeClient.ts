@@ -1,4 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
+import type { ILikeSchemaWithRecievingUser } from "$lib/@types/INotifiers.ts";
 import type { LikeSchema } from "$lib/schemas/Likes.ts";
 
 
@@ -7,6 +8,8 @@ interface ILikesParams {
     userId: string;
     page: number;
 }
+
+
 class LikeClient {
     instance: LikeClient | null = null;
 
@@ -16,7 +19,12 @@ class LikeClient {
     }
 
 
-    static async likeObject(data: LikeSchema) {
+    static async likeObject(data: {
+        userId: string;
+        recievingUser: string;
+        objectId: string;
+        objectType: string;
+    }) {
         try {
             await fetch(`${PUBLIC_URL}/api/like/like`, {
                 method: "POST",

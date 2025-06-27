@@ -5,7 +5,8 @@ import { sql, type InferInsertModel } from "drizzle-orm";
 
 export const notifications = pgTable('notifications', {
     id: uuid().primaryKey().notNull().default(sql`gen_random_uuid()`),
-    userId: text("user_id").references(() => user.id),
+    senderId: text("sender_id").references(() => user.id),
+    recieverId: text("recieverId").references(() => user.id),
     objectId: uuid("object_id").notNull(),
     objectType: text("object_type").notNull(),
     type: text("type").default("notification").notNull(),

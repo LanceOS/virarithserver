@@ -41,11 +41,11 @@ export const load: PageServerLoad = async ({ request }) => {
   
     }
     catch(error) {
-      return fail(500, {
+      return {
         message: `Failed to upload data ${error}`,
         error: true,
         details: error instanceof Error ? error.message : String(error)
-      });
+      };
     }
   }
 
@@ -63,9 +63,6 @@ export const actions: Actions = {
                 console.log("failed")
                 return fail(400, { session, missing: true });
             };
-
-            console.log(data)
-
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
             console.log(updatedPost)

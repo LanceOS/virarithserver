@@ -1,4 +1,4 @@
-import { PRIVATE_BUCKET_ACCESS_KEY, PRIVATE_BUCKET_SECRET_KEY, PRIVATE_MINIO_ENDPOINT } from '$env/static/private';
+import { PRIVATE_BUCKET_ACCESS_KEY, PRIVATE_BUCKET_SECRET_KEY, PRIVATE_MINIO_ENDPOINT, PRIVATE_MINIO_PORT } from '$env/static/private';
 import * as Minio from 'minio'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const minioClient = new Minio.Client({
     endPoint: PRIVATE_MINIO_ENDPOINT,
-    port: 9000,
+    port: parseInt(PRIVATE_MINIO_PORT),
     useSSL: false,
     accessKey: PRIVATE_BUCKET_ACCESS_KEY,
     secretKey: PRIVATE_BUCKET_SECRET_KEY,

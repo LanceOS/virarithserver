@@ -205,7 +205,7 @@
 </script>
 
 <Header />
-<main class="bg-base border-muted mx-auto max-w-7xl px-6 py-8">
+<main class="bg-base border-muted mx-auto max-w-7xl px-4 py-8">
 	<div class="">
 		<div class="mb-8">
 			<h1 class="content mb-2 text-3xl font-bold">Edit Post</h1>
@@ -239,11 +239,11 @@
 					!currentBody.trim() ||
 					currentTitle.length > MAX_TITLE_CHARS ||
 					currentBody.length > MAX_CONTENT_CHARS}
-				class="btn-big flex flex-1 items-center justify-center disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
+				class="btn-big flex gap-4 items-center justify-center disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
 			>
 				{#if isSubmitting}
+					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-xl" />
 					<span>
-						<Icon icon="svg-spinners:blocks-shuffle-3" class="text-xl" />
 						Updating...
 					</span>
 				{:else}

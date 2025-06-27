@@ -15,9 +15,9 @@ export const posts = pgTable('posts', {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
 }, (table) => [
-    index("post_created_at_desc_index").on(table.createdAt.desc()).concurrently(),
-    index("post_user_id_created_at_desc_index").on(table.userId, table.createdAt.desc()).concurrently(),
-    index("post_category_created_at_desc_index").on(table.category, table.createdAt.desc()).concurrently()
+    index("post_created_at_desc_index").on(table.createdAt.desc()),
+    index("post_user_id_created_at_desc_index").on(table.userId, table.createdAt.desc()),
+    index("post_category_created_at_desc_index").on(table.category, table.createdAt.desc())
 ])
 
 

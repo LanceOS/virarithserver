@@ -1,18 +1,32 @@
+import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts'
-import { likes, type LikeSchema } from '$lib/schemas/Likes.ts'
+import { likes } from '$lib/schemas/Likes.ts';
+import UserService from '$lib/server/UserService.ts';
 
 
 export const POST = async ({ request }) => {
     try {
-        const body: LikeSchema = await request.json();
+        const body = await request.json();
+
+        const session = await auth.api.getSession({
+            headers: request.headers
+        })
+
+        if(!session?.user) {
+            throw new Error("Must be logged in to like.")
+        }
 
         if(!body.objectId || !body.objectType) {
             throw new Error("Failed to data to like object")
         }
 
+        const notification = await UserService.generateUserNotification(body)
         const response = await DrizzleDB.insert(likes).values(body).returning();
 
-        return new Response(JSON.stringify(response), {
+        return new Response(JSON.stringify({
+            notification: notification,
+            like: response
+        }), {
             status: 200,
             statusText: "OK",
             headers: {

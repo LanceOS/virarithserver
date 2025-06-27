@@ -42,11 +42,12 @@ export const load: PageServerLoad = async ({ request }) => {
 
   }
   catch(error) {
-    return fail(500, {
+    console.error(error)
+    return {
       message: `Failed to upload data ${error}`,
       error: true,
       details: error instanceof Error ? error.message : String(error)
-    });
+    };
   }
 }
 

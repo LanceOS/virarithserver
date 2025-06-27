@@ -15,18 +15,18 @@
 	let communityVisible = false;
 
 	const serverIp = '54.39.250.197:25598';
-    let copied = $state(false);
+	let copied = $state(false);
 
-    const copyIpToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(serverIp);
-            copied = true;
-            setTimeout(() => copied = false, 2000);
-        } catch (err) {
-            console.error('Failed to copy IP: ', err);
-            alert('Failed to copy IP. Please copy it manually: ' + serverIp);
-        }
-    }
+	const copyIpToClipboard = async () => {
+		try {
+			await navigator.clipboard.writeText(serverIp);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
+		} catch (err) {
+			console.error('Failed to copy IP: ', err);
+			alert('Failed to copy IP. Please copy it manually: ' + serverIp);
+		}
+	};
 </script>
 
 <Header />
@@ -35,8 +35,8 @@
 	<Hero />
 
 	<div class="mx-auto flex max-w-7xl flex-col gap-8 px-4">
-		<section class="w-full gap-6 h-fit">
-			<div class="card-setup text-center flex flex-col gap-6">
+		<section class="h-fit w-full gap-6">
+			<div class="card-setup flex flex-col gap-6 text-center">
 				<h2 class="mb-4 text-3xl font-bold">Ready to Start Your Adventure?</h2>
 				<p class="muted mx-auto max-w-2xl text-lg">
 					VirarithMC is an MMORPG Kingdoms PvPvE server like no other. We offer a multitude of
@@ -49,18 +49,20 @@
 					<a href="/pages/vote" class="btn-big-active"> Vote </a>
 				</div>
 
-				<div class="p-8 border-muted w-full max-w-1/2 mx-auto">
+				<div class="border-muted mx-auto w-full max-w-1/2 p-8">
 					<div class="flex items-center justify-between gap-4">
-						<code class="text-lg flex-1 text-left">
+						<code class="flex-1 text-left text-lg">
 							{serverIp}
 						</code>
-						<button onclick={copyIpToClipboard}
-								class="btn-small {copied ? 'btn-small-active' : ''}">
+						<button
+							onclick={copyIpToClipboard}
+							class="btn-small {copied ? 'btn-small-active' : ''}"
+						>
 							{#if copied}
-								<Icon icon="lucide:check" class="w-4 h-4 mr-2" />
+								<Icon icon="lucide:check" class="mr-2 h-4 w-4" />
 								Copied
 							{:else}
-								<Icon icon="lucide:copy" class="w-4 h-4 mr-2" />
+								<Icon icon="lucide:copy" class="mr-2 h-4 w-4" />
 								Copy
 							{/if}
 						</button>
@@ -68,29 +70,32 @@
 				</div>
 			</div>
 		</section>
-
-		<section class="flex h-full w-full flex-col gap-4">
-			<h3 class="content text-2xl font-semibold">Our Staff</h3>
-			<div class="max-h-60 flex flex-wrap gap-4 overflow-y-auto pr-2">
-				{#each staffUsers as staff}
-					<div class="flex items-center gap-3 py-2">
-						{#if staff.image && staff.image !== 'placeholder'}
-							<div class="user-avatar h-10 w-10 flex-shrink-0">
-								<img
-									src={staff.image}
-									alt="Staff Avatar"
-									class="h-full w-full rounded-full object-cover"
-								/>
+		{#if staffUsers}
+			<section class="flex h-full w-full flex-col gap-4">
+				<h3 class="content text-2xl font-semibold">Our Staff</h3>
+				<div class="flex max-h-60 flex-wrap gap-4 overflow-y-auto pr-2">
+					{#each staffUsers as staff}
+						<div class="flex items-center gap-3 py-2">
+							{#if staff.image && staff.image !== 'placeholder'}
+								<div class="user-avatar h-10 w-10 flex-shrink-0">
+									<img
+										src={staff.image}
+										alt="Staff Avatar"
+										class="h-full w-full rounded-full object-cover"
+									/>
+								</div>
+							{/if}
+							<div class="flex flex-col gap-0.5">
+								<a class="btn-nav text-base font-medium" href={`/pages/profile/${staff.id}`}
+									>{staff.name}</a
+								>
+								<p class="text-muted text-xs">{staff.role.toUpperCase()}</p>
 							</div>
-						{/if}
-						<div class="flex flex-col gap-0.5">
-							<a class="btn-nav text-base font-medium" href={`/pages/profile/${staff.id}`}>{staff.name}</a>
-							<p class="text-muted text-xs">{staff.role.toUpperCase()}</p>
 						</div>
-					</div>
-				{/each}
-			</div>
-		</section>
+					{/each}
+				</div>
+			</section>
+		{/if}
 		<section class="w-full">
 			<div class="flex flex-col items-center gap-6 sm:flex-row">
 				<div class="card-setup w-full text-center">
