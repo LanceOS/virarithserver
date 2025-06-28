@@ -52,14 +52,14 @@ export const PUT = async ({ request }) => {
         await DrizzleDB.transaction(async (tx) => {
 
             let commentIds: string[] = [];
-            if(post.commentCount > 0) {
+            if (post.commentCount > 0) {
                 // First grabbing the post comments ids
                 const postComments = await tx.select({ id: comments.id })
                     .from(comments)
                     .where(eq(comments.postId, post.id!))
                     .execute();
-                    // This transforms the returns objects into strings
-                    commentIds = postComments.map(cr => cr.id);
+                // This transforms the returns objects into strings
+                commentIds = postComments.map(cr => cr.id);
             }
 
             // Defining the possible comment reply ids

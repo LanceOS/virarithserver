@@ -45,7 +45,7 @@
 			if (object.isLiked) {
 				setTimeout(() => {
 					sendingLike = false;
-				}, 3000);
+				}, 1500);
 			}
             else {
                 sendingLike = false;
@@ -79,6 +79,6 @@
 		style={`color: ${object.isLiked ? 'var(--color-primary)' : 'var(--color-muted)'};`}
 	/>
 	<span class="text-sm font-medium" style="color: var(--color-base-content);">
-		{object.likeCount || 0} Likes
+		{sendingLike ? "Liking..." : `${object.likeCount || 0} Likes`}
 	</span>
 </button>

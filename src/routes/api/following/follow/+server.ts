@@ -1,11 +1,12 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
+import { followers } from '$lib/schemas/Followers.ts';
 import NotificationService from '$lib/server/NotificationService.ts';
 
 
 export const POST = async ({ request }) => {
     try {
-        const body = await request.json();
+        const profile = await request.json();
 
         const session = await auth.api.getSession({
             headers: request.headers
@@ -17,16 +18,25 @@ export const POST = async ({ request }) => {
 
         const user = session.user
 
-        if(!body.objectId || !body.objectType) {
-            throw new Error("Failed to data to like object")
+        if(!profile.objectId) {
+            throw new Error("Failed to get required data to follow user")
         }
 
-        const notification = await NotificationService.generateUserNotification(body);
-        const response = await DrizzleDB.insert(followers).values({ userId: user.id, objectId: body.objectId, objectType: body.objectType }).returning();
+        const objectDetails = {
+            senderId: user.id,
+            recieverId: profile.recieverId,
+            objectId: profile.objectId,
+            objectType: "profile"
+        }
+
+        const newFollower = await DrizzleDB.insert(followers).values(objectDetails).returning();
+        const notification = await NotificationService.generateUserNotification(objectDetails);
+
+        console.log("Now following user:", newFollower)
 
         return new Response(JSON.stringify({
             notification: notification,
-            like: response
+            followers: newFollower
         }), {
             status: 200,
             statusText: "OK",
@@ -36,6 +46,7 @@ export const POST = async ({ request }) => {
         });
     }
     catch(error) {
+        console.error(error)
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",

@@ -6,7 +6,7 @@
     const session = authClient.useSession();
     const postId = page.params.post;
 
-    const { handleAddComment } = $props()
+    const { handleAddComment, post } = $props()
 
     let body = $state('');
     let isFocused = $state(false);
@@ -29,6 +29,7 @@
         isSubmittingComment = true;
 
         const data = {
+            postUser: post.user.id,
             userId: user.id,
             postId: postId,
             content: body

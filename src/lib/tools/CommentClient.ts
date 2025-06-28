@@ -7,6 +7,13 @@ interface ICommentsParams {
     page: number;
 }
 
+interface ICreateComment {
+    postId: string;
+    postUser: string;
+    userId: string;
+    content: string;
+}
+
 
 class CommentClient {
     instance: CommentClient | null = null;
@@ -16,14 +23,14 @@ class CommentClient {
         this.instance = this;
     }
 
-    static async createComment(params: CommentSchema) {
+    static async createComment(body: ICreateComment) {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/comments/create/create_comment`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(params)
+                body: JSON.stringify(body)
             })
 
             const data = await response.json()

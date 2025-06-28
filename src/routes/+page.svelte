@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Header from '$lib/components/landing/Header.svelte';
 	import Hero from '$lib/components/home/Hero.svelte';
-	import LatestAnnouncement from '$lib/components/home/LatestAnnouncement.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types.js';
 	import Footer from '$lib/components/landing/Footer.svelte';
@@ -22,7 +21,7 @@
 		try {
 			await navigator.clipboard.writeText(serverIp);
 			copied = true;
-			
+
 			setTimeout(() => (copied = false), 2000);
 		} catch (err) {
 			console.error('Failed to copy IP: ', err);

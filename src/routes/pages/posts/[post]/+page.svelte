@@ -236,7 +236,7 @@
 	{/if}
 
 	{#if $session.data?.user && post}
-		<CreateComment {handleAddComment} />
+		<CreateComment {handleAddComment} {post} />
 	{/if}
 
 	{#if comments}

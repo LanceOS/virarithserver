@@ -11,6 +11,7 @@
     import CategoryClient from '$lib/tools/CategoryClient.ts';
     import { onMount } from 'svelte';
     import Icon from '@iconify/svelte'; // Import Icon for loading/error states
+	import UserClient from '$lib/tools/UserClient.ts';
 
     let isInitialLoading = $state(true);
     let isPaginationLoading = $state(false);
@@ -93,13 +94,16 @@
 
     onMount(async () => {
         try {
-            const [postResponse, categoryResponse] = await Promise.all([
+            const [postResponse, categoryResponse, followers] = await Promise.all([
                 PostClient.getAllPosts(orderBy, 1),
-                CategoryClient.getCategories()
+                CategoryClient.getCategories(),
+                UserClient.getFollowers($session?.data?.user.id)
             ]);
             categoryList = categoryResponse;
             posts = postResponse.posts;
             pagination = postResponse.pagination;
+
+            console.log(followers)
         } catch (error) {
             errorLog = 'Failed to load forum content. Please check your connection and try again.';
             console.error('Error loading forum content:', error);
