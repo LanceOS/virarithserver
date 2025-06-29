@@ -51,7 +51,7 @@
 				</div>
 				<div class="border-muted mx-auto w-full p-4 sm:max-w-1/2 sm:p-8">
 					<div class="flex items-center justify-between gap-2 sm:gap-4">
-						<code class="flex-1 overflow-auto text-left text-base whitespace-nowrap sm:text-lg">
+						<code class="flex-1 w-fit text-left text-base whitespace-nowrap sm:text-lg">
 							{serverIp}
 						</code>
 						<button

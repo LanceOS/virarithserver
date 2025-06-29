@@ -1,4 +1,3 @@
-import { authClient } from '$lib/auth-client.ts'
 import { auth } from '$lib/auth.ts'
 import { DrizzleDB } from '$lib/Drizzle.ts'
 import { user } from '$lib/schemas/authentication.ts'
@@ -33,7 +32,7 @@ export const DELETE = async ({ request }) => {
         })
 
         await DrizzleDB.transaction(async (tx) => {
-            await tx.delete(followers).where(eq(followers.followingUserId, currentUser.id)).execute();
+            await tx.delete(followers).where(eq(followers.senderId, currentUser.id)).execute();
             await tx.delete(notifications).where(eq(notifications.senderId, currentUser.id)).execute();
             await tx.delete(profile).where(eq(profile.userId, currentUser.id)).execute();
             await tx.delete(user).where(and(eq(user.id, currentUser.id), eq(user.email, currentUser.email))).execute();

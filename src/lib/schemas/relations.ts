@@ -67,7 +67,7 @@ export const commentRelations = relations(comments, ({ one, many }) => ({
     replies: many(commentReply),
 }));
 
-export const commentReplyRelations = relations(commentReply, ({ one, many }) => ({
+export const commentReplyRelations = relations(commentReply, ({ one }) => ({
     // A comment reply belongs to one user
     user: one(user, {
         fields: [commentReply.userId],
