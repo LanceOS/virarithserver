@@ -4,7 +4,7 @@ import * as schema from "./schemas/authentication.ts"
 import { DrizzleDB } from "./Drizzle.ts";
 import { PRIVATE_DISCORD_CLIENT, PRIVATE_DISCORD_SECRET, PRIVATE_GOOGLE_CLIENT, PRIVATE_GOOGLE_SECRET } from "$env/static/private";
 import ProfileService from "./server/ProfileService.ts";
-import { PUBLIC_URL } from "$env/static/public";
+import { PUBLIC_BETTER_AUTH_URL } from "$env/static/public";
 
 export const auth = betterAuth({
     database: drizzleAdapter(DrizzleDB, {
@@ -31,12 +31,12 @@ export const auth = betterAuth({
         discord: {
             clientId: PRIVATE_DISCORD_CLIENT as string,
             clientSecret: PRIVATE_DISCORD_SECRET as string,
-            redirectURI: `${PUBLIC_URL}/api/auth/callback/discord`
+            redirectURI: `${PUBLIC_BETTER_AUTH_URL}/api/auth/callback/discord`
         },
         google: {
             clientId: PRIVATE_GOOGLE_CLIENT as string,
             clientSecret: PRIVATE_GOOGLE_SECRET as string,
-            redirectURI: `${PUBLIC_URL}/api/auth/callback/google`
+            redirectURI: `${PUBLIC_BETTER_AUTH_URL}/api/auth/callback/google`
         }
     },
     databaseHooks: {
@@ -53,5 +53,5 @@ export const auth = betterAuth({
         max: 100, // Max 100 requests
     },
     basePath: "/api/auth",
-    trustedOrigins: [`${PUBLIC_URL}`]
+    trustedOrigins: [`${PUBLIC_BETTER_AUTH_URL}`]
 });

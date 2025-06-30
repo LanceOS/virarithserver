@@ -11,7 +11,8 @@ export const minioClient = new Minio.Client({
     useSSL: false,
     accessKey: PRIVATE_BUCKET_ACCESS_KEY,
     secretKey: PRIVATE_BUCKET_SECRET_KEY,
-    region: "us-east-1"
+    region: "us-east-1",
+    pathStyle: true
 });
 
 export const bucketName = "virarithbucket"
