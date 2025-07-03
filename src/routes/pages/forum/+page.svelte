@@ -10,7 +10,7 @@
     import PostClient from '$lib/tools/PostClient.ts';
     import CategoryClient from '$lib/tools/CategoryClient.ts';
     import { onMount } from 'svelte';
-    import Icon from '@iconify/svelte'; // Import Icon for loading/error states
+    import Icon from '@iconify/svelte'; 
 	import UserClient from '$lib/tools/UserClient.ts';
 
     let isInitialLoading = $state(true);
@@ -39,18 +39,22 @@
 
     const fetchPosts = async (page: number) => {
         isPaginationLoading = true;
-        errorLog = null; // Clear previous errors
+        errorLog = null;
         try {
             let response;
-            if (selectedCategory !== 'all') {
+            if (selectedCategory !== 'all' && selectedCategory !== 'followers') {
                 response = await PostClient.getPostsByCategory(
                     orderBy,
                     selectedCategory.toLocaleLowerCase(),
                     page
                 );
-            } else {
+            } else if (selectedCategory === 'all') {
                 response = await PostClient.getAllPosts(orderBy, page);
             }
+            else {
+                response = await PostClient.getByFollowing(orderBy, page)
+            }
+            console.log(posts)
             posts = response.posts;
             pagination = response.pagination;
         } catch (error) {

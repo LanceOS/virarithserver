@@ -43,7 +43,7 @@
 
 .actions-menu-item.danger:hover {
     background-color: var(--color-error-light); /* A softer red hover for danger */
-    color: var(--color-base); /* Text turns white on hover for danger */
+    color: var(--color-error-dark); /* Text turns white on hover for danger */
 }
 
 .actions-menu-item.danger > .iconify {

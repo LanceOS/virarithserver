@@ -5,6 +5,7 @@
 	import type { PageData } from './$types.js';
 	import Footer from '$lib/components/landing/Footer.svelte';
 	import RoleCard from '$lib/components/cards/RoleCard.svelte';
+	import { PUBLIC_MC_SERVER_IP } from '$env/static/public';
 
 	const { data } = $props<{ data: PageData }>();
 
@@ -14,8 +15,9 @@
 	let featuresVisible = false;
 	let communityVisible = false;
 
-	const serverIp = '54.39.250.197:25598';
 	let copied = $state(false);
+
+	const serverIp = PUBLIC_MC_SERVER_IP
 
 	const copyIpToClipboard = async () => {
 		try {
@@ -86,6 +88,7 @@
 								</div>
 							{/if}
 							<div class="flex flex-col items-center gap-2">
+								<RoleCard role={staff.role} />
 								<a
 									class="btn-nav text-base font-medium"
 									style="color: var(--color-base-content)"
@@ -93,7 +96,6 @@
 								>
 									{staff.name}
 								</a>
-								<RoleCard role={staff.role} />
 							</div>
 						</div>
 					{/each}

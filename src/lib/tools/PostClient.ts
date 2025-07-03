@@ -131,6 +131,21 @@ class PostClient {
             throw new Error(`Failed to get post: ${error}`)
         }
     }
+
+    static async getByFollowing(orderBy: string, page: number): Promise<PostWithImage> {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_following?orderBy=${orderBy}&page=${page}`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            })
+            const data = await response.json();
+            return data;
+        }
+        catch (error) {
+            throw new Error(`Failed to get post: ${error}`)
+        }
+    }
 }
 
 export default PostClient;

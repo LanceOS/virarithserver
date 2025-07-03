@@ -1,32 +1,90 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
+
+    const quickLinks = [
+        { name: "Home", href: "/" },
+        { name: "Rules", href: "/pages/rules" },
+        { name: "Vote", href: "/pages/vote" },
+    ];
+
+    const legalLinks = [
+        { name: "Terms of Service", href: "/pages/terms-of-service" },
+    ];
+
+    const socialLinks = [
+        { name: "Discord", href: "https://discord.gg/EHeUmvuV", icon: "ic:baseline-discord" },
+    ];
 </script>
 
-<footer class="bg-card py-8 mt-12">
-    <div class="mx-auto max-w-7xl px-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-8 text-center md:text-left">
-        <div class="flex flex-col items-center md:items-start gap-2">
-            <p class="text-lg font-semibold" style="color: var(--color-base-content);">VirarithMC</p>
-            <p class="text-sm" style="color: var(--color-muted);">&copy; {new Date().getFullYear()} VirarithMC. All rights reserved.</p>
+<footer class="bg-card py-12 mt-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-10 text-center md:text-left">
+            <div class="col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center md:items-start gap-3">
+                <p class="text-2xl font-bold" style="color: var(--color-base-content);">VirarithMC</p>
+                <p class="text-sm" style="color: var(--color-muted);">&copy; {new Date().getFullYear()} VirarithMC. All rights reserved.</p>
+                <p class="text-sm mt-2" style="color: var(--color-muted);">
+                    A vibrant community for Minecraft enthusiasts. Join us for an unforgettable gaming experience!
+                </p>
+            </div>
+
+            <nav class="col-span-1" aria-labelledby="quick-links-heading">
+                <h3 id="quick-links-heading" class="text-lg font-semibold mb-4" style="color: var(--color-base-content);">Quick Links</h3>
+                <ul class="space-y-3">
+                    {#each quickLinks as link}
+                        <li>
+                            <a
+                                href={link.href}
+                                class="btn-nav"
+                                style="color: var(--color-muted); --tw-text-opacity: 1;"
+                            >
+                                {link.name}
+                            </a>
+                        </li>
+                    {/each}
+                </ul>
+            </nav>
+
+            <nav class="col-span-1" aria-labelledby="community-heading">
+                <h3 id="community-heading" class="text-lg font-semibold mb-4" style="color: var(--color-base-content);">Community</h3>
+                <ul class="space-y-3">
+                    {#each socialLinks as link}
+                        <li>
+                            <a
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn-nav"
+                                style="color: var(--color-muted); --tw-text-opacity: 1;"                            >
+                                <span>{link.name}</span>
+                                
+                            </a>
+                        </li>
+                    {/each}
+                </ul>
+            </nav>
+
+            <nav class="col-span-1" aria-labelledby="legal-heading">
+                <h3 id="legal-heading" class="text-lg font-semibold mb-4" style="color: var(--color-base-content);">Legal</h3>
+                <ul class="space-y-3">
+                    {#each legalLinks as link}
+                        <li>
+                            <a
+                                href={link.href}
+                                class="btn-nav"
+                                style="color: var(--color-muted); --tw-text-opacity: 1;"
+                            >
+                                {link.name}
+                            </a>
+                        </li>
+                    {/each}
+                </ul>
+            </nav>
         </div>
 
-        <div class="flex flex-col gap-2">
-            <h4 class="text-lg font-semibold mb-1" style="color: var(--color-base-content);">Quick Links</h4>
-            <a href="/" class="btn-nav text-sm transition-colors hover:text-[var(--color-primary)]">Home</a>
-            <a href="/pages/rules" class="btn-nav text-sm transition-colors hover:text-[var(--color-primary)]">Rules</a>
-            <a href="/pages/vote" class="btn-nav text-sm transition-colors hover:text-[var(--color-primary)]">Vote</a>
-            </div>
-
-        <div class="flex flex-col gap-2">
-            <h4 class="text-lg font-semibold mb-1" style="color: var(--color-base-content);">Community</h4>
-            <a href="YOUR_DISCORD_INVITE_LINK" target="_blank" rel="noopener noreferrer" class="btn-nav flex items-center gap-2 text-sm transition-colors hover:text-[var(--color-primary)]">
-                <Icon icon="ic:baseline-discord" class="iconify" />
-                Discord
-            </a>
-            </div>
-
-        <div class="flex flex-col gap-2">
-            <h4 class="text-lg font-semibold mb-1" style="color: var(--color-base-content);">Legal</h4>
-            <a href="/pages/terms-of-service" class="btn-nav text-sm transition-colors hover:text-[var(--color-primary)]">Terms of Service</a>
+        <div class="border-t pt-8 mt-12 text-center" style="border-color: var(--color-muted);">
+            <p class="text-sm" style="color: var(--color-muted);">
+                Crafted with ❤️ by the VirarithMC Team.
+            </p>
         </div>
     </div>
 </footer>

@@ -15,6 +15,7 @@
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import RoleCard from '$lib/components/cards/RoleCard.svelte';
 	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
+	import Actions from '$lib/components/actions/Actions.svelte';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
@@ -23,9 +24,6 @@
 	let comments: SerializedComment[] | undefined = $state();
 	let isLoadingPost: boolean = $state(true);
 	let isLoadingComments: boolean = $state(false);
-
-	let hasActions = $state(false);
-	let openPostActions = $state(false);
 
 	let errorLog = $state('');
 
@@ -37,21 +35,6 @@
 			day: 'numeric'
 		});
 	}
-
-	const deletePost = async () => {
-		openPostActions = false;
-
-		try {
-			if (!post) return;
-
-			await PostClient.deletePost(post);
-
-			goto('/pages/forum');
-		} catch (error) {
-			console.log(error);
-			errorLog = 'Failed to delete post';
-		}
-	};
 
 	const handleCommentDelete = (commentId: string) => {
 		if (!comments) return;
@@ -69,25 +52,6 @@
 		}
 	};
 
-	const handleClickOutsidePostActions = (event: MouseEvent) => {
-		const target = event.target as Element;
-		if (
-			!target.closest('.actions-menu-container') &&
-			!target.closest('.stat-item.actions-button')
-		) {
-			openPostActions = false;
-		}
-	};
-
-	$effect(() => {
-		if (openPostActions) {
-			document.addEventListener('click', handleClickOutsidePostActions);
-			return () => {
-				document.removeEventListener('click', handleClickOutsidePostActions);
-			};
-		}
-	});
-
 	onMount(async () => {
 		isLoadingComments = true;
 
@@ -96,9 +60,6 @@
 			post = postResponse;
 			const commentResponse = await CommentClient.getCommentsByPost(postId);
 			comments = commentResponse;
-			if ($session.data?.user.id === post?.user.id) {
-				hasActions = true;
-			}
 		} catch (error: any) {
 			console.error('Failed to load post:', error.error);
 			errorLog = 'Failed to load post. Please try again.';
@@ -152,37 +113,11 @@
 					{/if}
 				</div>
 				<div class="flex items-center gap-2">
-					<span class="text-sm sm:text-lg" style="color: var(--color-text-secondary);"
-						>{post.category.toUpperCase()}</span
-					>
-					{#if hasActions}
-						<button
-							class="stat-item actions-button"
-							onclick={() => (openPostActions = !openPostActions)}
-							aria-label="Post actions"
-						>
-							<Icon icon="ic:outline-more-vert" class="stat-icon" />
-						</button>
-					{/if}
+					<span class="text-sm sm:text-lg" style="color: var(--color-text-secondary);">
+						{post.category.toUpperCase()}
+					</span>
+					<Actions {post} user={$session.data?.user}/>
 				</div>
-
-				{#if openPostActions}
-					<div
-						class="actions-menu-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
-					>
-						<button onclick={() => goto(`/pages/edit_post/${post?.id}`)} class="actions-menu-item">
-							<Icon icon="mdi:text-box-edit-outline" />
-							<span class="text-sm font-medium">Edit Post</span>
-						</button>
-
-						<div class="border-t" style="border-color: var(--color-border-subtle);"></div>
-
-						<button onclick={deletePost} class="actions-menu-item danger">
-							<Icon icon="mdi:trash-can-outline" />
-							<span class="text-sm font-medium">Delete Post</span>
-						</button>
-					</div>
-				{/if}
 			</header>
 
 			<div class="mb-1 flex flex-col gap-2">
