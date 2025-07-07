@@ -18,10 +18,16 @@ export const POST = async ({ request }) => {
 
 
         if (!file) {
-            throw new Error("No file provided");
+            return new Response(JSON.stringify({ error: "A file must be provided!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
         if(!objectId || !objectType) {
-            throw new Error("Missing object values needed for image uplaod.")
+            return new Response(JSON.stringify({ error: "Missing required object information for upload!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const session = await auth.api.getSession({
@@ -30,7 +36,10 @@ export const POST = async ({ request }) => {
         const userId: string | null = session?.user.id || null;
 
         if(!userId) {
-            throw new Error("User must be logged in to upload photos.")
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         };
 
         const fileId = await uploadFile(file);
@@ -57,8 +66,7 @@ export const POST = async ({ request }) => {
         })
 
     } catch (error) {
-        console.error('File upload error:', error);
-        return new Response(JSON.stringify(error.message), {
+        return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",
             headers: {

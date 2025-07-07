@@ -46,7 +46,10 @@ export const GET = async ({ request }): Promise<Response> => {
         });
 
         if(!postData) {
-            throw new Error(`Failed to get lastest announcement post: ${postData}`)
+            return new Response(JSON.stringify({ error: "Failed to get latest announcement!" }), {
+                status: 404,
+                statusText: "UNAVAILABLE"
+            })
         }
         
         const images: ImageWithUrl[] = await ImageService.getS3Objects(postData);

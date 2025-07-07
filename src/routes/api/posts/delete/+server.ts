@@ -35,7 +35,10 @@ export const PUT = async ({ request }) => {
         const post: PostWithImage = await request.json()
 
         if (!post.id || !post.type) {
-            throw new Error("Failed to pass post for deletion")
+            return new Response(JSON.stringify({ error: "Missing required post data for deletion!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const session = await auth.api.getSession({
@@ -44,7 +47,10 @@ export const PUT = async ({ request }) => {
         const userId: string | null = session?.user.id || null;
 
         if (!userId) {
-            throw new Error("User must be logged in to delete post.")
+            return new Response(JSON.stringify({ error: "User must be logged in!" }), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const drizzleImagesForPosts = await ImageService.getDrizzleImageObjects(post)

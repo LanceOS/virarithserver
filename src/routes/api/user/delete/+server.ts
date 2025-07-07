@@ -19,7 +19,10 @@ export const DELETE = async ({ request }) => {
         });
 
         if(!session?.user) {
-            throw new Error("User must be logged in to delete post.")
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const currentUser = session.user;        

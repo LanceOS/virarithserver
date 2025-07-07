@@ -1,10 +1,16 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
+	import type { UserSchema } from '$lib/schemas/authentication.ts';
 	import Icon from '@iconify/svelte';
 
 	const session = authClient.useSession();
 	let isMobileMenuOpen = $state(false);
+
+	let user: UserSchema | undefined = $state();
+
+	$effect(() => {
+		user = $session.data?.user
+	})
 
 	const navigationItems = [
 		{ label: 'Home', path: '/', ariaLabel: 'Go to home page' },
@@ -31,27 +37,29 @@
 		isMobileMenuOpen = false;
 	}
 
-	function handleNavigation(path: string) {
-		goto(path, { replaceState: true, invalidateAll: true });
-		closeMobileMenu();
-	}
 </script>
 
 <header class="bg-base px-4 py-4">
 	<div class="mx-auto flex w-full max-w-7xl items-center justify-end">
 		<nav class="hidden items-center gap-6 md:flex">
-			{#each navigationItems as item}
+			{#if user?.role === "admin" || user?.role === "founder" || user?.role === "developer"}
 				<a
 					type="button"
-					aria-label={item.ariaLabel}
+					aria-label="Admin Dashboard"
 					class="btn-nav"
-					href={item.path}
+					href="/admin/interface"
 				>
+					Dashboard
+				</a>
+			{/if}
+
+			{#each navigationItems as item}
+				<a type="button" aria-label={item.ariaLabel} class="btn-nav" href={item.path}>
 					{item.label}
 				</a>
 			{/each}
 
-			{#if !$session.data}
+			{#if !user}
 				<a
 					type="button"
 					aria-label="Log In"
@@ -65,7 +73,7 @@
 					type="button"
 					aria-label="View notifications"
 					class="btn-small cursor-pointer px-4 py-2 duration-200"
-					href={`/pages/notifications/${$session.data.user.id}`}
+					href={`/pages/notifications/${user.id}`}
 				>
 					<Icon icon="material-symbols:notifications-outline" class="h-6 w-6" />
 				</a>
@@ -73,7 +81,7 @@
 					type="button"
 					aria-label="View profile"
 					class="btn-small cursor-pointer px-4 py-2 duration-200"
-					href={`/pages/profile/${$session.data.user.id}`}
+					href={`/pages/profile/${user.id}`}
 				>
 					<Icon icon="material-symbols:person-outline" class="h-6 w-6" />
 				</a>
@@ -129,7 +137,7 @@
 								type="button"
 								aria-label="View notifications"
 								class="btn-small w-full cursor-pointer px-4 py-2 duration-200"
-								href={`/pages/notifications/${$session.data.user.id}`}
+								href={`/pages/notifications/${user?.id}`}
 							>
 								Notifications
 							</a>
@@ -137,7 +145,7 @@
 								type="button"
 								aria-label="View profile"
 								class="btn-small w-full px-4 py-2"
-								href={`/pages/profile/${$session.data?.user.id}`}
+								href={`/pages/profile/${user?.id}`}
 							>
 								Profile
 							</a>

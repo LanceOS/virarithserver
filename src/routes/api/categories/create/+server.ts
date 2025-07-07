@@ -8,7 +8,10 @@ export const POST = async ({ request }) => {
         const body: TopicSchema = await request.json();
 
         if(!body) {
-            throw new Error(`Topic data required to create a new topic ${body}`)
+            return new Response(JSON.stringify({ error: `Topic data required to create a new topic!` }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const response = await DrizzleDB.insert(topic).values(body).returning()

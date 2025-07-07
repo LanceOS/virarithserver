@@ -3,17 +3,19 @@
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
 	import ImagePreview from '../forms/ImagePreview.svelte';
-	import RoleCard from '../cards/RoleCard.svelte';
 	import CardHeader from '../cards/CardHeader.svelte';
+	import { authClient } from '$lib/auth-client.ts';
 
 	let { posts } = $props();
+
+	const session = authClient.useSession()
 </script>
 
 <section class="flex w-full flex-col gap-4">
 	{#if posts}
 		{#each posts as post (post.id)}
 			<article class="card-setup flex flex-col gap-6 p-4">
-				<CardHeader data={post} />
+				<CardHeader data={post} user={$session.data?.user} />
 
 				<button
 					class="flex cursor-pointer flex-col gap-1 text-left"

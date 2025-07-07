@@ -27,17 +27,20 @@ export const GET = async ({ request }): Promise<Response> => {
 
 
         const page = Number(pageParam)
-
         const offset = (page - 1) * postPageLimit;
 
-
-
         if (isNaN(page) || page < 1) {
-            throw new Error("Failed to get page paramter for pagination.")
+            return new Response(JSON.stringify({ error: "Failed to get page paramter for pagination." }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         if (!category) {
-            throw new Error("A category must be passed to fetch by categorys")
+            return new Response(JSON.stringify({ error: "A category must be passed to fetch by categorys" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
 

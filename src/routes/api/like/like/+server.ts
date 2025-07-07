@@ -12,16 +12,21 @@ export const POST = async ({ request }) => {
             headers: request.headers
         })
 
-        if(!session?.user) {
-            throw new Error("Must be logged in to like.")
+        if (!session?.user) {
+            return new Response(JSON.stringify({ error: "User must be logged in!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const user = session.user
 
-        if(!body.objectId || !body.objectType) {
-            throw new Error("Failed to data to like object")
+        if (!body.objectId || !body.objectType) {
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
-
         const notification = await NotificationService.generateUserNotification(body);
         const response = await DrizzleDB.insert(likes).values({ userId: user.id, objectId: body.objectId, objectType: body.objectType }).returning();
 
@@ -36,7 +41,7 @@ export const POST = async ({ request }) => {
             }
         });
     }
-    catch(error) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",

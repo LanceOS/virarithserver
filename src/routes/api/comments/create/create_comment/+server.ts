@@ -1,7 +1,7 @@
 
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { comments, type CommentSchema } from '$lib/schemas/Comments.ts';
+import { comments } from '$lib/schemas/Comments.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
 import NotificationService from '$lib/server/NotificationService.ts';
 
@@ -22,13 +22,19 @@ export const POST = async ({ request }): Promise<Response> => {
         })
 
         if(!session?.user) {
-            throw new Error(`User must be logged in to post a comment`)
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const user = session.user;
 
         if (!body) {
-            throw new Error("Failed to get data for comment")
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const cleanBody = {
@@ -52,7 +58,7 @@ export const POST = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: unknown) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "Failed to create post!",

@@ -1,5 +1,29 @@
 <script lang="ts">
-	let { data } = $props();
+	import { goto } from '$app/navigation';
+	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
+	import type { UserSchema } from '$lib/schemas/authentication.ts';
+	import type { CommentSchema } from '$lib/schemas/Comments.ts';
+	import PostClient from '$lib/tools/PostClient.ts';
+	import Icon from '@iconify/svelte';
+
+	let { data, user } = $props<{
+		data?: PostWithImage | CommentSchema;
+		user?: UserSchema;
+	}>();
+
+	/**
+	 * @description We are getting the data from the passed object or the passed user. This is so that way
+	 * You can pass either or while not having to worry about specific attribute names.
+	 */
+	let currentUser: UserSchema | undefined = $state();
+
+	$effect(() => {
+		if (data) {
+			currentUser = data.user;
+		} else {
+			currentUser = user;
+		}
+	});
 
 	function formatDate(dateString: string) {
 		const date = new Date(dateString);
@@ -9,54 +33,143 @@
 			day: 'numeric'
 		});
 	}
+
+	let openPostActions = $state(false);
+	let errorLog = $state('');
+
+	const deletePost = async () => {
+		openPostActions = false;
+
+		try {
+			if (!data) return;
+
+			if (data.type === 'post') {
+				await PostClient.deletePost(data);
+			}
+
+			goto('/pages/forum');
+		} catch (error) {
+			console.log(error);
+			errorLog = 'Failed to delete post';
+		} finally {
+			window.location.reload();
+		}
+	};
+
+	const handleClickOutsidePostActions = (event: MouseEvent) => {
+		const target = event.target as Element;
+		if (
+			!target.closest('.actions-menu-container') &&
+			!target.closest('.stat-item.actions-button')
+		) {
+			openPostActions = false;
+		}
+	};
+
+	$effect(() => {
+		if (openPostActions) {
+			document.addEventListener('click', handleClickOutsidePostActions);
+			return () => {
+				document.removeEventListener('click', handleClickOutsidePostActions);
+			};
+		}
+	});
 </script>
 
 <header
 	class="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-4"
 >
 	<div class="flex flex-wrap items-center gap-4">
-		{#if data.user.image && data.user.image !== 'placeholder'}
+		{#if currentUser?.image}
 			<div class="user-avatar flex-shrink-0">
 				<img
-					src={data.user.image}
-					alt={data.user.name || 'User avatar'}
+					src={currentUser?.image}
+					alt={currentUser?.name || 'User avatar'}
 					class="h-10 w-10 rounded-full object-cover"
 				/>
 			</div>
 		{/if}
 		<div class="flex flex-col leading-tight">
 			<a
-				class="btn-nav text-base font-semibold"
+				class="btn-nav font-semibold"
 				style="color: var(--color-base-content)"
-				href={`/pages/profile/${data.user.id}`}
+				href={`/pages/profile/${currentUser?.id}`}
 			>
-				{data.user.name}
+				{currentUser?.name}
 			</a>
-			<time class="text-sm font-light" datetime={data.createdAt} style="color: var(--color-muted);">
-				{formatDate(data.createdAt)}
-			</time>
+			{#if data}
+				<time
+					class="text-sm font-light"
+					datetime={data.createdAt}
+					style="color: var(--color-muted);"
+				>
+					{formatDate(data.createdAt)}
+				</time>
+			{/if}
 		</div>
 
 		<div class="mt-1 flex items-center gap-2 sm:mt-0">
-			{#if data.user.role === 'developer'}
+			{#if currentUser?.role === 'developer'}
 				<div class="role-card rounded bg-blue-200 px-2 py-0.5 text-xs font-medium text-blue-800">
 					<p>Developer</p>
 				</div>
-			{:else if data.user.role === 'admin'}
+			{:else if currentUser?.role === 'admin'}
 				<div class="role-card rounded bg-red-200 px-2 py-0.5 text-xs font-medium text-red-800">
 					<p>Admin</p>
 				</div>
-			{:else if data.user.role === 'moderator'}
+			{:else if currentUser?.role === 'moderator'}
 				<div class="role-card rounded bg-green-200 px-2 py-0.5 text-xs font-medium text-green-800">
 					<p>Moderator</p>
 				</div>
+			{:else if currentUser?.role === 'founder'}
+				<div class="role-card rounded bg-green-200 px-2 py-0.5 text-xs font-medium text-green-800">
+					<p>Founder</p>
+				</div>
 			{/if}
-			{#if data.isEdited}
+			{#if data && data.isEdited}
 				<p class="text-xs" style="color: var(--color-muted);">(edited)</p>
 			{/if}
 		</div>
 	</div>
-	<span class="mt-2 flex-shrink-0 text-sm font-medium sm:mt-0" style="color: var(--color-muted);">
-		{data.category.toUpperCase()}
-	</span>
+	{#if data}
+		<div class="relative flex items-center gap-2">
+			<span
+				class="mt-2 flex-shrink-0 text-sm font-medium sm:mt-0"
+				style="color: var(--color-muted);"
+			>
+				{data.category.toUpperCase()}
+			</span>
+
+			<button
+				class="stat-item actions-button"
+				onclick={() => (openPostActions = !openPostActions)}
+				aria-label="Post actions"
+			>
+				<Icon icon="ic:outline-more-vert" class="stat-icon" />
+			</button>
+			{#if openPostActions}
+				<div
+					class="actions-menu-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
+				>
+					{#if user}
+						<button onclick={() => goto(`/pages/edit_post/${data?.id}`)} class="actions-menu-item">
+							<Icon icon="mdi:text-box-edit-outline" />
+							<span class="text-sm font-medium">Edit</span>
+						</button>
+
+						<div class="border-t" style="border-color: var(--color-border-subtle);"></div>
+
+						<button onclick={deletePost} class="actions-menu-item danger">
+							<Icon icon="mdi:trash-can-outline" />
+							<span class="text-sm font-medium">Delete</span>
+						</button>
+					{/if}
+					<button class="actions-menu-item danger">
+						<Icon icon="material-symbols:report-outline" />
+						<span class="text-sm font-medium">Report</span>
+					</button>
+				</div>
+			{/if}
+		</div>
+	{/if}
 </header>

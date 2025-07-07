@@ -13,9 +13,8 @@
 	import { page } from '$app/state';
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
-	import RoleCard from '$lib/components/cards/RoleCard.svelte';
 	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
-	import Actions from '$lib/components/actions/Actions.svelte';
+	import CardHeader from '$lib/components/cards/CardHeader.svelte';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
@@ -26,15 +25,6 @@
 	let isLoadingComments: boolean = $state(false);
 
 	let errorLog = $state('');
-
-	function formatDate(date: Date | string) {
-		const dateObj = typeof date === 'string' ? new Date(date) : date;
-		return dateObj.toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric'
-		});
-	}
 
 	const handleCommentDelete = (commentId: string) => {
 		if (!comments) return;
@@ -86,39 +76,7 @@
 		</section>
 	{:else if post}
 		<article class="card-setup flex flex-col gap-8 p-6">
-			<header class="relative flex items-center justify-between gap-3">
-				<div class="flex items-center gap-2">
-					{#if post.user.image && post.user.image !== 'placeholder'}
-						<img src={post.user.image} alt={post.user.name || 'User avatar'} class="user-avatar" />
-					{/if}
-					<div class="flex flex-col">
-						<a
-							class="btn-nav font-semibold sm:text-lg"
-							style="color: var(--color-base-content)"
-							href={`/pages/profile/${post?.user.id}`}
-						>
-							{post.user.name}
-						</a>
-						<time
-							class="text-xs font-light sm:text-sm"
-							datetime={formatDate(post.createdAt)}
-							style="color: var(--color-muted);"
-						>
-							{formatDate(post.createdAt)}
-						</time>
-					</div>
-					<RoleCard role={post.user.role} />
-					{#if post.isEdited}
-						<p class="text-xs" style="color: var(--color-muted);">(edited)</p>
-					{/if}
-				</div>
-				<div class="flex items-center gap-2">
-					<span class="text-sm sm:text-lg" style="color: var(--color-text-secondary);">
-						{post.category.toUpperCase()}
-					</span>
-					<Actions {post} user={$session.data?.user}/>
-				</div>
-			</header>
+			<CardHeader data={post} user={$session.data?.user}/>
 
 			<div class="mb-1 flex flex-col gap-2">
 				<h1 class="text-lg sm:text-3xl" style="color: var(--color-base-content);">

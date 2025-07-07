@@ -12,14 +12,8 @@
     background-color: var(--color-card);
     border-radius: 12px; /* A bit more pronounced rounding for cards */
     padding: 2rem;
-    /* Smoother, slightly slower transition for a more refined feel */
     transition: transform 0.2s ease-in-out; /* box-shadow transition removed */
     border: 1px solid var(--color-border-subtle); /* Thinner, more subtle border */
-    /* box-shadow removed */
-}
-
-.card-setup:hover {
-    /* box-shadow removed */
 }
 
 /* Role Card - for smaller, informational tags/pills */

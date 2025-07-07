@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
     import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
     import { authClient } from '$lib/auth-client.ts';
     import CategoryFilter from '$lib/components/forms/CategoryFilter.svelte';
@@ -11,7 +10,6 @@
     import CategoryClient from '$lib/tools/CategoryClient.ts';
     import { onMount } from 'svelte';
     import Icon from '@iconify/svelte'; 
-	import UserClient from '$lib/tools/UserClient.ts';
 
     let isInitialLoading = $state(true);
     let isPaginationLoading = $state(false);
@@ -54,7 +52,6 @@
             else {
                 response = await PostClient.getByFollowing(orderBy, page)
             }
-            console.log(posts)
             posts = response.posts;
             pagination = response.pagination;
         } catch (error) {
@@ -98,16 +95,13 @@
 
     onMount(async () => {
         try {
-            const [postResponse, categoryResponse, followers] = await Promise.all([
+            const [postResponse, categoryResponse] = await Promise.all([
                 PostClient.getAllPosts(orderBy, 1),
                 CategoryClient.getCategories(),
-                UserClient.getFollowers($session?.data?.user.id)
             ]);
             categoryList = categoryResponse;
             posts = postResponse.posts;
             pagination = postResponse.pagination;
-
-            console.log(followers)
         } catch (error) {
             errorLog = 'Failed to load forum content. Please check your connection and try again.';
             console.error('Error loading forum content:', error);
@@ -155,7 +149,7 @@
                 <section class="card-setup flex flex-col items-center justify-center gap-4 p-8 text-center min-h-64">
                     <Icon icon="material-symbols:error-outline" class="text-5xl" style="color: var(--color-error);" />
                     <p class="text-base font-medium" style="color: var(--color-error);">{errorLog}</p>
-                    <button class="btn-primary btn-medium" onclick={retryLoading}>Try Again</button>
+                    <button class="btn-small" onclick={retryLoading}>Try Again</button>
                 </section>
             {:else if posts && posts.length > 0}
                 <div class="mb-4 flex items-center justify-end">

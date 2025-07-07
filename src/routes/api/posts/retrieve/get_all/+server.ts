@@ -27,7 +27,10 @@ export const GET = async ({ request }): Promise<Response> => {
         const offset = (page - 1) * postPageLimit;
 
         if (isNaN(page) || page < 1) {
-            throw new Error("Failed to get page paramter for pagination.")
+            return new Response(JSON.stringify({ error: "Failed to get page paramter for pagination."}), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
 
@@ -91,8 +94,8 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: any) {
-        return new Response(JSON.stringify(error.message), {
+    catch (error) {
+        return new Response(JSON.stringify(error), {
             status: 404,
             statusText: "FAIL",
             headers: {

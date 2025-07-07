@@ -22,7 +22,10 @@ export const GET = async ({ request }): Promise<Response> => {
         const currentUserId: string | null = session?.user.id || null; 
 
         if (!userIdParam) {
-            throw new Error("Must pass a userId to fetch liked posts");
+            return new Response(JSON.stringify({ error: "Missing user ID for post retrieval!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const page = Number(pageParam)
@@ -105,8 +108,7 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: unknown) {
-        console.error("Error fetching liked posts:", error); 
+    catch (error) {
         return new Response(JSON.stringify({ message: "Failed to fetch liked posts", error: (error instanceof Error ? error.message : String(error)) }), {
             status: 500,
             statusText: "FAIL",

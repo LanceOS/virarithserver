@@ -23,20 +23,23 @@ export const GET = async ({ request }): Promise<Response> => {
         });
         const userId: string | null = session?.user.id || null;
 
-        console.log(userId)
-
-
         const page = Number(pageParam)
 
         const offset = (page - 1) * postPageLimit;
 
 
         if (isNaN(page) || page < 1) {
-            throw new Error("Failed to get page paramter for pagination.")
+            return new Response(JSON.stringify({ error: "Failed to get page paramter for pagination." }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         if (!userIdParam) {
-            throw new Error("A user must be passed to fetch by users")
+            return new Response(JSON.stringify({ error: "Missing user ID required for retrieval!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
 
@@ -103,8 +106,8 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: any) {
-        return new Response(JSON.stringify(error.message), {
+    catch (error) {
+        return new Response(JSON.stringify(error), {
             status: 404,
             statusText: "FAIL",
             headers: {

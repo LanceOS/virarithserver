@@ -1,4 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
+import type { UserSchema } from "$lib/schemas/authentication.ts";
 
 
 
@@ -91,6 +92,20 @@ class UserClient {
         }
         catch (error) {
             throw new Error(`Failed to follow user: ${error}`)
+        }
+    }
+
+
+    static async getUserByName(name: string): Promise<UserSchema> {
+        try {
+            const response = await fetch(`${PUBLIC_URL}/api/user/retrieve/get_by_name?name=${name}`, {
+                method: "GET",
+            })
+            const data = await response.json()
+            return data
+        }
+        catch(error) {
+            throw new Error(error as string)
         }
     }
 }

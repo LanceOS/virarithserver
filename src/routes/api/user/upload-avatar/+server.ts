@@ -11,7 +11,10 @@ export const POST = async ({ request }) => {
         const file = formData.get('file') as File | null;
 
         if (!file) {
-            throw new Error("No file provided");
+            return new Response(JSON.stringify({ error: "A file must be provided!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const session = await auth.api.getSession({
@@ -20,7 +23,10 @@ export const POST = async ({ request }) => {
         const userId: string | null = session?.user.id || null;
 
         if (!userId || !session?.user.email) {
-            throw new Error("User must be logged in to upload an avatar.");
+            return new Response(JSON.stringify({ errro: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const fileId = await uploadFile(file);
@@ -41,8 +47,7 @@ export const POST = async ({ request }) => {
         });
 
     } catch (error) {
-        console.error('User avatar upload error:', error);
-        return new Response(JSON.stringify(error.message), {
+        return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",
             headers: {

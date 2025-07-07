@@ -36,10 +36,16 @@ export const PUT = async ({ request }) => {
         })
 
         if (!session?.user.id) {
-            throw new Error("User must be logged in to delete comment");
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
         if (!comment.postId || !comment.id) {
-            throw new Error(`Missing required comment data: ${comment}`)
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         await DrizzleDB.transaction(async (tx) => {
@@ -73,7 +79,7 @@ export const PUT = async ({ request }) => {
             }
         })
     }
-    catch (error: unknown) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",

@@ -17,7 +17,10 @@ export const GET = async ({ request }): Promise<Response> => {
         const userId: string | null = session?.user.id || null;
 
         if (!postId) {
-            throw new Error("Must pass a postId to fetch specific post")
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
         /**
          * @params postId
@@ -51,7 +54,7 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: unknown) {
+    catch (error) {
         console.error(error)
         return new Response(JSON.stringify(error), {
             status: 500,

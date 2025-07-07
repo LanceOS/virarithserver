@@ -3,8 +3,6 @@ import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { commentReply, type CommentReplySchema } from '$lib/schemas/CommentReply.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { marked } from 'marked';
-import sanitizeHtml from 'sanitize-html';
 
 
 export const GET = async () => {
@@ -22,13 +20,19 @@ export const POST = async ({ request }): Promise<Response> => {
          */
         const session = await authClient.getSession();
         if(!session.data) {
-            throw new Error("User must be logged in to create a new post!")
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const body: CommentReplySchema = await request.json();
 
         if (!body) {
-            throw new Error("Failed to get data for comment")
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const cleanBody = {
@@ -52,7 +56,7 @@ export const POST = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: unknown) {
+    catch (error) {
         return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "Failed to create post!",

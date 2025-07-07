@@ -9,7 +9,10 @@ export const GET = async ({ request }) => {
         const userId = url.searchParams.get('userId');
 
         if(!userId) {
-            throw new Error(`No user id provided to get followers.`)
+            return new Response(JSON.stringify({ error: "Missing user ID for follower retrieval" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const following = await DrizzleDB.query.followers.findMany({

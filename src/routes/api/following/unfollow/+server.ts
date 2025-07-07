@@ -16,13 +16,19 @@ export const DELETE = async ({ request, url }) => {
         })
 
         if (!session?.user) {
-            throw new Error("Must be logged in to like.")
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const user = session.user
 
         if (!objectId || !recieverId) {
-            throw new Error("Failed to data to like object")
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const objectDetails = {

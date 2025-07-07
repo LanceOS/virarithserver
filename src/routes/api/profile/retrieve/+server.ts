@@ -14,7 +14,10 @@ export const GET = async ({ request }): Promise<Response>  => {
         })
 
         if(!userId) {
-            throw new Error("User Id must be passed to get profile.")
+            return new Response(JSON.stringify({ error: "User's ID must be provided for profile search!"}), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const profile = await DrizzleDB.query.profile.findFirst({
@@ -28,7 +31,10 @@ export const GET = async ({ request }): Promise<Response>  => {
         })
 
         if(!profile) {
-            throw new Error(`Failed to get user's profile`)
+            return new Response(JSON.stringify({ error: "Failed to find user's profile." }), {
+                status: 404,
+                statusText: "UNAVAILABLE"
+            })
         }
 
         return new Response(JSON.stringify(profile), {

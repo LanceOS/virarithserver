@@ -9,7 +9,10 @@ export const DELETE = async ({ request }) => {
         const body = await request.json();
 
         if(!body.objectId || !body.objectType) {
-            throw new Error("Failed to data to like object")
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
 

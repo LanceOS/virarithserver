@@ -19,11 +19,21 @@ export const GET = async ({ request }): Promise<Response> => {
         const userId: string | null = session?.user.id || null;
 
         if (!userIdParam) {
-            throw new Error("Must pass a postId to fetch specific post")
+            return new Response(JSON.stringify({ error: "Missing user ID for comment retrieval" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const page = Number(pageParam)
         const offset = (page - 1) * postPageLimit;
+
+        if (isNaN(page) || page < 1) {
+            return new Response(JSON.stringify({ error: "Failed to get page paramter for pagination." }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
+        }
 
         /**
          * @params userId

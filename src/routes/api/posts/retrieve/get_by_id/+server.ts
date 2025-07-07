@@ -21,7 +21,10 @@ export const GET = async ({ request }): Promise<Response> => {
 
 
         if (!postId) {
-            throw new Error("Must pass a postId to fetch specific post")
+            return new Response(JSON.stringify({ error: "Missing required post id for retrieval!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         /**
@@ -53,7 +56,10 @@ export const GET = async ({ request }): Promise<Response> => {
         })
 
         if(!post) {
-            throw new Error("Failed to find post")
+            return new Response(JSON.stringify({ error: "Failed to find post!" }), {
+                status: 404,
+                statusText: "UNAVAILABLE"
+            })
         }
 
         const images: ImageWithUrl[] = await ImageService.getS3Objects(post);
@@ -67,8 +73,8 @@ export const GET = async ({ request }): Promise<Response> => {
             }
         })
     }
-    catch (error: any) {
-        return new Response(JSON.stringify(error.message), {
+    catch (error) {
+        return new Response(JSON.stringify(error), {
             status: 500,
             statusText: "FAIL",
             headers: {

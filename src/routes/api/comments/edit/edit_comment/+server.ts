@@ -12,10 +12,16 @@ export const PUT = async ({ request }) => {
         })
 
         if (!body) {
-            throw new Error(`Post information was not provided ${body}`);
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
         if (!session?.user) {
-            throw new Error(`User must be logged in to edit post ${session?.user}`)
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const response = await DrizzleDB.update(comments).set({
@@ -24,11 +30,7 @@ export const PUT = async ({ request }) => {
         })
         .where(and(eq(comments.id, body.id), eq(comments.userId, session.user.id)))
         .returning({ id: comments.id })
-
-        if (!response) {
-            throw new Error(`Failed to update post in database ${response}`)
-        }
-
+        
         return new Response(JSON.stringify(response), {
             status: 200,
             statusText: "OK",

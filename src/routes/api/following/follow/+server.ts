@@ -13,13 +13,19 @@ export const POST = async ({ request }) => {
         })
 
         if(!session?.user) {
-            throw new Error("Must be logged in to like.")
+            return new Response(JSON.stringify({ error: "User must be logged in!"}), {
+                status: 403,
+                statusText: "UNAUTHORIZED"
+            })
         }
 
         const user = session.user
 
         if(!profile.objectId) {
-            throw new Error("Failed to get required data to follow user")
+            return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
+                status: 400,
+                statusText: "BAD REQUEST"
+            })
         }
 
         const objectDetails = {
@@ -31,8 +37,6 @@ export const POST = async ({ request }) => {
 
         const newFollower = await DrizzleDB.insert(followers).values(objectDetails).returning();
         const notification = await NotificationService.generateUserNotification(objectDetails);
-
-        console.log("Now following user:", newFollower)
 
         return new Response(JSON.stringify({
             notification: notification,
