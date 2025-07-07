@@ -85,10 +85,6 @@
 </script>
 
 <section class="flex flex-col gap-4">
-	{#if handleCommentDelete}
-		<h4 class="text-xl" style="color: var(--color-base-content);">Comments</h4>
-	{/if}
-
 	{#if isLoadingComments}
 		<section class="flex min-h-32 flex-col items-center justify-center gap-2">
 			<Icon

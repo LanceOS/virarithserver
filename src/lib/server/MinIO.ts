@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const minioClient = new Minio.Client({
     endPoint: PUBLIC_MINIO_ENDPOINT,
     port: parseInt(PRIVATE_MINIO_PORT),
-    useSSL: false,
+    useSSL: true,
     accessKey: PRIVATE_BUCKET_ACCESS_KEY,
     secretKey: PRIVATE_BUCKET_SECRET_KEY,
     region: "us-east-1",

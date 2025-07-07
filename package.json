@@ -13,7 +13,7 @@
 		"lint": "prettier --check . && eslint .",
 		"test:e2e": "playwright test",
 		"test": "npm run test:e2e",
-		"db": "./pocketbase/pocketbase serve"
+		"start": "PORT=7000 node ./build/index.js"
 	},
 	"type": "module",
 	"devDependencies": {

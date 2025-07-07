@@ -14,7 +14,7 @@
 <section class="flex w-full flex-col gap-4">
 	{#if posts}
 		{#each posts as post (post.id)}
-			<article class="card-setup flex flex-col gap-6 p-4">
+			<article class="card-setup flex flex-col gap-6">
 				<CardHeader data={post} user={$session.data?.user} />
 
 				<button

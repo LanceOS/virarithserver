@@ -11,7 +11,7 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 
-	const { data } = $props<{ data: PageData }>(); 
+	const { data } = $props<{ data: PageData }>();
 
 	let categoryList = data.categories;
 
@@ -120,13 +120,23 @@
 			</div>
 		{/if}
 
-		<form method="POST" action="?/submitData" enctype="multipart/form-data" class="space-y-8" use:enhance={() => {
-			return async ({ result }) => {
-				if(result.type === "success") {
-					goto("/pages/forum")
-				}
-			}
-		}}>
+		<form
+			method="POST"
+			action="?/submitData"
+			enctype="multipart/form-data"
+			class="space-y-8"
+			use:enhance={() => {
+				isSubmitting = true;
+
+				return async ({ result }) => {
+					if (result.type === 'success') {
+						goto('/pages/forum');
+					} else {
+						isSubmitting = false;
+					}
+				};
+			}}
+		>
 			<TitleInput {MAX_TITLE_CHARS} />
 
 			<ContentInput {MAX_CONTENT_CHARS} />
@@ -143,15 +153,13 @@
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				class="btn-big flex flex-1 items-center justify-center disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
+				class="btn-big flex flex-1 gap-2 items-center justify-center disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
 			>
 				{#if isSubmitting}
-					<span>
-						<Icon icon="svg-spinners:blocks-shuffle-3" class="text-xl" />
-						Publishing...
-					</span>
+					<Icon icon="svg-spinners:blocks-shuffle-3" class="text-xl" />
+					<span>Publishing...</span>
 				{:else}
-					Create Post
+					<span>Create Post</span>
 				{/if}
 			</button>
 		</form>

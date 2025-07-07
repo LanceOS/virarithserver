@@ -6,7 +6,7 @@ export default {
 	kit: {
 		adapter: adapter(),
 		csrf: {
-			checkOrigin: true
+			checkOrigin: false
 		}
 	},
 };

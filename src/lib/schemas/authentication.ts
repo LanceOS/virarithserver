@@ -9,7 +9,7 @@ export const user = pgTable("user", {
 	image: text('image'),
 	createdAt: timestamp('created_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
 	updatedAt: timestamp('updated_at').$defaultFn(() => /* @__PURE__ */ new Date()).notNull(),
-	role: text('role').default("user"),
+	role: text('role').default("user").notNull(),
 });
 
 export type UserSchema = InferInsertModel<typeof user>;

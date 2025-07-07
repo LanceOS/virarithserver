@@ -91,7 +91,7 @@ class UserClient {
             return true;
         }
         catch (error) {
-            throw new Error(`Failed to follow user: ${error}`)
+            throw new Error(error as string)
         }
     }
 
@@ -99,13 +99,17 @@ class UserClient {
     static async getUserByName(name: string): Promise<UserSchema> {
         try {
             const response = await fetch(`${PUBLIC_URL}/api/user/retrieve/get_by_name?name=${name}`, {
-                method: "GET",
+                method: "GET"
             })
-            const data = await response.json()
+            if(!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.error)
+            }
+            const data = await response.json();
             return data
         }
-        catch(error) {
-            throw new Error(error as string)
+        catch(error: any) {
+            throw new Error(error.message)
         }
     }
 }

@@ -6,8 +6,8 @@
         newAvatar = $bindable(),
         avatar
     } = $props<{
-        isEditing: boolean;
-        newAvatar: File | undefined;
+        isEditing?: boolean;
+        newAvatar?: File | undefined;
         avatar: string | undefined;
     }>();
 
