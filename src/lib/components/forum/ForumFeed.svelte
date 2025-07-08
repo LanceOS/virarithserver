@@ -8,13 +8,13 @@
 
 	let { posts } = $props();
 
-	const session = authClient.useSession()
+	const session = authClient.useSession();
 </script>
 
-<section class="flex w-full flex-col gap-4">
+<section class="flex w-full flex-col gap-12 sm:gap-4">
 	{#if posts}
-		{#each posts as post (post.id)}
-			<article class="card-setup flex flex-col gap-6">
+		{#each posts as post, index (post.id)}
+			<article class="sm:card-setup flex flex-col gap-6">
 				<CardHeader data={post} user={$session.data?.user} />
 
 				<button
@@ -22,10 +22,7 @@
 					onclick={() => goto(`/pages/posts/${post.id}`)}
 					type="button"
 				>
-					<h3
-						class="text-xl leading-snug break-words"
-						style="color: var(--color-base-content);"
-					>
+					<h3 class="text-xl leading-snug break-words" style="color: var(--color-base-content);">
 						{@html post.title}
 					</h3>
 					<p class="text-sm leading-snug break-words" style="color: var(--color-base-content);">
@@ -54,6 +51,9 @@
 					</button>
 				</footer>
 			</article>
+			{#if index !== posts.length - 1}
+				<div class="border-muted sm:hidden"></div>
+			{/if}
 		{/each}
 	{/if}
 </section>

@@ -96,7 +96,7 @@
 		</section>
 	{:else if comments && comments.length > 0}
 		{#each comments as comment (comment.id)}
-			<div class="card-setup flex flex-col gap-4">
+			<div class="sm:card-setup flex flex-col gap-4">
 				<div class="relative flex items-center justify-between">
 					<div class="flex items-center gap-2">
 						<div class="user-avatar">

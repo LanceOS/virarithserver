@@ -72,7 +72,7 @@
 
 <section class="space-y-4">
     <p class="font-semibold text-xl" style="color: var(--color-base-content);">Create Comment</p>
-    <form class="card-setup p-6 space-y-4" onsubmit={handleSubmit}>
+    <form class="sm:card-setup space-y-4" onsubmit={handleSubmit}>
         <div class="relative">
             <textarea
                 placeholder="What's on your mind?"

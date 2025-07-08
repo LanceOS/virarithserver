@@ -2,53 +2,45 @@
 
 /* Base Card Background - for simpler card-like elements */
 .bg-card {
-    background-color: var(--color-card);
-    /* box-shadow removed */
-    border-radius: 8px; /* Consistent with button rounding */
+	background-color: var(--color-card);
+	/* box-shadow removed */
+	border-radius: 8px; /* Consistent with button rounding */
 }
 
-/* Main Card Setup - for interactive or prominent cards */
-.card-setup {
-    background-color: var(--color-card);
-    border-radius: 12px; /* A bit more pronounced rounding for cards */
-    padding: 2rem;
-    transition: transform 0.2s ease-in-out; /* box-shadow transition removed */
-    border: 1px solid var(--color-border-subtle); /* Thinner, more subtle border */
-}
 
 /* Role Card - for smaller, informational tags/pills */
 .role-card {
-    padding: 0.4rem 0.8rem; /* Slightly more generous padding */
-    border-radius: 6px; /* Consistent smaller rounding for tags */
-    font-size: 0.85rem; /* Slightly larger, more readable text */
-    line-height: 1; /* Tighter line height for single-line tags */
-    font-weight: 600; /* Modern font weight for tags */
-    text-transform: uppercase;
-    letter-spacing: 0.05em; /* Reduced letter spacing for better readability */
-    display: inline-flex; /* Use flex for alignment if content grows */
-    align-items: center;
-    color: var(--color-base-content); /* Use base content color for versatility */
-    background-color: var(--color-primary); /* Default to primary for visibility */
-    border: none; /* Remove border for a cleaner, filled-pill look */
-    /* box-shadow removed */
-    transition: background-color 0.2s ease-in-out; /* box-shadow transition removed */
+	padding: 0.4rem 0.8rem; /* Slightly more generous padding */
+	border-radius: 6px; /* Consistent smaller rounding for tags */
+	font-size: 0.85rem; /* Slightly larger, more readable text */
+	line-height: 1; /* Tighter line height for single-line tags */
+	font-weight: 600; /* Modern font weight for tags */
+	text-transform: uppercase;
+	letter-spacing: 0.05em; /* Reduced letter spacing for better readability */
+	display: inline-flex; /* Use flex for alignment if content grows */
+	align-items: center;
+	color: var(--color-base-content); /* Use base content color for versatility */
+	background-color: var(--color-primary); /* Default to primary for visibility */
+	border: none; /* Remove border for a cleaner, filled-pill look */
+	/* box-shadow removed */
+	transition: background-color 0.2s ease-in-out; /* box-shadow transition removed */
 }
 
 /* Optional: Add specific colors for different role types if needed, e.g.: */
 .role-card.admin {
-    background-color: var(--color-secondary);
+	background-color: var(--color-secondary);
 }
 
 .role-card.moderator {
-    background-color: var(--color-info);
+	background-color: var(--color-info);
 }
 
 .role-card.member {
-    background-color: var(--color-muted);
+	background-color: var(--color-muted);
 }
 
 .role-card:hover {
-    /* Slight darkening or lightening on hover for interactivity */
-    background-color: var(--color-primary-hover);
-    /* box-shadow removed */
+	/* Slight darkening or lightening on hover for interactivity */
+	background-color: var(--color-primary-hover);
+	/* box-shadow removed */
 }

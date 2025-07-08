@@ -75,7 +75,7 @@
 			<p style="color: var(--color-muted);">Loading post...</p>
 		</section>
 	{:else if post}
-		<article class="card-setup flex flex-col gap-8 p-6">
+		<article class="sm:card-setup flex flex-col gap-8">
 			<CardHeader data={post} user={$session.data?.user}/>
 
 			<div class="mb-1 flex flex-col gap-2">
@@ -128,9 +128,13 @@
 		</section>
 	{/if}
 
+	<div class="sm:hidden border-muted"></div>
+
 	{#if $session.data?.user && post}
 		<CreateComment {handleAddComment} {post} />
 	{/if}
+
+	<div class="sm:hidden border-muted"></div>
 
 	{#if comments}
 		<CommentFeed {comments} {isLoadingComments} {handleCommentDelete} />

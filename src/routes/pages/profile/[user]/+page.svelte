@@ -195,7 +195,7 @@
 </script>
 
 <Header />
-<main class="mx-auto min-h-screen max-w-7xl p-4 sm:p-6 lg:p-8">
+<main class="mx-auto min-h-screen max-w-7xl p-4 sm:p-6 lg:p-8 pb-12">
 	<div class="w-full">
 		{#if !isHydrated}
 			<div
