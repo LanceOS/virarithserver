@@ -1,5 +1,5 @@
 import { PRIVATE_BUCKET_ACCESS_KEY, PRIVATE_BUCKET_SECRET_KEY, PRIVATE_MINIO_PORT } from '$env/static/private';
-import { PUBLIC_MINIO_ENDPOINT } from '$env/static/public';
+import { PUBLIC_BUCKET_NAME, PUBLIC_MINIO_ENDPOINT } from '$env/static/public';
 import * as Minio from 'minio'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,7 +15,7 @@ export const minioClient = new Minio.Client({
     pathStyle: true
 });
 
-export const bucketName = "virarithbucket"
+export const bucketName = PUBLIC_BUCKET_NAME
 
 
 /**

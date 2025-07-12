@@ -3,7 +3,7 @@ import { posts } from '$lib/schemas/Posts.ts';
 import { count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
-import { isLikedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
+import { isLikedSubquery, isReportedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
 import ImageService from '$lib/server/ImageService.ts';
 import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
@@ -27,7 +27,7 @@ export const GET = async ({ request }): Promise<Response> => {
         const offset = (page - 1) * postPageLimit;
 
         if (isNaN(page) || page < 1) {
-            return new Response(JSON.stringify({ error: "Failed to get page paramter for pagination."}), {
+            return new Response(JSON.stringify({ error: "Failed to get page parameter for pagination."}), {
                 status: 400,
                 statusText: "BAD REQUEST"
             })
@@ -53,7 +53,8 @@ export const GET = async ({ request }): Promise<Response> => {
                     WHERE comments.post_id = posts.id
                     AND comments.is_deleted = false
                 )`.as('comment_count'),
-                isLiked: isLikedSubquery(userId).as('is_liked')
+                isLiked: isLikedSubquery(userId).as('is_liked'),
+                isReported: isReportedSubquery(userId).as('is_reported')
             },
             with: {
                 user: true,

@@ -12,6 +12,7 @@ export const commentReply = pgTable("comment_reply", {
     type: text("type").default("commentReply").notNull(),
     content: text("content").notNull(),
     isEdited: boolean("is_edited").default(false),
+    isFlagged: boolean("is_flagged").default(false),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())

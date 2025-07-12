@@ -112,7 +112,7 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
     }),
     // 'receiver' relation: A notification has one receiver (another user)
     receiver: one(user, {
-        fields: [notifications.recieverId],
+        fields: [notifications.receiverId],
         references: [user.id],               
         relationName: "received_notifications" 
     }),
@@ -127,7 +127,7 @@ export const followersRelations = relations(followers, ({ one }) => ({
     }),
     // The user or entity being followed
     followedUser: one(user, { 
-        fields: [followers.recieverId],
+        fields: [followers.receiverId],
         references: [user.id],
         relationName: "user_followers" 
     }),

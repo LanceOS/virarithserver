@@ -15,7 +15,7 @@
 	const navigationItems = [
 		{ label: 'Home', path: '/', ariaLabel: 'Go to home page' },
 		{ label: 'Forums', path: '/pages/forum', ariaLabel: 'Go to forum page' },
-		{ label: 'Map', path: '/pages/dynmap', ariaLabel: 'Go to map page' },
+		{ label: 'Map', path: '/pages/map', ariaLabel: 'Go to map page' },
 		{ label: 'Wiki', path: '/pages/wiki', ariaLabel: 'Go to wiki page' }
 	];
 

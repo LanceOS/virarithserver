@@ -6,7 +6,7 @@ export const isFollowing = (profileUser: string, currentUser: string | undefined
         return sql<boolean>`EXISTS (
             SELECT 1 FROM followers
             WHERE followers.sender_id = ${currentUser}
-            AND followers.reciever_id = ${profileUser}
+            AND followers.receiver_id = ${profileUser}
         )`;
     }
     else {

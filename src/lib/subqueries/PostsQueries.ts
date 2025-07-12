@@ -27,6 +27,20 @@ export const isLikedSubquery = (userId: string | null) => {
     }
 }
 
+export const isReportedSubquery = (userId: string | null) => {
+    if (userId) {
+        return sql<boolean>`EXISTS (
+            SELECT 1 FROM reports
+            WHERE reports.object_id = posts.id
+            AND reports.object_type = 'post'
+            AND reports.user_id = ${userId}
+        )`
+    }
+    else {
+        return sql<boolean>`false`
+    }
+}
+
 /**
  * Creates a sorting function for Drizzle queries based on creation date.
  *

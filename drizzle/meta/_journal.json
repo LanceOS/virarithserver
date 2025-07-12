@@ -379,6 +379,27 @@
       "when": 1751726869735,
       "tag": "0053_tearful_living_lightning",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1752179944515,
+      "tag": "0054_numerous_cloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1752180509919,
+      "tag": "0055_vengeful_stingray",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1752273705997,
+      "tag": "0056_volatile_komodo",
+      "breakpoints": true
     }
   ]
 }

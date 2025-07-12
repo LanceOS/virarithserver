@@ -28,6 +28,22 @@ export const isLikedSubquery = (userId: string | null) => {
     }
 }
 
+
+
+export const isReportedSubquery = (userId: string | null) => {
+    if (userId) {
+        return sql<boolean>`EXISTS (
+            SELECT 1 FROM reports
+            WHERE reports.object_id = comments.id
+            AND reports.object_type = 'comment'
+            AND reports.user_id = ${userId}
+        )`
+    }
+    else {
+        return sql<boolean>`false`
+    }
+}
+
 /**
  * Creates a subquery to count the number of replies a comment has.
  *

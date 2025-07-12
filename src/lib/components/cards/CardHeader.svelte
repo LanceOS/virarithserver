@@ -5,6 +5,8 @@
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 	import PostClient from '$lib/tools/PostClient.ts';
 	import Icon from '@iconify/svelte';
+	import ErrorModal from '../popups/ErrorModal.svelte';
+	import UserClient from '$lib/tools/UserClient.ts';
 
 	let { data, user } = $props<{
 		data?: PostWithImage | CommentSchema;
@@ -16,6 +18,8 @@
 	 * You can pass either or while not having to worry about specific attribute names.
 	 */
 	let currentUser: UserSchema | undefined = $state();
+
+	let errorLog: string = $state('');
 
 	$effect(() => {
 		if (data) {
@@ -35,7 +39,6 @@
 	}
 
 	let openPostActions = $state(false);
-	let errorLog = $state('');
 
 	const deletePost = async () => {
 		openPostActions = false;
@@ -74,8 +77,25 @@
 			};
 		}
 	});
+
+	const reportObject = async () => {
+		openPostActions = false;
+
+		try {
+			await UserClient.userReportTool(data);
+		} catch (error: any) {
+			errorLog = error;
+		} finally {
+			if (!errorLog) {
+				window.location.reload();
+			}
+		}
+	};
 </script>
 
+{#if errorLog}
+	<ErrorModal {errorLog} />
+{/if}
 <header
 	class="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-4"
 >
@@ -151,7 +171,7 @@
 				<div
 					class="actions-menu-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
 				>
-					{#if user}
+					{#if user && user.id === data.user.id}
 						<button onclick={() => goto(`/pages/edit_post/${data?.id}`)} class="actions-menu-item">
 							<Icon icon="mdi:text-box-edit-outline" />
 							<span class="text-sm font-medium">Edit</span>
@@ -164,10 +184,16 @@
 							<span class="text-sm font-medium">Delete</span>
 						</button>
 					{/if}
-					<button class="actions-menu-item danger">
-						<Icon icon="material-symbols:report-outline" />
-						<span class="text-sm font-medium">Report</span>
-					</button>
+					{#if !data.isReported && data.user.id !== user.id}
+						<button class="actions-menu-item danger" onclick={reportObject}>
+							<Icon icon="material-symbols:report-outline" />
+							<span class="text-sm font-medium">Report</span>
+						</button>
+					{:else if data.isReported}
+					<div class="actions-menu-item">
+						<p class="text-sm font-medium">Already Reported</p>
+					</div>
+					{/if}
 				</div>
 			{/if}
 		</div>

@@ -10,6 +10,7 @@ export const comments = pgTable("comments", {
     content: text("content").notNull(),
     type: text("type").default("comment").notNull(),
     isEdited: boolean("is_edited").default(false),
+    isFlagged: boolean("is_flagged").default(false),
     isDeleted: boolean("is_deleted").default(false),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date())
