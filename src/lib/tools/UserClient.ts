@@ -5,7 +5,7 @@ import type { CommentReplySchema } from '$lib/schemas/CommentReply.ts';
 import type { CommentSchema } from '$lib/schemas/Comments.ts';
 
 interface IFollow {
-	recieverId: string;
+	receiverId: string;
 	objectId: string;
 }
 
@@ -70,7 +70,7 @@ class UserClient {
 
 	static async unfollowUser(body: IFollow): Promise<boolean> {
 		const params = new URLSearchParams({
-			recieverId: body.recieverId,
+			receiverId: body.receiverId,
 			objectId: body.objectId
 		}).toString();
 

@@ -172,10 +172,15 @@
 					class="actions-menu-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
 				>
 					{#if user && user.id === data.user.id}
-						<button onclick={() => goto(`/pages/edit_post/${data?.id}`)} class="actions-menu-item">
-							<Icon icon="mdi:text-box-edit-outline" />
-							<span class="text-sm font-medium">Edit</span>
-						</button>
+						{#if data.isEdited === false}
+							<button
+								onclick={() => goto(`/pages/edit_post/${data?.id}`)}
+								class="actions-menu-item"
+							>
+								<Icon icon="mdi:text-box-edit-outline" />
+								<span class="text-sm font-medium">Edit</span>
+							</button>
+						{/if}
 
 						<div class="border-t" style="border-color: var(--color-border-subtle);"></div>
 
@@ -190,9 +195,9 @@
 							<span class="text-sm font-medium">Report</span>
 						</button>
 					{:else if data.isReported}
-					<div class="actions-menu-item">
-						<p class="text-sm font-medium">Already Reported</p>
-					</div>
+						<div class="actions-menu-item">
+							<p class="text-sm font-medium">Already Reported</p>
+						</div>
 					{/if}
 				</div>
 			{/if}

@@ -6,7 +6,7 @@ import { and, eq } from "drizzle-orm";
 interface INotification {
     objectId: string;
     objectType: string;
-    recieverId: string;
+    receiverId: string;
     senderId: string;
 }
 
@@ -21,14 +21,14 @@ class NotificationService {
     }
     static async generateUserNotification(object: INotification): Promise<NotificationSchema> {
         try {
-            if (!object.senderId || !object.recieverId || !object.objectId) {
+            if (!object.senderId || !object.receiverId || !object.objectId) {
                 throw new Error(`Missing required data to create new notification: ${object}`)
             }
             
             const response = await DrizzleDB.insert(notifications)
                 .values({
                     senderId: object.senderId,
-                    recieverId: object.recieverId,
+                    receiverId: object.receiverId,
                     objectId: object.objectId,
                     objectType: object.objectType
                 })
@@ -64,11 +64,11 @@ class NotificationService {
         try {
 
             if (!userId) {
-                throw new Error(`Failed to get user Id required for recieving notifications: ${userId}`)
+                throw new Error(`Failed to get user Id required for receiving notifications: ${userId}`)
             }
 
             const response = await DrizzleDB.query.notifications.findMany({
-                where: and(eq(notifications.recieverId, userId), eq(notifications.type, "notification")),
+                where: and(eq(notifications.receiverId, userId), eq(notifications.type, "notification")),
                 with: {
                     sender: true
                 }

@@ -28,16 +28,16 @@ const pool = new Pool({
     connectionTimeoutMillis: 2000, // how long to wait to acquire a client before timing out
 });
     
-pool.on("connect", (client) => {
-    console.log("New client connected")
-})
-pool.on("error", (fuckers, client) => {
-    console.error("Refused to connect to client:", fuckers)
-    console.error("Database URL:", databaseUrl)
-})
-pool.on("acquire", (client) => {
-    // console.log("Client has been acquired from the pool")
-})
+// pool.on("connect", (client) => {
+//     console.log("New client connected")
+// })
+// pool.on("error", (fuckers, client) => {
+//     console.error("Refused to connect to client:", fuckers)
+//     console.error("Database URL:", databaseUrl)
+// })
+// pool.on("acquire", (client) => {
+//     // console.log("Client has been acquired from the pool")
+// })
 
 async function testConnection() {
     try {
