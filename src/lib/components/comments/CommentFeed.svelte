@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
 	import { authClient } from '$lib/auth-client.ts';
-	import CommentClient from '$lib/client/CommentClient.ts';
+	import CommentClient from '$lib/client/CommentClient.client.ts';
 	import CommentEdit from './CommentEdit.svelte';
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
 	import RoleCard from '../cards/RoleCard.svelte';

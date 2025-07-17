@@ -6,8 +6,8 @@ import { comments } from '$lib/schemas/Comments.ts'
 import { images } from '$lib/schemas/Images.ts'
 import { notifications } from '$lib/schemas/Notifications.ts'
 import { posts } from '$lib/schemas/Posts.ts'
-import ImageService from '$lib/server/ImageService.ts'
-import S3Service from '$lib/server/S3Service.ts'
+import ImageService from '$lib/server/ImageServer.server.ts'
+import S3Service from '$lib/server/S3Server.server.ts'
 import { and, eq, inArray } from 'drizzle-orm'
 
 /**

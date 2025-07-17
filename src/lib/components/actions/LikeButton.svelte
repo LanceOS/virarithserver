@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LikeClient from '$lib/client/LikeClient.ts';
+	import LikeClient from '$lib/client/LikeClient.client.ts';
 	import Icon from '@iconify/svelte';
 	import ErrorModal from '../popups/ErrorModal.svelte';
 	import { authClient } from '$lib/auth-client.ts';

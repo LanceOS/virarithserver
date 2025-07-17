@@ -4,11 +4,11 @@ import { and, count, desc, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../../../../../lib/retrieval.config.ts';
 import { posts } from '$lib/schemas/Posts.ts';
 import { likes } from '$lib/schemas/Likes.ts'; 
-import ImageService from '$lib/server/ImageService.ts';
+import ImageService from '$lib/server/ImageServer.server.ts';
 import { user } from '$lib/schemas/authentication.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { isPostLikedSubquery } from '$lib/subqueries/PostsQueries.ts';
-import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.ts';
+import { isPostLikedSubquery } from '$lib/subqueries/PostsQueries.query.ts';
+import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.query.ts';
 
 
 export const GET = async ({ request }): Promise<Response> => {

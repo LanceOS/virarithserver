@@ -1,6 +1,6 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { isFollowing } from '$lib/subqueries/FollowQueries.ts';
+import { isFollowing } from '$lib/subqueries/FollowQueries.query.ts';
 import { and } from 'drizzle-orm';
 
 

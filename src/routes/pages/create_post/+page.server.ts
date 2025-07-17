@@ -1,10 +1,10 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
 import type { PostSchema } from '$lib/schemas/Posts.ts';
-import S3Service from '$lib/server/S3Service.ts';
-import PostService from '$lib/server/PostService.ts';
+import S3Service from '$lib/server/S3Server.server.ts';
+import PostService from '$lib/server/PostServer.server.ts';
 import type { PageServerLoad } from './$types.js';
-import CategoryClient from '$lib/client/CategoryClient.ts';
+import CategoryClient from '$lib/client/CategoryClient.client.ts';
 import type { TopicSchema } from '$lib/schemas/Topic.ts';
 
 

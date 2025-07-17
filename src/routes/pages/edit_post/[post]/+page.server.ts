@@ -1,11 +1,11 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
-import ImageService from '$lib/server/ImageService.ts';
-import PostService from '$lib/server/PostService.ts';
-import S3Service from '$lib/server/S3Service.ts';
+import ImageService from '$lib/server/ImageServer.server.ts';
+import PostService from '$lib/server/PostServer.server.ts';
+import S3Service from '$lib/server/S3Server.server.ts';
 import type { TopicSchema } from '$lib/schemas/Topic.ts';
-import CategoryClient from '$lib/client/CategoryClient.ts';
-import type { PageServerLoad } from '../$types.js';
+import CategoryClient from '$lib/client/CategoryClient.client.ts';
+import type { PageServerLoad } from './$types.js';
 
 
 export const load: PageServerLoad = async ({ request }) => {

@@ -1,7 +1,7 @@
 import type { CommentReplySchema } from "$lib/schemas/CommentReply.ts";
 import type { CommentSchema } from "$lib/schemas/Comments.ts";
 import type { PostSchema } from "$lib/schemas/Posts.ts";
-import { bucketName, minioClient } from "$lib/server/MinIO.ts";
+import { bucketName, minioClient } from "$lib/server/MinIOServer.server.ts";
 
 
 interface IExistingObject {
@@ -15,14 +15,7 @@ interface IExistingObject {
 type PostedObject = PostSchema | CommentSchema | CommentReplySchema;
 
 
-class S3Service {
-    instance: S3Service | null = null;
-
-    constructor() {
-        if (this.instance) return this.instance;
-        this.instance = null;
-    }
-
+const S3Service = {
     /**
      * @description Uploads multiple image files to the server, associating them with a specific object.
      * Each file is uploaded individually using a FormData object. The function returns a list
@@ -40,8 +33,8 @@ class S3Service {
      * Specific error messages will indicate the cause of failure, including network issues or
      * server-side errors.
      */
-    static async uploadImages(files: File[], object: PostedObject, fetchFn: typeof fetch): Promise<string[]> {
-        const successfullIds: string[] = [];
+    uploadImages: async (files: File[], object: PostedObject, fetchFn: typeof fetch): Promise<string[]> => {
+        const successfulIds: string[] = [];
         for await (const file of files) {
             try {
                 const formData = new FormData();
@@ -61,18 +54,18 @@ class S3Service {
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ message: 'No additional error details.' }));
-                    throw new Error(`Upload failed for file "${file.name}" with status ${response.status}: ${errorData.message || response.statusText}`);
+                    throw new Error(`Upload failed for file "${file.name}" with status ${response.status}: ${errorData.message || response.statusText}`, { cause: errorData });
                 }
 
                 const result = await response.json();
-                successfullIds.push(result);
+                successfulIds.push(result.id || result); 
             } catch (error) {
-                console.error(`S3Client upload error for file "${file?.name || 'unknown'}":`, error instanceof Error ? error.message : error);
-                throw new Error(`Upload process failed: ${error instanceof Error ? error.message : 'An unknown error occurred during upload.'}`);
+                console.error(`S3Service upload error for file "${file?.name || 'unknown'}":`, error);
+                throw new Error(`Upload process failed: ${error instanceof Error ? error.message : 'An unknown error occurred during upload.'}`, { cause: error });
             }
         }
-        return successfullIds;
-    }
+        return successfulIds;
+    },
 
 
     /**
@@ -87,7 +80,7 @@ class S3Service {
      * @throws {Error} If the deletion of any image fails. The error message will include
      * details about the failure.
      */
-    static async deleteImages(objects: IExistingObject | IExistingObject[]): Promise<boolean> {
+    deleteImages: async (objects: IExistingObject | IExistingObject[]): Promise<boolean> => {
         const objectArray = Array.isArray(objects) ? objects : [objects];
 
         console.log("Attempting to remove images...");
@@ -100,37 +93,48 @@ class S3Service {
                 await minioClient.removeObject(bucketName, obj.bucketObjectId);
                 console.log(`Successfully removed image with bucketObjectId: ${obj.bucketObjectId}`);
             } catch (error) {
-                console.error(`Failed to remove image with bucketObjectId "${obj.bucketObjectId}":`, error instanceof Error ? error.message : error);
-                throw new Error(`Failed to remove images. Encountered error with ${obj.bucketObjectId}: ${error instanceof Error ? error.message : 'An unknown error occurred during deletion.'}`);
+                console.error(`Failed to remove image with bucketObjectId "${obj.bucketObjectId}":`, error);
+                throw new Error(`Failed to remove images. Encountered error with ${obj.bucketObjectId}.`, { cause: error });
             }
         }
         return true;
-    }
+    },
 
-
-    static async uploadUserAvatar(file: File, userId: string, fetchFn: typeof fetch): Promise<string> {
+    /**
+     * @description Uploads a user's avatar image to the server.
+     *
+     * @param {File} file The `File` object representing the user's avatar image.
+     * @param {string} userId The ID of the user whose avatar is being uploaded.
+     * @param {FetchFunction} fetchFn The `fetch` function or a compatible mock function, used for making API requests.
+     * @returns {Promise<string>} A `Promise` that resolves to the `bucketId` of the uploaded avatar.
+     * @throws {Error} If the upload operation fails.
+     */
+    uploadUserAvatar: async (file: File, userId: string, fetchFn: typeof fetch): Promise<string> => {
         try {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('userId', userId);
-    
+
             const response = await fetchFn('/api/user/upload-avatar', {
                 method: 'POST',
                 body: formData
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: 'No additional error details.' }));
-                throw new Error(`Upload failed for avatar "${file.name}" with status ${response.status}: ${errorData.message || response.statusText}`);
+                throw new Error(`Upload failed for avatar "${file.name}" with status ${response.status}: ${errorData.message || response.statusText}`, { cause: errorData });
             }
-    
+
             const result = await response.json();
+            if (!result.bucketId) {
+                throw new Error(`API response missing 'bucketId' for avatar upload: ${JSON.stringify(result)}`);
+            }
             return result.bucketId;
         } catch (error) {
-            console.error(`S3Client upload error for avatar "${file?.name || 'unknown'}":`, error instanceof Error ? error.message : error);
-            throw new Error(`Upload process failed: ${error instanceof Error ? error.message : 'An unknown error occurred during upload.'}`);
+            console.error(`S3Service upload error for avatar "${file?.name || 'unknown'}":`, error);
+            throw new Error(`Upload process failed: ${error instanceof Error ? error.message : 'An unknown error occurred during upload.'}`, { cause: error });
         }
     }
-}
+};
 
 export default S3Service;

@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import * as schema from "./schemas/authentication.ts"
 import { DrizzleDB } from "./Drizzle.ts";
 import { PRIVATE_DISCORD_CLIENT, PRIVATE_DISCORD_SECRET, PRIVATE_GOOGLE_CLIENT, PRIVATE_GOOGLE_SECRET } from "$env/static/private";
-import ProfileService from "./server/ProfileService.ts";
+import ProfileService from "./server/ProfileServer.server.ts";
 import { PUBLIC_BETTER_AUTH_URL } from "$env/static/public";
 
 export const auth = betterAuth({

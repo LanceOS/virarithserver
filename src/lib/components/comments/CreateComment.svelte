@@ -1,7 +1,7 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client.ts";
     import { page } from '$app/state';
-    import CommentClient from "$lib/client/CommentClient.ts";
+    import CommentClient from "$lib/client/CommentClient.client.ts";
     
     const session = authClient.useSession();
     const postId = page.params.post;

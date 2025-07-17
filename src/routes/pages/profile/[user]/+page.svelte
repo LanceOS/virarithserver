@@ -10,10 +10,10 @@
 	import { onMount } from 'svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import { page } from '$app/state';
-	import PostClient from '$lib/client/PostClient.ts';
+	import PostClient from '$lib/client/PostClient.client.ts';
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
-	import ProfileClient from '$lib/client/ProfileClient.ts';
-	import CommentClient from '$lib/client/CommentClient.ts';
+	import ProfileClient from '$lib/client/ProfileClient.client.ts';
+	import CommentClient from '$lib/client/CommentClient.client.ts';
 	import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import RoleCard from '$lib/components/cards/RoleCard.svelte';

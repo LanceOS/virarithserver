@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types.js";
-import UserService from "$lib/server/UserService.ts";
+import UserService from "$lib/server/UserServer.server.ts";
 
 
 export const load: PageServerLoad = async ({ request }) => {

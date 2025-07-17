@@ -3,7 +3,7 @@ import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { comments } from '$lib/schemas/Comments.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import NotificationService from '$lib/server/NotificationService.ts';
+import NotificationService from '$lib/server/NotificationServer.server.ts';
 
 
 export const GET = async () => {

@@ -6,8 +6,8 @@
     import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
     import Pagination from '$lib/components/forum/Pagination.svelte';
     import Header from '$lib/components/landing/Header.svelte';
-    import PostClient from '$lib/client/PostClient.ts';
-    import CategoryClient from '$lib/client/CategoryClient.ts';
+    import PostClient from '$lib/client/PostClient.client.ts';
+    import CategoryClient from '$lib/client/CategoryClient.client.ts';
     import { onMount } from 'svelte';
     import Icon from '@iconify/svelte'; 
 

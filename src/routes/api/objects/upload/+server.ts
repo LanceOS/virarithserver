@@ -1,7 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { images, type ImageSchema } from '$lib/schemas/Images.ts';
-import { uploadFile } from '$lib/server/MinIO.ts';
+import { uploadFile } from '$lib/server/MinIOServer.server.ts';
 
 export const POST = async ({ request }) => {
     try {
