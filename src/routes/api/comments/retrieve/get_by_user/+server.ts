@@ -1,11 +1,11 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { isLikedSubquery, replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
+import { isCommentLikedSubquery, replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
-import { postPageLimit } from '../../../posts/retrieve/retrieval.config.ts';
+import { postPageLimit } from '../../../../../lib/retrieval.config.ts';
 import { comments } from '$lib/schemas/Comments.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { isReportedSubquery } from '$lib/subqueries/CommentQueries.ts';
+import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.ts';
 
 export const GET = async ({ request }): Promise<Response> => {
 	try {
@@ -51,8 +51,8 @@ export const GET = async ({ request }): Promise<Response> => {
                     FROM likes 
                     WHERE likes.object_id = comments.id
                 )`.as('like_count'),
-				isLiked: isLikedSubquery(userId).as('is_liked'),
-				isReported: isReportedSubquery(userId).as('is_reported'),
+				isLiked: isCommentLikedSubquery(userId).as('is_liked'),
+				isReported: isCommentReportedSubquery(userId).as('is_reported'),
 				replyCount: replyCountSubquery(null)
 			},
 			with: {

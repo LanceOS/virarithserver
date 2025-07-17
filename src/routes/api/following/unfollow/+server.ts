@@ -8,7 +8,7 @@ import { and } from 'drizzle-orm';
 
 export const DELETE = async ({ request, url }) => {
     try {
-        const recieverId = url.searchParams.get('recieverId');
+        const receiverId = url.searchParams.get('receiverId');
         const objectId = url.searchParams.get('objectId');
 
         const session = await auth.api.getSession({
@@ -24,7 +24,7 @@ export const DELETE = async ({ request, url }) => {
 
         const user = session.user
 
-        if (!objectId || !recieverId) {
+        if (!objectId || !receiverId) {
             return new Response(JSON.stringify({ error: "Missing required object information for request!" }), {
                 status: 400,
                 statusText: "BAD REQUEST"
@@ -33,21 +33,21 @@ export const DELETE = async ({ request, url }) => {
 
         const objectDetails = {
             senderId: user.id,
-            recieverId: recieverId,
+            receiverId: receiverId,
             objectId: objectId,
             objectType: "profile"
         }
 
         const removedFollower = await DrizzleDB.delete(followers)
             .where(and(
-                eq(followers.recieverId, objectDetails.recieverId),
+                eq(followers.receiverId, objectDetails.receiverId),
                 eq(followers.objectType, objectDetails.objectType),
                 eq(followers.objectId, objectDetails.objectId)
             )).returning();
 
         const notification = await NotificationService.removeUserNotification({
             senderId: user.id,
-            recieverId: objectDetails.recieverId,
+            receiverId: objectDetails.receiverId,
             objectId: objectDetails.objectId,
             objectType: objectDetails.objectType
         });

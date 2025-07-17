@@ -48,7 +48,7 @@ export const POST = async ({ request }): Promise<Response> => {
          * Creating new comment with drizzle
          */
         const newComment = await DrizzleDB.insert(comments).values(cleanBody).returning()
-        await NotificationService.generateUserNotification({ objectId: newComment[0].id, objectType: newComment[0].type, senderId: user.id, recieverId: body.postUser })
+        await NotificationService.generateUserNotification({ objectId: newComment[0].id, objectType: newComment[0].type, senderId: user.id, receiverId: body.postUser })
 
         return new Response(JSON.stringify(newComment), {
             status: 200,

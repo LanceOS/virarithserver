@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UserClient from '$lib/tools/UserClient.ts';
+	import UserClient from '$lib/client/UserClient.ts';
 	import Icon from '@iconify/svelte';
 
 	let { profile = $bindable() } = $props();
@@ -15,12 +15,12 @@
 		try {
 			if (wasFollowed === true) {
 				await UserClient.unfollowUser({
-					recieverId: profile.user.id,
+					receiverId: profile.user.id,
 					objectId: profile.id
 				});
 			} else {
 				await UserClient.followUser({
-					recieverId: profile.user.id,
+					receiverId: profile.user.id,
 					objectId: profile.id
 				});
 			}

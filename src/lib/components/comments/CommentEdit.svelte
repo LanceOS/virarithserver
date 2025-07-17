@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CommentClient from "$lib/tools/CommentClient.ts";
+	import CommentClient from "$lib/client/CommentClient.ts";
 
 
     const { cancelEdit, comment, commentFeedUpdate } = $props()

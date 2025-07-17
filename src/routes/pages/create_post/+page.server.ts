@@ -4,7 +4,7 @@ import type { PostSchema } from '$lib/schemas/Posts.ts';
 import S3Service from '$lib/server/S3Service.ts';
 import PostService from '$lib/server/PostService.ts';
 import type { PageServerLoad } from './$types.js';
-import CategoryClient from '$lib/tools/CategoryClient.ts';
+import CategoryClient from '$lib/client/CategoryClient.ts';
 import type { TopicSchema } from '$lib/schemas/Topic.ts';
 
 

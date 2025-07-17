@@ -2,8 +2,8 @@ import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
 import { replyCountSubquery } from '$lib/subqueries/CommentQueries.ts';
-import { isReportedSubquery } from '$lib/subqueries/CommentQueries.ts';
-import { isLikedSubquery } from '$lib/subqueries/CommentQueries.ts';
+import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.ts';
+import { isCommentLikedSubquery } from '$lib/subqueries/CommentQueries.ts';
 import { and, sql } from 'drizzle-orm';
 
 export const GET = async ({ request }): Promise<Response> => {
@@ -38,8 +38,8 @@ export const GET = async ({ request }): Promise<Response> => {
                     WHERE likes.object_id = comments.id
                     AND likes.object_type = comments.type
                 )`.as('like_count'),
-				isLiked: isLikedSubquery(userId).as('is_liked'),
-				isReported: isReportedSubquery(userId).as('is_reported'),
+				isLiked: isCommentLikedSubquery(userId).as('is_liked'),
+				isReported: isCommentReportedSubquery(userId).as('is_reported'),
 				replyCount: replyCountSubquery(postId)
 			},
 			with: {

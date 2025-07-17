@@ -82,7 +82,7 @@ class PostClient {
      */
     static async getPostsByUser(params: IPostParams) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_user?userId=${params.userId}&page=${params.page}`, {
+            const response = await fetch(`${PUBLIC_URL}/pages/profile?userId=${params.userId}&page=${params.page}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -103,7 +103,7 @@ class PostClient {
      */
     static async getPostById(postId: string) {
         try {
-            const response = await fetch(`${PUBLIC_URL}/api/posts/retrieve/get_by_id?postId=${postId}`, {
+            const response = await fetch(`${PUBLIC_URL}/pages/posts?postId=${postId}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },

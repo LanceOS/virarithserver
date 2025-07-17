@@ -1,0 +1,126 @@
+{
+  "termsOfService": {
+    "title": "Terms of Service for VirarithMC Forums",
+    "lastUpdated": "July 13, 2025",
+    "introduction": "Welcome to the VirarithMC Forums! These Terms of Service (\"Terms\") govern your access to and use of the virarithmc.com web application (the \"Service\"). By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our Service.",
+    "sections": [
+      {
+        "heading": "1. Acceptance of Terms",
+        "content": "By creating an account, logging in via social authentication (Discord, Google), or otherwise using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms, as well as our [Link to Privacy Policy, e.g., Privacy Policy]."
+      },
+      {
+        "heading": "2. Eligibility and Accounts",
+        "content": [
+          {
+            "subHeading": "Age Restriction:",
+            "text": "You must be at least 13 years old to use our Service. If you are under 13, you may only use the Service with the explicit consent and supervision of a parent or legal guardian."
+          },
+          {
+            "subHeading": "Account Creation:",
+            "text": "You can create an account using various social authentication methods, including Discord and Google. You agree to provide accurate and complete information when creating your account."
+          },
+          {
+            "subHeading": "Account Security:",
+            "text": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account. We cannot and will not be liable for any loss or damage arising from your failure to comply with this security obligation."
+          }
+        ]
+      },
+      {
+        "heading": "3. User-Generated Content",
+        "content": [
+          {
+            "text": "Our Service allows you to create and share content, including posts, comments, and images (collectively, \"User Content\")."
+          },
+          {
+            "subHeading": "Responsibility for Your Content:",
+            "text": "You are solely responsible for the User Content you post on the Service. You represent and warrant that you own or have the necessary licenses, rights, consents, and permissions to publish User Content that you submit."
+          },
+          {
+            "subHeading": "Prohibited Content:",
+            "list": [
+              "Illegal, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, libelous, invasive of another's privacy, hateful, or racially, ethnically, or otherwise objectionable.",
+              "Infringes any patent, trademark, trade secret, copyright, or other proprietary rights of any party.",
+              "Contains unsolicited or unauthorized advertising, promotional materials, \"junk mail,\" \"spam,\" \"chain letters,\" \"pyramid schemes,\" or any other form of solicitation.",
+              "Contains software viruses or any other computer code, files, or programs designed to interrupt, destroy, or limit the functionality of any computer software or hardware or telecommunications equipment."
+            ]
+          },
+          {
+            "subHeading": "Content Moderation:",
+            "text": "We reserve the right, but are not obligated, to monitor, remove, or edit User Content that we determine, in our sole discretion, violates these Terms or is otherwise harmful."
+          },
+          {
+            "subHeading": "Content Deletion & Reporting:",
+            "list": [
+              "When you delete a post, it is **soft-deleted**, meaning it may no longer be visible to other users but may remain in our database for administrative purposes or compliance with legal obligations.",
+              "If a user's post is **reported**, it will be **automatically removed** from public view and flagged for review by our moderators. We reserve the right to reinstate or permanently remove reported content based on our review."
+            ]
+          },
+          {
+            "subHeading": "License to Your Content:",
+            "text": "By posting User Content on the Service, you grant VirarithMC a worldwide, non-exclusive, royalty-free, transferable license to use, reproduce, distribute, prepare derivative works of, display, and perform your User Content in connection with the Service and our (and our successors' and affiliates') business, including without limitation for promoting and redistributing part or all of the Service (and derivative works thereof) in any media formats and through any media channels."
+          }
+        ]
+      },
+      {
+        "heading": "4. Permitted Use and Prohibited Activities",
+        "content": [
+          {
+            "subHeading": "Permitted Use:",
+            "text": "You may use the Service to create profiles, post and comment on forums, upload images, follow other users, and view other users' posts and comments, all in accordance with these Terms."
+          },
+          {
+            "subHeading": "Prohibited Activities:",
+            "list": [
+              "Use the Service for any unlawful purpose or in violation of any international, federal, provincial, or local laws.",
+              "Impersonate any person or entity, or falsely state or otherwise misrepresent your affiliation with a person or entity.",
+              "Interfere with or disrupt the Service or servers or networks connected to the Service.",
+              "Attempt to gain unauthorized access to any portion or feature of the Service, or any other systems or networks connected to the Service or to any VirarithMC server.",
+              "Use any \"deep-link,\" \"page-scrape,\" \"robot,\" \"spider,\" or other automatic device, program, algorithm, or methodology, or any similar or equivalent manual process, to access, acquire, copy, or monitor any portion of the Service or any Content."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "5. Intellectual Property",
+        "content": "The Service and its original content, features, and functionality are and will remain the exclusive property of VirarithMC and its licensors. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of VirarithMC."
+      },
+      {
+        "heading": "6. Privacy Policy",
+        "content": "Our [Link to Privacy Policy, e.g., Privacy Policy] describes how we collect, use, and disclose information about you. By using the Service, you consent to our collection, use, and disclosure of data as described in our Privacy Policy. Please note that our database only collects data directly from your social authentication provider (e.g., username, email, profile picture if provided by the social auth) and any data you choose to post on the forums."
+      },
+      {
+        "heading": "7. Termination",
+        "content": "We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms. If you wish to terminate your account, you may simply discontinue using the Service."
+      },
+      {
+        "heading": "8. Disclaimers and Limitation of Liability",
+        "content": [
+          {
+            "subHeading": "\"AS IS\" Basis:",
+            "text": "The Service is provided on an \"AS IS\" and \"AS AVAILABLE\" basis. VirarithMC makes no warranties, expressed or implied, and hereby disclaims all other warranties, including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights."
+          },
+          {
+            "subHeading": "No Guarantee of Uptime:",
+            "text": "We do not warrant that the Service will be uninterrupted, secure, or error-free."
+          },
+          {
+            "subHeading": "Limitation of Liability:",
+            "text": "In no event shall VirarithMC, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from (i) your access to or use of or inability to access or use the Service; (ii) any conduct or content of any third party on the Service; (iii) any content obtained from the Service; and (iv) unauthorized access, use, or alteration of your transmissions or content, whether based on warranty, contract, tort (including negligence), or any other legal theory, whether or not we have been informed of the possibility of such damage, and even if a remedy set forth herein is found to have failed of its essential purpose."
+          }
+        ]
+      },
+      {
+        "heading": "9. Governing Law",
+        "content": "These Terms shall be governed and construed in accordance with the laws of [Your State/Country, e.g., the State of California, United States], without regard to its conflict of law provisions."
+      },
+      {
+        "heading": "10. Changes to These Terms",
+        "content": "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Service after any revisions become effective, you agree to be bound by the revised terms."
+      },
+      {
+        "heading": "11. Contact Us",
+        "content": "If you have any questions about these Terms, please contact us on our official Discord server: [Your Discord Server Invite Link, e.g., discord.gg/yourserverinvite]"
+      }
+    ]
+  }
+}

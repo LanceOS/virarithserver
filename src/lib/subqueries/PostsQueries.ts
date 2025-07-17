@@ -10,10 +10,10 @@ import { sql } from "drizzle-orm"
  * db.select({
  * id: posts.id,
  * content: posts.content,
- * isLiked: isLikedSubquery("user123")
+ * isLiked: isPostLikedSubquery ("user123")
  * }).from(posts);
  */
-export const isLikedSubquery = (userId: string | null) => {
+export const isPostLikedSubquery = (userId: string | null) => {
     if (userId) {
         return sql<boolean>`EXISTS (
             SELECT 1 FROM likes
@@ -27,7 +27,7 @@ export const isLikedSubquery = (userId: string | null) => {
     }
 }
 
-export const isReportedSubquery = (userId: string | null) => {
+export const isPostReportedSubquery = (userId: string | null) => {
     if (userId) {
         return sql<boolean>`EXISTS (
             SELECT 1 FROM reports

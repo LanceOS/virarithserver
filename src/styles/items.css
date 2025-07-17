@@ -1,80 +1,121 @@
-/* Redesigned Item Styles */
-
 /* Stat Item - for interactive textual stats/labels with icons */
 .stat-item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0.5rem; /* Slightly increased gap for better breathing room */
-    color: var(--color-text-secondary); /* Use text-secondary for default, muted look */
-    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out; /* Smoother transitions */
+    gap: 0.5rem;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
     cursor: pointer;
-    font-weight: 500; /* Slightly less bold for a modern text feel */
-    text-shadow: none; /* Remove text shadow for a cleaner look */
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
 }
 
 .stat-item:hover {
-    color: var(--color-primary); /* Primary color on hover for emphasis */
-    transform: translateY(-2px); /* Gentle lift on hover */
+    color: var(--color-text-link);
+    transform: translateY(-2px);
+    background: rgba(52, 152, 219, 0.1);
 }
 
+.stat-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    filter: drop-shadow(0 1px 1px var(--color-shadow));
+}
+
+.stat-item:hover .stat-icon {
+    color: var(--color-text-link);
+}
+
+.stat-icon:active {
+    transform: scale(0.95);
+    color: var(--color-secondary);
+    filter: none;
+}
+
+/* Disabled State */
+.stat-item:disabled, 
 .stat-icon:disabled {
-    background-color: var(--color-disabled-background);
+    background-color: transparent;
     color: var(--color-disabled-content);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    filter: none;
 }
 
+.stat-item:disabled:hover, 
 .stat-icon:disabled:hover {
-    background-color: var(--color-disabled-background);
+    background-color: transparent;
     color: var(--color-disabled-content);
 }
 
-.stat-icon {
-    width: 20px; /* Slightly larger icon for better visibility */
-    height: 20px; /* Consistent size */
-    stroke-width: 2; /* Standard stroke width, generally 2px or 1.5px is common */
-    color: var(--color-muted); /* Icon color matches default stat text */
-    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out; /* Smoother transitions */
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1)); /* Subtle, soft drop shadow for icon */
-}
-
-.stat-item:hover .stat-icon { /* Icon color changes with parent on hover */
-    color: var(--color-primary);
-}
-
-.stat-icon:active {
-    transform: scale(0.95); /* Subtle shrink/press effect */
-    color: var(--color-secondary); /* A different color on active for feedback, e.g., secondary */
-    filter: drop-shadow(0 0 0 rgba(0,0,0,0)); /* Remove shadow on active for flatter "pressed" look */
-}
-
-
 /* User Avatar */
 .user-avatar {
-    width: 3.25rem; /* Slightly larger avatar for presence */
-    height: 3.25rem; /* Consistent size */
-    border-radius: 12px; /* Softer, slightly more rounded corners for the container */
-    border: 2px solid var(--color-card-border); /* Thinner, more modern border */
-    background-color: var(--color-card); /* Background for consistency */
-    /* Smoother transitions for all properties */
-    transition: border-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    /* Soft, diffused shadow for modern depth */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 12px;
+    border: 2px solid var(--color-card-border);
+    background-color: var(--color-card);
+    transition: 
+        border-color 0.2s ease-in-out, 
+        transform 0.2s ease-in-out, 
+        box-shadow 0.2s ease-in-out;
+    box-shadow: 
+        0 4px 8px var(--color-shadow),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
 }
 
 .user-avatar:hover {
-    border-color: var(--color-primary); /* Primary color border on hover for focus */
-    transform: translateY(-3px); /* Gentle lift effect */
-    /* More pronounced, diffused shadow on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25), 0 3px 6px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-text-link);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 16px var(--color-shadow),
+        0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+.user-avatar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(0, 0, 0, 0.05) 100%
+    );
+    pointer-events: none;
+    border-radius: 10px;
 }
 
 .user-avatar > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px; /* Keep inner image slightly less rounded than container for subtle overlap effect */
-    display: block; /* Removes any default inline-block spacing issues */
+    border-radius: 10px;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.user-avatar.offline::before {
+    background-color: var(--color-muted);
+}
+
+.user-avatar.busy::before {
+    background-color: var(--color-warning);
+}
+
+.user-avatar.away::before {
+    background-color: var(--color-secondary);
 }

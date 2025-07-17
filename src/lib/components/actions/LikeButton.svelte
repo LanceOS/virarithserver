@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LikeClient from '$lib/tools/LikeClient.ts';
+	import LikeClient from '$lib/client/LikeClient.ts';
 	import Icon from '@iconify/svelte';
 	import ErrorModal from '../popups/ErrorModal.svelte';
 	import { authClient } from '$lib/auth-client.ts';
@@ -23,7 +23,7 @@
 
 		const newObject = {
 			senderId: user.id,
-			recieverId: object.user.id,
+			receiverId: object.user.id,
 			objectId: object.id,
 			objectType: object.type
 		};

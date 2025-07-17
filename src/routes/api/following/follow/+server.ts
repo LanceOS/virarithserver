@@ -30,7 +30,7 @@ export const POST = async ({ request }) => {
 
         const objectDetails = {
             senderId: user.id,
-            recieverId: profile.recieverId,
+            receiverId: profile.receiverId,
             objectId: profile.objectId,
             objectType: "profile"
         }

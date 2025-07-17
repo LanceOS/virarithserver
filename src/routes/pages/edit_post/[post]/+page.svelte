@@ -3,8 +3,8 @@
 	import { authClient, useSession } from '$lib/auth-client.ts';
 	import Header from '$lib/components/landing/Header.svelte';
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
-	import CategoryClient from '$lib/tools/CategoryClient.ts';
-	import PostClient from '$lib/tools/PostClient.ts';
+	import CategoryClient from '$lib/client/CategoryClient.ts';
+	import PostClient from '$lib/client/PostClient.ts';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import TitleInput from '$lib/components/forms/TitleInput.svelte';

@@ -1,7 +1,6 @@
 .dropdown-selector {
-    /* Base styling */
     padding: 0.75rem 1rem;
-    border: 2px solid var(--color-card-border);
+    border: 2px solid var(--color-border-subtle);
     border-radius: 0.5rem;
     background-color: var(--color-input);
     color: var(--color-input-content);
@@ -9,49 +8,60 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-    outline: none;
+    outline: none; /* Ensures no default browser focus ring */
     min-width: 120px;
-    
-    /* Custom dropdown arrow */
     appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23757575' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2395a5a6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
     background-position: right 0.75rem center;
     background-repeat: no-repeat;
     background-size: 1.25rem;
     padding-right: 3rem;
-  }
-  
-  /* Hover state */
-  .dropdown-selector:hover {
-    border-color: var(--color-primary-hover);
-  }
-  
-  .dropdown-selector:disabled {
-    opacity: 0.6;
+}
+
+.dropdown-selector:hover {
+    border-color: var(--color-text-link);
+    background-color: var(--color-input-hover);
+}
+
+/* Removed :focus styles completely (no box-shadow or border change) */
+.dropdown-selector:focus {
+    outline: none; /* Redundant but explicit */
+    border-color: var(--color-border-subtle); /* Revert to default (or remove to keep hover state) */
+    box-shadow: none; /* Removes the focus ring */
+}
+
+.dropdown-selector:disabled {
+    opacity: 0.7;
     cursor: not-allowed;
     background-color: var(--color-disabled-background);
     color: var(--color-disabled-content);
     border-color: var(--color-border-subtle);
-  }
-  
-  .dropdown-selector option {
-    background-color: var(--color-input);
-    color: var(--color-input-content);
-    padding: 0.5rem;
-  }
-  
-  .dropdown-selector--sm {
+}
+
+.dropdown-selector option {
+    background-color: var(--color-card);
+    color: var(--color-base-content);
+    padding: 0.75rem 1rem;
+}
+
+.dropdown-selector option:hover {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+}
+
+/* Size variants (unchanged) */
+.dropdown-selector--sm {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     padding-right: 2.5rem;
     background-size: 1rem;
     background-position: right 0.5rem center;
-  }
-  
-  .dropdown-selector--lg {
+}
+
+.dropdown-selector--lg {
     padding: 1rem 1.25rem;
     font-size: 1.125rem;
     padding-right: 3.5rem;
     background-size: 1.5rem;
     background-position: right 1rem center;
-  }
+}

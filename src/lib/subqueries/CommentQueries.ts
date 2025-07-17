@@ -11,10 +11,10 @@ import { sql } from "drizzle-orm"
  * db.select({
  * id: comments.id,
  * content: comments.content,
- * isLiked: isLikedSubquery("user123")
+ * isLiked: isCommentLikedSubquery("user123")
  * }).from(comments);
  */
-export const isLikedSubquery = (userId: string | null) => {
+export const isCommentLikedSubquery = (userId: string | null) => {
     if (userId) {
         return sql<boolean>`EXISTS (
             SELECT 1 FROM likes
@@ -30,7 +30,7 @@ export const isLikedSubquery = (userId: string | null) => {
 
 
 
-export const isReportedSubquery = (userId: string | null) => {
+export const isCommentReportedSubquery = (userId: string | null) => {
     if (userId) {
         return sql<boolean>`EXISTS (
             SELECT 1 FROM reports

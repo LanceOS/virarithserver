@@ -1,46 +1,163 @@
-/* Redesigned Card Styles */
-
-/* Base Card Background - for simpler card-like elements */
+/* Main Card Component */
 .bg-card {
-	background-color: var(--color-card);
-	/* box-shadow removed */
-	border-radius: 8px; /* Consistent with button rounding */
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 1px 3px var(--color-shadow),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transform: translateY(0);
 }
 
+.bg-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 25px var(--color-shadow),
+        0 4px 10px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-text-link);
+}
 
-/* Role Card - for smaller, informational tags/pills */
+.bg-card:active {
+    transform: translateY(-1px);
+    transition: all 0.1s ease;
+}
+
+/* Removed :focus-visible styles */
+.bg-card:focus,
+.bg-card:focus-visible {
+    outline: none;
+}
+
+/* Role Badge Component */
 .role-card {
-	padding: 0.4rem 0.8rem; /* Slightly more generous padding */
-	border-radius: 6px; /* Consistent smaller rounding for tags */
-	font-size: 0.85rem; /* Slightly larger, more readable text */
-	line-height: 1; /* Tighter line height for single-line tags */
-	font-weight: 600; /* Modern font weight for tags */
-	text-transform: uppercase;
-	letter-spacing: 0.05em; /* Reduced letter spacing for better readability */
-	display: inline-flex; /* Use flex for alignment if content grows */
-	align-items: center;
-	color: var(--color-base-content); /* Use base content color for versatility */
-	background-color: var(--color-primary); /* Default to primary for visibility */
-	border: none; /* Remove border for a cleaner, filled-pill look */
-	/* box-shadow removed */
-	transition: background-color 0.2s ease-in-out; /* box-shadow transition removed */
-}
-
-/* Optional: Add specific colors for different role types if needed, e.g.: */
-.role-card.admin {
-	background-color: var(--color-secondary);
-}
-
-.role-card.moderator {
-	background-color: var(--color-info);
-}
-
-.role-card.member {
-	background-color: var(--color-muted);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-button-primary-content);
+    background-color: var(--color-primary);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+    box-shadow:
+        0 2px 8px var(--color-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .role-card:hover {
-	/* Slight darkening or lightening on hover for interactivity */
-	background-color: var(--color-primary-hover);
-	/* box-shadow removed */
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+        0 4px 15px var(--color-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.role-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Removed :focus-visible styles */
+.role-card:focus,
+.role-card:focus-visible {
+    outline: none;
+}
+
+/* Role Variations (unchanged) */
+.role-card.admin {
+    background-color: var(--color-secondary);
+}
+
+.role-card.admin:hover {
+    background-color: var(--color-secondary-dark);
+}
+
+.role-card.moderator {
+    background-color: var(--color-info);
+}
+
+.role-card.moderator:hover {
+    background-color: #2980b9;
+}
+
+.role-card.member {
+    background-color: var(--color-muted);
+}
+
+.role-card.member:hover {
+    background-color: #6c7a89;
+}
+
+.role-card.featured {
+    border: 2px solid var(--color-sunlight);
+    box-shadow:
+        0 0 0 2px rgba(255, 215, 0, 0.2),
+        0 2px 8px var(--color-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.role-card.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Mobile Responsiveness (unchanged) */
+@media (max-width: 640px) {
+    .bg-card {
+        border-radius: 8px;
+        margin: 0.25rem;
+        transition: all 0.2s ease;
+    }
+
+    .bg-card:hover {
+        transform: translateY(-1px);
+        box-shadow:
+            0 4px 12px var(--color-shadow),
+            0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .role-card {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 16px;
+        margin: 0.2rem;
+    }
+}
+
+/* Touch Device Optimizations (unchanged) */
+@media (hover: none) and (pointer: coarse) {
+    .bg-card:hover {
+        transform: none;
+        box-shadow:
+            0 1px 3px var(--color-shadow),
+            0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    .role-card:hover {
+        transform: none;
+    }
+}
+
+/* Reduced Motion Preference (unchanged) */
+@media (prefers-reduced-motion: reduce) {
+    .bg-card, .role-card {
+        transition: none;
+    }
+    
+    .bg-card:hover,
+    .role-card:hover {
+        transform: none;
+    }
 }

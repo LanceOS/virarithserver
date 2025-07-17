@@ -782,8 +782,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "recieverId": {
-          "name": "recieverId",
+        "receiverId": {
+          "name": "receiverId",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -851,12 +851,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "notifications_recieverId_user_id_fk": {
-          "name": "notifications_recieverId_user_id_fk",
+        "notifications_receiverId_user_id_fk": {
+          "name": "notifications_receiverId_user_id_fk",
           "tableFrom": "notifications",
           "tableTo": "user",
           "columnsFrom": [
-            "recieverId"
+            "receiverId"
           ],
           "columnsTo": [
             "id"

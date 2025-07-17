@@ -1,6 +1,5 @@
 import { PUBLIC_URL } from "$env/static/public";
-import type { ILikeSchemaWithRecievingUser } from "$lib/@types/INotifiers.ts";
-import type { LikeSchema } from "$lib/schemas/Likes.ts";
+
 
 
 
@@ -21,7 +20,7 @@ class LikeClient {
 
     static async likeObject(data: {
         senderId: string;
-        recieverId: string;
+        receiverId: string;
         objectId: string;
         objectType: string;
     }) {
@@ -44,7 +43,7 @@ class LikeClient {
 
     static async unlikeObject(data: {
         senderId: string;
-        recieverId: string;
+        receiverId: string;
         objectId: string;
         objectType: string;
     }) {

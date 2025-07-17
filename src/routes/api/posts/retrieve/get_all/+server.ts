@@ -1,13 +1,13 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { posts } from '$lib/schemas/Posts.ts';
 import { count, eq, sql } from 'drizzle-orm';
-import { postPageLimit } from '../retrieval.config.ts';
+import { postPageLimit } from '../../../../../lib/retrieval.config.ts';
 import { auth } from '$lib/auth.ts';
-import { isLikedSubquery, isReportedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
 import ImageService from '$lib/server/ImageService.ts';
 import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
+import { isPostLikedSubquery, isPostReportedSubquery, orderBySort } from '$lib/subqueries/PostsQueries.ts';
 
 
 
@@ -53,8 +53,8 @@ export const GET = async ({ request }): Promise<Response> => {
                     WHERE comments.post_id = posts.id
                     AND comments.is_deleted = false
                 )`.as('comment_count'),
-                isLiked: isLikedSubquery(userId).as('is_liked'),
-                isReported: isReportedSubquery(userId).as('is_reported')
+                isLiked: isPostLikedSubquery(userId).as('is_liked'),
+                isReported: isPostReportedSubquery(userId).as('is_reported')
             },
             with: {
                 user: true,

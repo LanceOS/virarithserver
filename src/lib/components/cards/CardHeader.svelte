@@ -3,10 +3,10 @@
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import type { UserSchema } from '$lib/schemas/authentication.ts';
 	import type { CommentSchema } from '$lib/schemas/Comments.ts';
-	import PostClient from '$lib/tools/PostClient.ts';
+	import PostClient from '$lib/client/PostClient.ts';
 	import Icon from '@iconify/svelte';
 	import ErrorModal from '../popups/ErrorModal.svelte';
-	import UserClient from '$lib/tools/UserClient.ts';
+	import UserClient from '$lib/client/UserClient.ts';
 
 	let { data, user } = $props<{
 		data?: PostWithImage | CommentSchema;

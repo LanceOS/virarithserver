@@ -1,5 +1,3 @@
-/* Redesigned Buttons - Ensured Rounded Corners and Corrected Active States */
-
 /* Base Button Styles - Applied to all main button types for consistency */
 .btn-small,
 .btn-small-active,
@@ -8,11 +6,12 @@
 .btn-discord,
 .btn-google,
 .read-more-btn,
-.btn-delete {
+.btn-delete,
+.btn-nav {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -21,9 +20,48 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 4px var(--color-shadow),
+        0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-/* Add to focus state for accessibility */
+/* Subtle shine effect on hover */
+.btn-small::before,
+.btn-small-active::before,
+.btn-big::before,
+.btn-big-active::before,
+.btn-discord::before,
+.btn-google::before,
+.read-more-btn::before,
+.btn-delete::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: left 0.5s ease;
+}
+
+.btn-small:hover::before,
+.btn-small-active:hover::before,
+.btn-big:hover::before,
+.btn-big-active:hover::before,
+.btn-discord:hover::before,
+.btn-google:hover::before,
+.read-more-btn:hover::before,
+.btn-delete:hover::before {
+    left: 100%;
+}
+
+/* Enhanced focus states for accessibility */
 .btn-small:focus-visible,
 .btn-small-active:focus-visible,
 .btn-big:focus-visible,
@@ -35,12 +73,16 @@
 .btn-delete:focus-visible {
     outline: 3px solid var(--color-focus-ring);
     outline-offset: 2px;
+    transform: translateY(-2px);
+    box-shadow: 
+        0 4px 12px var(--color-shadow),
+        0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 /* Small Buttons */
 .btn-small {
     background-color: var(--color-primary);
-    color: var(--color-button-primary-content); /* Updated to use primary button content color */
+    color: var(--color-button-primary-content);
     padding: 0.75rem 1.75rem;
     font-size: 0.875rem;
 }
@@ -48,35 +90,55 @@
 .btn-small:hover {
     background-color: var(--color-primary-hover);
     transform: translateY(-2px);
+    box-shadow: 
+        0 6px 16px var(--color-shadow),
+        0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
 .btn-small:active {
     transform: translateY(0);
     background-color: var(--color-primary-hover);
+    box-shadow: 
+        0 2px 4px var(--color-shadow),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.1s ease;
 }
 
 /* Small Active Button - Distinctive Look */
 .btn-small-active {
     background-color: var(--color-secondary);
-    color: var(--color-button-primary-content); /* Updated to use primary button content color */
+    color: var(--color-button-primary-content);
     padding: 0.75rem 1.75rem;
     font-size: 0.875rem;
+    box-shadow: 
+        0 3px 8px var(--color-shadow),
+        0 1px 3px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn-small-active:hover {
     background-color: var(--color-secondary-dark);
     transform: translateY(-2px);
+    box-shadow: 
+        0 6px 16px var(--color-shadow),
+        0 3px 6px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-small-active:active {
     transform: translateY(0);
     background-color: var(--color-secondary-dark);
+    box-shadow: 
+        0 2px 4px var(--color-shadow),
+        0 1px 2px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.1s ease;
 }
 
 /* Big Buttons */
 .btn-big {
     background-color: var(--color-primary);
-    color: var(--color-button-primary-content); /* Updated to use primary button content color */
+    color: var(--color-button-primary-content);
     padding: 1rem 2.25rem;
     font-size: 1rem;
     font-weight: 700;
@@ -85,51 +147,74 @@
 .btn-big:hover {
     background-color: var(--color-primary-hover);
     transform: translateY(-3px);
+    box-shadow: 
+        0 8px 20px var(--color-shadow),
+        0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-big:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
     background-color: var(--color-primary-hover);
+    box-shadow: 
+        0 4px 8px var(--color-shadow),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: all 0.1s ease;
 }
 
 /* Big Active Button - Distinctive Look */
 .btn-big-active {
     background-color: var(--color-secondary);
-    color: var(--color-button-primary-content); /* Updated to use primary button content color */
+    color: var(--color-button-primary-content);
     padding: 1rem 2.25rem;
     font-size: 1rem;
     font-weight: 700;
+    box-shadow: 
+        0 4px 12px var(--color-shadow),
+        0 2px 4px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn-big-active:hover {
     background-color: var(--color-secondary-dark);
     transform: translateY(-3px);
+    box-shadow: 
+        0 8px 20px var(--color-shadow),
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-big-active:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
     background-color: var(--color-secondary-dark);
+    box-shadow: 
+        0 4px 8px var(--color-shadow),
+        0 2px 4px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.1s ease;
 }
 
 /* Navigation Buttons (subtle, text-based) */
 .btn-nav {
+    background: transparent;
     cursor: pointer;
     width: fit-content;
     height: fit-content;
     display: inline-block;
-    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
-    color: var(--color-text-secondary); /* This typically remains secondary text color, not a button content color */
+    color: var(--color-text-secondary);
     position: relative;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding-bottom: 4px;
+    box-shadow: none;
+    transform: none;
 }
 
 .btn-nav:hover {
-    color: var(--color-primary);
+    color: var(--color-text-link);
     transform: translateY(-2px);
 }
 
@@ -141,8 +226,8 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--color-primary);
-    transition: width 0.2s ease-in-out;
+    background-color: var(--color-text-link);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-nav:hover::after {
@@ -152,83 +237,154 @@
 /* Discord Button */
 .btn-discord {
     background-color: #5865f2;
-    color: white; /* Often hardcoded for brand colors, but you could use var(--color-button-primary-content) if desired */
+    color: white;
     padding: 1rem 2.25rem;
     font-size: 1rem;
     font-weight: 700;
+    position: relative;
+}
+
+.btn-discord::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
 }
 
 .btn-discord:hover {
     background-color: #4752c4;
     transform: translateY(-3px);
+    box-shadow: 
+        0 8px 20px rgba(88, 101, 242, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-discord:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
     background-color: #4752c4;
+    box-shadow: 
+        0 4px 8px rgba(88, 101, 242, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: all 0.1s ease;
 }
 
 /* Google Button */
 .btn-google {
     background-color: var(--color-card);
-    color: var(--color-button-secondary-content); /* Updated to use secondary button content color */
+    color: var(--color-button-secondary-content);
     padding: 1rem 2.25rem;
     font-size: 1rem;
     font-weight: 700;
     border: 1px solid var(--color-border-subtle);
+    position: relative;
+}
+
+.btn-google::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
 }
 
 .btn-google:hover {
     background-color: var(--color-card-border);
     transform: translateY(-2px);
+    box-shadow: 
+        0 6px 16px var(--color-shadow),
+        0 3px 6px rgba(0, 0, 0, 0.06);
+    border-color: var(--color-text-link);
 }
 
 .btn-google:active {
     transform: translateY(0);
     background-color: var(--color-card-border);
+    box-shadow: 
+        0 2px 4px var(--color-shadow),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.1s ease;
 }
 
 /* Read More Button (Ghost/Outline style) */
 .read-more-btn {
     background: transparent;
-    border: 1px solid var(--color-primary);
-    color: var(--color-primary); /* Keeps its primary brand color for the text itself */
+    border: 1px solid var(--color-text-link);
+    color: var(--color-text-link);
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
     font-weight: 600;
+    position: relative;
+    box-shadow: none;
+}
+
+.read-more-btn::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
 }
 
 .read-more-btn:hover {
-    background: var(--color-primary);
-    color: var(--color-button-primary-content); /* Now uses primary button content for hover */
-    border-color: var(--color-primary);
+    background: var(--color-text-link);
+    color: var(--color-button-primary-content);
+    border-color: var(--color-text-link);
     transform: translateY(-2px);
+    box-shadow: 
+        0 6px 16px var(--color-shadow),
+        0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
 .read-more-btn:active {
     transform: translateY(0);
     background: var(--color-primary-hover);
-    color: var(--color-button-primary-content); /* Now uses primary button content for active */
+    color: var(--color-button-primary-content);
+    box-shadow: 
+        0 2px 4px var(--color-shadow),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.1s ease;
 }
 
+/* Delete Button */
 .btn-delete {
     background-color: var(--color-error);
-    color: var(--color-button-primary-content); /* Updated to use primary button content color */
+    color: var(--color-button-primary-content);
     padding: 0.75rem 1.75rem;
     font-size: 0.875rem;
+    position: relative;
+}
+
+.btn-delete::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
 }
 
 .btn-delete:hover {
     background-color: var(--color-error-dark);
     transform: translateY(-2px);
+    box-shadow: 
+        0 6px 16px rgba(231, 76, 60, 0.25),
+        0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
 .btn-delete:active {
     transform: translateY(0);
     background-color: var(--color-error-dark);
+    box-shadow: 
+        0 2px 4px rgba(231, 76, 60, 0.15),
+        0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.1s ease;
 }
 
-/* Add to disabled state */
+/* Enhanced disabled states */
 .btn-small:disabled,
 .btn-small-active:disabled,
 .btn-big:disabled,
@@ -243,16 +399,119 @@
     transform: none;
     box-shadow: none;
     opacity: 0.7;
+    pointer-events: none;
 }
 
-.btn-small:disabled:hover,
-.btn-small-active:disabled:hover,
-.btn-big:disabled:hover,
-.btn-big-active:disabled:hover,
-.btn-discord:disabled:hover,
-.btn-google:disabled:hover,
-.read-more-btn:disabled:hover,
-.btn-delete:disabled:hover {
-    background-color: var(--color-disabled-background);
-    color: var(--color-disabled-content);
+.btn-small:disabled::before,
+.btn-small-active:disabled::before,
+.btn-big:disabled::before,
+.btn-big-active:disabled::before,
+.btn-discord:disabled::before,
+.btn-google:disabled::before,
+.read-more-btn:disabled::before,
+.btn-delete:disabled::before {
+    display: none;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .btn-small,
+    .btn-small-active,
+    .btn-big,
+    .btn-big-active,
+    .btn-discord,
+    .btn-google,
+    .read-more-btn,
+    .btn-delete {
+        transition: all 0.2s ease;
+        min-height: 44px; /* Touch target size */
+        padding: 0.75rem 1.25rem; /* More compact padding */
+    }
+    
+    .btn-big,
+    .btn-big-active,
+    .btn-discord {
+        padding: 0.875rem 1.5rem;
+    }
+    
+    .btn-small:hover,
+    .btn-small-active:hover,
+    .btn-big:hover,
+    .btn-big-active:hover,
+    .btn-discord:hover,
+    .btn-google:hover,
+    .read-more-btn:hover,
+    .btn-delete:hover {
+        transform: translateY(-1px);
+    }
+    
+    .btn-small:active,
+    .btn-small-active:active,
+    .btn-big:active,
+    .btn-big-active:active,
+    .btn-discord:active,
+    .btn-google:active,
+    .read-more-btn:active,
+    .btn-delete:active {
+        transform: scale(0.98);
+        transition: all 0.1s ease;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn-small:hover,
+    .btn-small-active:hover,
+    .btn-big:hover,
+    .btn-big-active:hover,
+    .btn-discord:hover,
+    .btn-google:hover,
+    .read-more-btn:hover,
+    .btn-delete:hover {
+        transform: none;
+        box-shadow: 
+            0 2px 4px var(--color-shadow),
+            0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+    
+    .btn-small::before,
+    .btn-small-active::before,
+    .btn-big::before,
+    .btn-big-active::before,
+    .btn-discord::before,
+    .btn-google::before,
+    .read-more-btn::before,
+    .btn-delete::before {
+        display: none;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .btn-small,
+    .btn-small-active,
+    .btn-big,
+    .btn-big-active,
+    .btn-discord,
+    .btn-google,
+    .read-more-btn,
+    .btn-delete,
+    .btn-nav {
+        transition: none;
+    }
+    
+    .btn-small::before,
+    .btn-small-active::before,
+    .btn-big::before,
+    .btn-big-active::before,
+    .btn-discord::before,
+    .btn-google::before,
+    .read-more-btn::before,
+    .btn-delete::before {
+        display: none;
+    }
+    
+    .btn-nav::after {
+        transition: none;
+    }
 }

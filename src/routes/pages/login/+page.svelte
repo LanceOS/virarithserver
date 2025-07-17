@@ -106,7 +106,7 @@
 
 <main class="relative flex min-h-screen w-full flex-col md:flex-row overflow-hidden">
     <section class="w-full h-48 md:h-auto md:w-3/5 overflow-hidden">
-        <img src="/images/snow.png" alt="" class="h-full w-full object-cover" />
+        <img src="/images/field.png" alt="" class="h-full w-full object-cover" />
     </section>
 
     <section class="relative flex w-full md:w-2/5 items-center justify-center px-4 py-8 md:py-0">

@@ -1,99 +1,96 @@
-/* --- Image Preview Component --- */
-
-/* Text for image count/info */
 .image-preview-info-text {
     color: var(--color-base-content);
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 500; /* font-medium */
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
-/* Button to remove all images */
 .btn-remove-all {
     cursor: pointer;
     color: var(--color-error);
-    font-size: 0.875rem; /* text-sm */
+    font-size: 0.875rem;
     transition: color 0.2s ease;
-    font-weight: 500; /* font-medium */
+    font-weight: 500;
 }
 
 .btn-remove-all:hover {
-    color: var(--color-error-dark); /* Deeper red on hover */
+    color: var(--color-error-dark);
 }
 
-/* Button to remove a single image */
 .btn-remove-image {
     position: absolute;
-    right: 0.5rem; /* right-2 */
-    top: 0.5rem; /* top-2 */
+    right: 0.5rem;
+    top: 0.5rem;
     z-index: 10;
     cursor: pointer;
-    border-radius: 9999px; /* rounded-full */
+    border-radius: 9999px;
     background-color: var(--color-error);
-    padding: 0.5rem; /* p-2 */
-    color: var(--color-base-content); /* text-color-base-content (assuming base is white/light on dark error) */
-    opacity: 0; /* hidden by default, show on group-hover */
+    padding: 0.5rem;
+    color: var(--color-base-content);
+    opacity: 0;
     transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .btn-remove-image:hover {
-    background-color: var(--color-error-dark); /* hover:bg-red-700 */
+    background-color: var(--color-error-dark);
 }
 
-/* Navigation buttons (chevrons) for image gallery */
 .image-nav-button {
-    background-color: var(--color-card); /* Card background for buttons */
-    border: 1px solid var(--color-secondary);
-    padding: 0.5rem; /* p-2 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: var(--shadow-sm); /* subtle shadow */
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border-subtle);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px var(--color-shadow);
     transition: all 0.2s ease;
-    color: var(--color-base-content); /* Icon color */
-    display: flex; /* For centering icon */
+    color: var(--color-base-content);
+    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
 }
 
 .image-nav-button:hover {
-    background-color: var(--color-card-hover); /* Slightly darker on hover */
-    transform: scale(1.05); /* Gentle zoom on hover */
+    background-color: var(--color-background-elevated);
+    transform: translateY(-2px);
+    border-color: var(--color-text-link);
+    box-shadow: 0 4px 8px var(--color-shadow);
 }
 
 .image-nav-button:disabled {
-    opacity: 0.6; /* More distinct disabled state */
+    opacity: 0.6;
     cursor: not-allowed;
     background-color: var(--color-disabled-background);
     color: var(--color-disabled-content);
     box-shadow: none;
     transform: none;
+    border-color: var(--color-border-subtle);
 }
 
+/* Removed focus styles */
+.image-nav-button:focus,
 .image-nav-button:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px var(--color-focus-ring); /* Focus ring consistent with btn-primary */
+    box-shadow: 0 4px 8px var(--color-shadow); 
 }
 
-/* Image thumbnail borders */
 .thumbnail-active-border {
-    border-color: var(--color-primary); /* Active border color */
-    box-shadow: 0 0 0 2px var(--color-primary-light); /* Subtle glow for active thumbnail */
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
 .thumbnail-inactive-border {
-    border-color: var(--color-border-subtle); /* Inactive border color */
+    border-color: var(--color-border-subtle);
 }
 
-/* Overlay for inactive thumbnails */
 .thumbnail-overlay-inactive {
-    background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
-    opacity: 1; /* Always visible if inactive */
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 1;
     transition: opacity 0.2s ease;
 }
 
 .thumbnail-overlay-active {
-    opacity: 0; /* Hidden if active */
+    opacity: 0;
 }
 
 .group:hover .btn-remove-image {
-    opacity: 1; /* Make it visible on group hover */
+    opacity: 1;
 }

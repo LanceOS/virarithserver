@@ -1,58 +1,46 @@
-/* Redesigned Input Styles */
-
 .input {
-    /* Background and text colors from your palette */
     background-color: var(--color-input);
     color: var(--color-input-content);
-
-    padding: 0.875rem 1rem; /* Good, consistent padding */
-    border: 1px solid var(--color-border-subtle); /* Thinner, subtle border for a cleaner look */
-    border-radius: 8px; /* Consistent rounding with buttons and cards */
-
-    width: 100%; /* Make inputs fluidly fill their container */
-    box-sizing: border-box; /* Ensures padding/border don't add to total width */
-
-    font-size: 0.95rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
     font-weight: 500;
-
-    /* Smoother, refined transitions for border, shadow, and background */
     transition:
         border-color 0.2s ease-in-out,
         box-shadow 0.2s ease-in-out,
         background-color 0.2s ease-in-out;
-
-    /* Subtle inset shadow to give it a slight "depth" or "pressed in" look */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-
-
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Focus State - Clean and Accessible */
+.input:hover {
+    border-color: var(--color-text-link);
+    background-color: var(--color-input-hover);
+}
+
+/* Removed focus styles (no outline or box-shadow) */
 .input:focus {
-    outline: none; /* Remove default browser outline */
-    border-color: var(--color-primary); /* Primary accent color for the border on focus */
-    /* A clear, modern focus ring using the focus-ring variable */
-    box-shadow: 0 0 0 3px var(--color-focus-ring), inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    /* No transform on focus, keep it stable */
+    outline: none;
+    border-color: var(--color-text-link);
 }
 
-/* Placeholder Text */
 .input::placeholder {
-    color: var(--color-text-placeholder); /* Using the specific placeholder color */
-    font-weight: 400; /* Lighter weight for placeholder, common practice */
+    color: var(--color-text-placeholder);
+    font-weight: 400;
+    opacity: 0.8;
 }
 
-/* Disabled State */
 .input:disabled {
     background-color: var(--color-disabled-background);
     color: var(--color-disabled-content);
-    border-color: var(--color-disabled-content); /* Match border to content for disabled state */
+    border-color: var(--color-border-subtle);
     cursor: not-allowed;
-    opacity: 0.8; /* Slightly dim it */
-    box-shadow: none; /* No shadow when disabled */
+    opacity: 0.8;
+    box-shadow: none;
 }
 
-/* Optional: Read-only state if applicable */
 .input:read-only {
     background-color: var(--color-background-subtle);
     border-color: var(--color-border-subtle);
