@@ -1,19 +1,17 @@
 <script lang="ts">
 	import LikeClient from '$lib/client/tools/LikeClient.client.ts';
 	import Icon from '@iconify/svelte';
-	import ErrorModal from '../popups/ErrorModal.svelte';
 	import { authClient } from '$lib/auth-client.ts';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const session = authClient.useSession();
 
 	let { object } = $props();
 
-	let errorLog = $state('');
 	let sendingLike = $state(false);
 
 	const likePost = async (id: string) => {
 		if (!$session.data?.user) {
-			setError();
 			return;
 		}
 
@@ -33,8 +31,8 @@
 			} else {
 				await LikeClient.likeObject(newObject);
 			}
-		} catch (error) {
-			errorLog = 'Failed to like post';
+		} catch (error: any) {
+			toast.push(error.message);
 		} finally {
 			object = {
 				...object,
@@ -42,30 +40,10 @@
 				likeCount: wasLiked ? object.likeCount - 1 : object.likeCount + 1
 			};
 
-			if (object.isLiked) {
-				setTimeout(() => {
-					sendingLike = false;
-				}, 1500);
-			}
-            else {
-                sendingLike = false;
-            }
+			sendingLike = false;
 		}
 	};
-
-	const setError = () => {
-		errorLog = 'Must log in to like.';
-		sendingLike = true;
-		setTimeout(() => {
-			errorLog = '';
-			sendingLike = false;
-		}, 2000);
-	};
 </script>
-
-{#if errorLog}
-	<ErrorModal {errorLog} />
-{/if}
 
 <button
 	class="stat-item"
@@ -79,6 +57,6 @@
 		style={`color: ${object.isLiked ? 'var(--color-primary)' : 'var(--color-muted)'};`}
 	/>
 	<span class="text-sm font-medium" style="color: var(--color-base-content);">
-		{sendingLike ? "Liking..." : `${object.likeCount || 0} Likes`}
+		{sendingLike ? 'Liking...' : `${object.likeCount || 0} Likes`}
 	</span>
 </button>

@@ -6,6 +6,7 @@
     import LikeButton from '../actions/LikeButton.svelte';
     import { goto } from '$app/navigation';
     import RoleCard from '../cards/RoleCard.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
     let latestAnnouncement: PostWithImage | undefined = $state();
     let isLoadingPost = $state(false);
@@ -23,8 +24,8 @@
         isLoadingPost = true;
         try {
             latestAnnouncement = await PostClient.getLatestAnnouncementPost();
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            toast.push(error.message)
         } finally {
             isLoadingPost = false;
         }

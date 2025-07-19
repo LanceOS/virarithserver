@@ -5,8 +5,8 @@
 	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import Icon from '@iconify/svelte';
-	import ErrorModal from '../popups/ErrorModal.svelte';
 	import UserClient from '$lib/client/tools/UserClient.client.ts';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let { data, user } = $props<{
 		data?: PostWithImage | CommentSchema;
@@ -18,8 +18,6 @@
 	 * You can pass either or while not having to worry about specific attribute names.
 	 */
 	let currentUser: UserSchema | undefined = $state();
-
-	let errorLog: string = $state('');
 
 	$effect(() => {
 		if (data) {
@@ -51,11 +49,9 @@
 			}
 
 			goto('/pages/forum');
-		} catch (error) {
+		} catch (error: any) {
 			console.log(error);
-			errorLog = 'Failed to delete post';
-		} finally {
-			window.location.reload();
+			toast.push(error.message)
 		}
 	};
 
@@ -83,19 +79,14 @@
 
 		try {
 			await UserClient.userReportTool(data);
+			window.location.reload()
 		} catch (error: any) {
-			errorLog = error;
-		} finally {
-			if (!errorLog) {
-				window.location.reload();
-			}
+			toast.push(error.message)
 		}
 	};
 </script>
 
-{#if errorLog}
-	<ErrorModal {errorLog} />
-{/if}
+
 <header
 	class="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-4"
 >

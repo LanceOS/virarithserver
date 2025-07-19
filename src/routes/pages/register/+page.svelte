@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
-	import SuccessModal from '$lib/client/components/popups/SuccessModal.svelte';
+	import { goto, pushState } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 
 	const { form } = $props();
@@ -15,31 +13,19 @@
 	});
 
 	let loading = $state(false);
-	let errorLog = $state('');
-	let successLog = $state('');
 
 	$effect(() => {
 		credentials.name;
 		credentials.email;
 		credentials.password;
 		credentials.confirmPassword;
-		errorLog = '';
 	});
 
-	const showError = (message: string) => {
-		errorLog = message;
-	};
 </script>
 
 <main class="relative flex min-h-screen w-full overflow-hidden">
 	<h1>Registering with email and password has been disabled</h1>
 	<!-- <section class="relative flex w-3/4 items-center justify-center px-4">
-		{#if errorLog}
-			<ErrorModal {errorLog} />
-		{/if}
-		{#if successLog}
-			<SuccessModal {successLog} />
-		{/if}
 		<button
 			type="button"
 			aria-label="Return Home"
@@ -59,7 +45,7 @@
 					if (!form?.errorLog && !form?.success) {
 						goto("/")
 					} else {
-						showError(form?.errorLog!)
+						toast.pushState(form.errorLog)
 					}
 				};
 			}}

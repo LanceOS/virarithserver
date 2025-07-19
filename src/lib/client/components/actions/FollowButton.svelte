@@ -1,16 +1,15 @@
 <script lang="ts">
 	import UserClient from '$lib/client/tools/UserClient.client.ts';
 	import Icon from '@iconify/svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let { profile = $bindable() } = $props();
 
-	let errorLog = $state('');
 	let isSubmitting = $state(false);
 
 	const handleFollow = async () => {
 		isSubmitting = true;
 		let wasFollowed: boolean = profile.isFollowed;
-		errorLog = '';
 
 		try {
 			if (wasFollowed === true) {
@@ -24,9 +23,8 @@
 					objectId: profile.id
 				});
 			}
-		} catch (error) {
-			console.error(`Failed to follow user due to: ${error}`);
-			errorLog = 'Failed to follow user.';
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			profile = {
 				...profile,

@@ -18,6 +18,7 @@
 	import ForumFeed from '$lib/client/components/forum/ForumFeed.svelte';
 	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
 	import FollowButton from '$lib/client/components/actions/FollowButton.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const userPage = page.params.user;
 
@@ -66,8 +67,8 @@
 			posts = response.posts;
 			postPagination = response.pagination;
 			if (activeTab === 'posts') pagination = postPagination;
-		} catch (error) {
-			console.error('Error fetching posts:', error);
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			isLoading = false;
 		}
@@ -80,8 +81,8 @@
 			comments = response.comments;
 			commentPagination = response.pagination;
 			if (activeTab === 'comments') pagination = commentPagination;
-		} catch (error) {
-			console.error('Error fetching comments:', error);
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			isLoading = false;
 		}
@@ -148,9 +149,8 @@
 
 			profile = await ProfileClient.getUserProfile(userPage);
 			profileUser = profile?.user;
-		} catch (error) {
-			console.error('Error saving profile:', error);
-			alert(`Failed to save profile: ${error}`);
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			isLoading = false;
 			isEditing = false;
@@ -186,8 +186,8 @@
 			commentPagination = commentsResp.pagination;
 
 			pagination = postPagination;
-		} catch (error) {
-			console.error('Error fetching profile data:', error);
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			isHydrated = true;
 		}

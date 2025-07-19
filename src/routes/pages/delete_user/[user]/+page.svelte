@@ -2,12 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
 	import UserClient from '$lib/client/tools/UserClient.client.ts';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const deleteUser = async () => {
 		try {
 			await UserClient.deleteUser();
-		} catch (error) {
-			console.error(error);
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			await authClient.signOut();
 			goto('/');

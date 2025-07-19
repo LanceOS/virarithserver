@@ -32,8 +32,6 @@
 		const inputElement = event.target as HTMLInputElement;
 		if (!inputElement || !inputElement.files) return;
 
-		console.log('New file being added to input', inputElement);
-
 		const dataTransfer = new DataTransfer();
 
 		imagePreviews.forEach((preview) => {

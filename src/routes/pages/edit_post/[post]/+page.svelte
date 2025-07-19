@@ -13,6 +13,7 @@
 	import Icon from '@iconify/svelte';
 	import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 	import type { PageData } from './$types.js';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const session = authClient.useSession();
 	let postId = page.params.post
@@ -112,8 +113,6 @@
 		event.preventDefault();
 		const formElement = event.target as HTMLFormElement;
 
-		console.log(formElement)
-
 		const titleInput = formElement.elements.namedItem('title') as HTMLInputElement;
 		const contentInput = formElement.elements.namedItem('content') as HTMLInputElement;
 		const categoryInput = formElement.elements.namedItem('category') as HTMLInputElement;
@@ -152,9 +151,9 @@
 				method: 'POST',
 				body: formData
 			});
-		} catch (error) {
+		} catch (error: any) {
 			isSubmitting = false;
-			console.error(error);
+			toast.push(error.message)
 		} finally {
 			isSubmitting = false;
 			goto('/pages/forum');

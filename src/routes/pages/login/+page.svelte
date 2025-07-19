@@ -1,10 +1,9 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { authClient } from '$lib/auth-client.ts';
-    import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
-    import SuccessModal from '$lib/client/components/popups/SuccessModal.svelte';
 
     import Icon from '@iconify/svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
     let credentials = $state({
         email: '',
@@ -12,17 +11,15 @@
     });
 
     let loading = $state(false);
-    let errorLog = $state('');
-    let successLog = $state('');
+
 
     $effect(() => {
         credentials.email;
         credentials.password;
-        errorLog = '';
     });
 
     const redirect = () => {
-        successLog = 'Successfully signed in! Redirecting...';
+        toast.push('Successfully signed in! Redirecting...');
         setTimeout(() => {
             goto('/');
         }, 2000);
@@ -30,7 +27,7 @@
 
     const validateForm = () => {
         if (!credentials.email || !credentials.password) {
-            errorLog = 'A Field is missing!';
+            toast.push('A Field is missing!');
             return false;
         } else {
             return true;
@@ -68,7 +65,6 @@
     // };
 
     const signInWithDiscord = async () => {
-        errorLog = '';
         loading = true;
 
         try {
@@ -78,14 +74,13 @@
 
         } catch (error: any) {
             console.error('Discord Sign-in Error:', error.message, error.status);
-            errorLog = error.message || 'Failed to sign in with Discord.';
+            toast.push(error.message || 'Failed to sign in with Discord.');
         } finally {
             loading = false;
         }
     };
 
     const signInWithGoogle = async () => {
-        errorLog = '';
         loading = true;
 
         let user;
@@ -97,7 +92,7 @@
 
         } catch (error: any) {
             console.error('Google Sign-in Error:', error.message, error.status);
-            errorLog = error.message || 'Failed to sign in with Google.';
+            toast.push(error.message || 'Failed to sign in with Google.');
         } finally {
             loading = false;
         }
@@ -110,12 +105,6 @@
     </section>
 
     <section class="relative flex w-full md:w-2/5 items-center justify-center px-4 py-8 md:py-0">
-        {#if errorLog}
-            <ErrorModal {errorLog} />
-        {/if}
-        {#if successLog}
-            <SuccessModal {successLog} />
-        {/if}
         <button
             type="button"
             aria-label="Return Home"

@@ -8,12 +8,12 @@
 	import { onMount } from 'svelte';
 	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import LikeButton from '$lib/client/components/actions/LikeButton.svelte';
-	import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
 	import { page } from '$app/state';
 	import ImagePreview from '$lib/client/components/forms/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
 	import CardHeader from '$lib/client/components/cards/CardHeader.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;
@@ -22,8 +22,6 @@
 	let comments: SerializedComment[] | undefined = $state();
 	let isLoadingPost: boolean = $state(true);
 	let isLoadingComments: boolean = $state(false);
-
-	let errorLog = $state('');
 
 	const handleCommentDelete = (commentId: string) => {
 		if (!comments) return;
@@ -51,7 +49,7 @@
 			comments = commentResponse;
 		} catch (error: any) {
 			console.error('Failed to load post:', error.error);
-			errorLog = 'Failed to load post. Please try again.';
+			toast.push('Failed to load post. Please try again.');
 		} finally {
 			isLoadingPost = false;
 			isLoadingComments = false;
@@ -59,9 +57,6 @@
 	});
 </script>
 
-{#if errorLog}
-	<ErrorModal {errorLog} />
-{/if}
 <Header />
 <main class="mx-auto flex max-w-7xl flex-col gap-8 p-3 pb-12 sm:p-8">
 	{#if isLoadingPost}

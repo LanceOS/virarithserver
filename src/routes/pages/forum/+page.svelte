@@ -10,10 +10,10 @@
     import CategoryClient from '$lib/client/tools/CategoryClient.client.ts';
     import { onMount } from 'svelte';
     import Icon from '@iconify/svelte'; 
+	import { toast } from '@zerodevx/svelte-toast';
 
     let isInitialLoading = $state(true);
     let isPaginationLoading = $state(false);
-    let errorLog = $state<string | null>(null);
 
     const session = authClient.useSession();
 
@@ -37,7 +37,6 @@
 
     const fetchPosts = async (page: number) => {
         isPaginationLoading = true;
-        errorLog = null;
         try {
             let response;
             if (selectedCategory !== 'all' && selectedCategory !== 'followers') {
@@ -55,8 +54,7 @@
             posts = response.posts;
             pagination = response.pagination;
         } catch (error) {
-            console.error('Error loading posts:', error);
-            errorLog = 'Failed to load posts. Please check your connection and try again.';
+            toast.push('Failed to load posts. Please check your connection and try again.');
             posts = []; 
             pagination = undefined; 
         } finally {
@@ -80,13 +78,12 @@
 
     const retryLoading = async () => {
         isInitialLoading = true;
-        errorLog = null;
         try {
             const postResponse = await PostClient.getAllPosts(orderBy, 1);
             posts = postResponse.posts;
             pagination = postResponse.pagination;
         } catch (error) {
-            errorLog = 'Failed to load posts. Please check your connection and try again.';
+            toast.push('Failed to load posts. Please check your connection and try again.');
             console.error('Error loading posts:', error);
         } finally {
             isInitialLoading = false;
@@ -103,8 +100,7 @@
             posts = postResponse.posts;
             pagination = postResponse.pagination;
         } catch (error) {
-            errorLog = 'Failed to load forum content. Please check your connection and try again.';
-            console.error('Error loading forum content:', error);
+            toast.push('Failed to load posts. Please check your connection and try again.');
         } finally {
             isInitialLoading = false;
         }

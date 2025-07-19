@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CommentClient from "$lib/client/tools/CommentClient.client.ts";
+	import { toast } from "@zerodevx/svelte-toast";
 
 
     const { cancelEdit, comment, commentFeedUpdate } = $props()
@@ -43,8 +44,8 @@
             commentFeedUpdate(newComment)
             cancelEdit()
         }
-        catch(error) {
-
+        catch(error: any) {
+            toast.push(error.message)
         }
         finally {
             isSubmittingComment = false;

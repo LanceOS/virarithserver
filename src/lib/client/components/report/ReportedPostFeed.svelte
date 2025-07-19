@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import ImagePreview from '../forms/ImagePreview.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let { posts } = $props<{
 		posts: PostWithImage[] | undefined;
@@ -14,6 +15,15 @@
 			month: 'short',
 			day: 'numeric'
 		});
+	}
+
+	const archivePost = async () => {
+		try {
+
+		}
+		catch(error: any) {
+			toast.push(error.message)
+		}
 	}
 </script>
 

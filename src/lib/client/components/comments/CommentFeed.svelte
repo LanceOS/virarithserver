@@ -8,6 +8,7 @@
 	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 	import RoleCard from '../cards/RoleCard.svelte';
 	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let { comments, isLoadingComments, handleCommentDelete } = $props<{
 		comments: CommentSchema[];
@@ -57,8 +58,8 @@
 		try {
 			await CommentClient.deleteComment(comment);
 			handleCommentDelete(comment.id);
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			toast.push(error.message)
 		} finally {
 			closeActionsMenu();
 		}

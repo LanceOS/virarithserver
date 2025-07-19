@@ -2,6 +2,7 @@
     import { authClient } from "$lib/auth-client.ts";
     import { page } from '$app/state';
     import CommentClient from "$lib/client/tools/CommentClient.client.ts";
+	import { toast } from "@zerodevx/svelte-toast";
     
     const session = authClient.useSession();
     const postId = page.params.post;
@@ -39,8 +40,8 @@
             const response = await CommentClient.createComment(data);
             const newComment = { ...response[0], user: user };
             handleAddComment(newComment)
-        } catch (error) {
-            console.error('Failed to create comment:', error);
+        } catch (error: any) {
+            toast.push(error.message)
         } finally {
             isSubmittingComment = false;
         }

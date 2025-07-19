@@ -6,14 +6,11 @@
 	import Footer from '$lib/client/components/landing/Footer.svelte';
 	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
 	import { PUBLIC_MC_SERVER_IP } from '$env/static/public';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const { data } = $props<{ data: PageData }>();
 
 	const staffUsers = data.staff;
-
-	let discordVisible = false;
-	let featuresVisible = false;
-	let communityVisible = false;
 
 	let copied = $state(false);
 
@@ -25,9 +22,8 @@
 			copied = true;
 
 			setTimeout(() => (copied = false), 2000);
-		} catch (err) {
-			console.error('Failed to copy IP: ', err);
-			alert('Failed to copy IP. Please copy it manually: ' + serverIp);
+		} catch (error: any) {
+			toast.push(error.message)
 		}
 	};
 </script>
