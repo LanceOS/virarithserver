@@ -5,7 +5,7 @@ const databaseUrl = `postgresql://${process.env.PRIVATE_POSTGRES_USER!}:${proces
 
 export default defineConfig({
   out: './drizzle',
-  schema: './src/lib/schemas/*.ts',
+  schema: './src/lib/server/schemas/*.ts',
   dialect: 'postgresql',
   dbCredentials: {
     url: databaseUrl,

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
-	import type { UserSchema } from '$lib/schemas/authentication.ts';
-	import type { CommentSchema } from '$lib/schemas/Comments.ts';
-	import PostClient from '$lib/client/PostClient.client.ts';
+	import type { UserSchema } from '$lib/server/schemas/authentication.ts';
+	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
+	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import Icon from '@iconify/svelte';
 	import ErrorModal from '../popups/ErrorModal.svelte';
-	import UserClient from '$lib/client/UserClient.client.ts';
+	import UserClient from '$lib/client/tools/UserClient.client.ts';
 
 	let { data, user } = $props<{
 		data?: PostWithImage | CommentSchema;

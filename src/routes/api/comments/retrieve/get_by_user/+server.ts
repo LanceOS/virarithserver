@@ -1,11 +1,11 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { isCommentLikedSubquery, replyCountSubquery } from '$lib/subqueries/CommentQueries.query.ts';
+import { isCommentLikedSubquery, replyCountSubquery } from '$lib/server/subqueries/CommentQueries.query.ts';
 import { and, count, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../../../../../lib/retrieval.config.ts';
-import { comments } from '$lib/schemas/Comments.ts';
+import { comments } from '$lib/server/schemas/Comments.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.query.ts';
+import { isCommentReportedSubquery } from '$lib/server/subqueries/CommentQueries.query.ts';
 
 export const GET = async ({ request }): Promise<Response> => {
 	try {

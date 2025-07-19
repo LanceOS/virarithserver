@@ -1,7 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { user } from '$lib/schemas/authentication.ts';
-import { uploadFile } from '$lib/server/MinIOServer.server.ts';
+import { user } from '$lib/server/schemas/authentication.ts';
+import { uploadFile } from '$lib/server/tools/MinIOServer.server.ts';
 import { and } from 'drizzle-orm';
 import { eq } from 'drizzle-orm';
 

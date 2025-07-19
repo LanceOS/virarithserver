@@ -1,10 +1,13 @@
 import type { SerializedComment } from "$lib/@types/ICommentSerializer.ts";
 import type { ImageWithUrl } from "$lib/@types/IImage.ts";
 import type { NewPost, PostWithImage } from "$lib/@types/IPostSerializer.ts";
+import type { PostSchema } from "$lib/server/schemas/Posts.ts";
 import { marked } from "marked";
 import sanitizeHtml from 'sanitize-html';
 
+type PostTypes = NewPost | PostSchema
 
+type PostResponseTypes = PostSchema | PostWithImage
 
 
 class Generalizer {
@@ -27,11 +30,11 @@ class Generalizer {
  * @returns A `PostWithImage` object or an array of `PostWithImage` objects,
  * with each post containing an `images` array populated with its associated images.
  */
-    static serializedPostDataAndAlignImages = (postData: NewPost[] | NewPost, images: ImageWithUrl[]): PostWithImage[] | PostWithImage => {
+    static serializedPostDataAndAlignImages = (postData: PostTypes | PostTypes[], images: ImageWithUrl[]): PostResponseTypes[] | PostResponseTypes => {
         const objectArray = Array.isArray(postData) ? postData : [postData];
         const isInputArray = Array.isArray(postData);
 
-        const result = objectArray.map((post): PostWithImage => {
+        const result = objectArray.map((post) => {
             const imagesForCurrentPost = images.filter(img => img.objectId === post.id && img.objectType === post.type)
                 .filter(img => img !== null);
 

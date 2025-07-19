@@ -1,5 +1,5 @@
 import { auth } from '$lib/auth.ts'
-import AdministrativeService from '$lib/server/Administrative.server.ts'
+import AdministrativeService from '$lib/server/tools/Administrative.server.ts'
 
 
 export const POST = async ({ request }) => {

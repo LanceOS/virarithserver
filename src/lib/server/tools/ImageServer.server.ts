@@ -1,9 +1,9 @@
 import { DrizzleDB } from "$lib/Drizzle.ts";
-import type { CommentReplySchema } from "$lib/schemas/CommentReply.ts";
-import type { CommentSchema } from "$lib/schemas/Comments.ts";
-import { images, type ImageSchema } from "$lib/schemas/Images.ts";
-import type { PostSchema } from "$lib/schemas/Posts.ts";
-import { bucketName, minioClient } from "$lib/server/MinIOServer.server.ts";
+import type { CommentReplySchema } from "$lib/server/schemas/CommentReply.ts";
+import type { CommentSchema } from "$lib/server/schemas/Comments.ts";
+import { images, type ImageSchema } from "$lib/server/schemas/Images.ts";
+import type { PostSchema } from "$lib/server/schemas/Posts.ts";
+import { bucketName, minioClient } from "$lib/server/tools/MinIOServer.server.ts";
 import { and, eq } from "drizzle-orm";
 import type { ImageWithUrl } from "$lib/@types/IImage.ts";
 import { PUBLIC_MINIO_ENDPOINT } from "$env/static/public";

@@ -3,9 +3,9 @@
 	import Icon from '@iconify/svelte';
 	import LikeButton from '../actions/LikeButton.svelte';
 	import { authClient } from '$lib/auth-client.ts';
-	import CommentClient from '$lib/client/CommentClient.client.ts';
+	import CommentClient from '$lib/client/tools/CommentClient.client.ts';
 	import CommentEdit from './CommentEdit.svelte';
-	import type { CommentSchema } from '$lib/schemas/Comments.ts';
+	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 	import RoleCard from '../cards/RoleCard.svelte';
 	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
 

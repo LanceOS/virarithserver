@@ -2,7 +2,7 @@
 	import Header from '$lib/components/landing/Header.svelte';
 	import Icon from '@iconify/svelte';
 	import CommentFeed from '$lib/components/comments/CommentFeed.svelte';
-	import type { UserSchema } from '$lib/schemas/authentication.ts';
+	import type { UserSchema } from '$lib/server/schemas/authentication.ts';
 	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import ProfileAvatar from '$lib/components/profile/ProfileAvatar.svelte';
 	import ProfileInfo from '$lib/components/profile/ProfileInfo.svelte';
@@ -10,10 +10,10 @@
 	import { onMount } from 'svelte';
 	import Pagination from '$lib/components/forum/Pagination.svelte';
 	import { page } from '$app/state';
-	import PostClient from '$lib/client/PostClient.client.ts';
-	import type { CommentSchema } from '$lib/schemas/Comments.ts';
-	import ProfileClient from '$lib/client/ProfileClient.client.ts';
-	import CommentClient from '$lib/client/CommentClient.client.ts';
+	import PostClient from '$lib/client/tools/PostClient.client.ts';
+	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
+	import ProfileClient from '$lib/client/tools/ProfileClient.client.ts';
+	import CommentClient from '$lib/client/tools/CommentClient.client.ts';
 	import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
 	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
 	import RoleCard from '$lib/components/cards/RoleCard.svelte';

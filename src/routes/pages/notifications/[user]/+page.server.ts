@@ -1,4 +1,4 @@
-import NotificationService from "$lib/server/NotificationServer.server.ts";
+import NotificationService from "$lib/server/tools/NotificationServer.server.ts";
 import type { PageServerLoad } from "./$types.js";
 
 

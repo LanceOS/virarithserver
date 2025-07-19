@@ -1,9 +1,9 @@
 import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts'
 import { auth } from '$lib/auth.ts'
 import { DrizzleDB } from '$lib/Drizzle.ts'
-import { commentReply } from '$lib/schemas/CommentReply.ts'
-import { comments } from '$lib/schemas/Comments.ts'
-import { notifications } from '$lib/schemas/Notifications.ts'
+import { commentReply } from '$lib/server/schemas/CommentReply.ts'
+import { comments } from '$lib/server/schemas/Comments.ts'
+import { notifications } from '$lib/server/schemas/Notifications.ts'
 import { and, inArray } from 'drizzle-orm'
 import { eq } from 'drizzle-orm'
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UserClient from '$lib/client/UserClient.client.ts';
+	import UserClient from '$lib/client/tools/UserClient.client.ts';
 	import Icon from '@iconify/svelte';
 
 	let { profile = $bindable() } = $props();

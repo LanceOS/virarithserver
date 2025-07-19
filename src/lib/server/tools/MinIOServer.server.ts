@@ -73,7 +73,6 @@ export async function uploadFile(file: File): Promise<string> {
  */
 export async function getFileUrl(fileId: string): Promise<string> {
     try {
-        // Generate a presigned URL that expires in 1 hour (3600 seconds).
         const url = await minioClient.presignedGetObject(bucketName, fileId, 3600);
         console.log(`Generated presigned URL for file ID ${fileId}.`);
         return url;

@@ -2,13 +2,13 @@ import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { and, count, desc, eq, sql } from 'drizzle-orm';
 import { postPageLimit } from '../../../../../lib/retrieval.config.ts';
-import { posts } from '$lib/schemas/Posts.ts';
-import { likes } from '$lib/schemas/Likes.ts'; 
-import ImageService from '$lib/server/ImageServer.server.ts';
-import { user } from '$lib/schemas/authentication.ts';
+import { posts } from '$lib/server/schemas/Posts.ts';
+import { likes } from '$lib/server/schemas/Likes.ts'; 
+import ImageService from '$lib/server/tools/ImageServer.server.ts';
+import { user } from '$lib/server/schemas/authentication.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { isPostLikedSubquery } from '$lib/subqueries/PostsQueries.query.ts';
-import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.query.ts';
+import { isPostLikedSubquery } from '$lib/server/subqueries/PostsQueries.query.ts';
+import { isCommentReportedSubquery } from '$lib/server/subqueries/CommentQueries.query.ts';
 
 
 export const GET = async ({ request }): Promise<Response> => {

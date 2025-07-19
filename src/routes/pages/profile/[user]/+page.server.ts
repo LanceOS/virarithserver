@@ -1,8 +1,8 @@
 import { fail, type Actions } from "@sveltejs/kit";
 import { auth } from "$lib/auth.ts";
-import ProfileService from "$lib/server/ProfileServer.server.ts";
-import S3Service from "$lib/server/S3Server.server.ts";
-import UserService from "$lib/server/UserServer.server.ts";
+import ProfileService from "$lib/server/tools/ProfileServer.server.ts";
+import S3Service from "$lib/server/tools/S3Server.server.ts";
+import UserService from "$lib/server/tools/UserServer.server.ts";
 
 
 export const actions: Actions = {

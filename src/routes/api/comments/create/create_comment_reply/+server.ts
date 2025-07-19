@@ -1,7 +1,7 @@
 
 import { authClient } from '$lib/auth-client.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { commentReply, type CommentReplySchema } from '$lib/schemas/CommentReply.ts';
+import { commentReply, type CommentReplySchema } from '$lib/server/schemas/CommentReply.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
 
 

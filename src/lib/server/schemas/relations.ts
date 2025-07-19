@@ -10,6 +10,7 @@ import { profile } from "./Profile.ts";
 import { images } from "./Images.ts";
 import { notifications } from "./Notifications.ts";
 import { followers } from "./Followers.ts";
+import { archived } from "./archived.ts";
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
     user: one(user, {
@@ -131,4 +132,12 @@ export const followersRelations = relations(followers, ({ one }) => ({
         references: [user.id],
         relationName: "user_followers" 
     }),
+}));
+
+
+export const archivedRelations = relations(archived, ({ one }) => ({
+  archiver: one(user, {
+    fields: [archived.archiver],
+    references: [user.id],
+  }),
 }));

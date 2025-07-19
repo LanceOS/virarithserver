@@ -1,7 +1,7 @@
-import type { CommentReplySchema } from "$lib/schemas/CommentReply.ts";
-import type { CommentSchema } from "$lib/schemas/Comments.ts";
-import type { PostSchema } from "$lib/schemas/Posts.ts";
-import { bucketName, minioClient } from "$lib/server/MinIOServer.server.ts";
+import type { CommentReplySchema } from "$lib/server/schemas/CommentReply.ts";
+import type { CommentSchema } from "$lib/server/schemas/Comments.ts";
+import type { PostSchema } from "$lib/server/schemas/Posts.ts";
+import { bucketName, minioClient } from "$lib/server/tools/MinIOServer.server.ts";
 
 
 interface IExistingObject {

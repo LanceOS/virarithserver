@@ -5,8 +5,8 @@
 	import Header from '$lib/components/landing/Header.svelte';
 	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
 	import ProfileAvatar from '$lib/components/profile/ProfileAvatar.svelte';
-	import { type UserSchema } from '$lib/schemas/authentication.ts';
-	import UserClient from '$lib/client/UserClient.client.ts';
+	import { type UserSchema } from '$lib/server/schemas/authentication.ts';
+	import UserClient from '$lib/client/tools/UserClient.client.ts';
 
 	const session = authClient.useSession();
 	const currentUser = $session.data?.user || undefined;

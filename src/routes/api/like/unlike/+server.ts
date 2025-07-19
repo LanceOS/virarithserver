@@ -1,6 +1,6 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { likes } from '$lib/schemas/Likes.ts';
-import NotificationService from '$lib/server/NotificationServer.server.ts';
+import { likes } from '$lib/server/schemas/Likes.ts';
+import NotificationService from '$lib/server/tools/NotificationServer.server.ts';
 import { eq } from 'drizzle-orm';
 
 

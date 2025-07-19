@@ -1,9 +1,9 @@
 import { PUBLIC_URL, PUBLIC_MINIO_ENDPOINT } from "$env/static/public";
 import { DrizzleDB } from "$lib/Drizzle.ts";
-import { user } from "$lib/schemas/authentication.ts";
+import { user } from "$lib/server/schemas/authentication.ts";
 import { eq, or } from "drizzle-orm";
 
-import { bucketName, minioClient } from "$lib/server/MinIOServer.server.ts";
+import { bucketName, minioClient } from "$lib/server/tools/MinIOServer.server.ts";
 
 import type { NewPost } from "$lib/@types/IPostSerializer.ts";
 import type { SerializedComment } from "$lib/@types/ICommentSerializer.ts";
@@ -97,6 +97,8 @@ const UserService = {
     },
 
     /**
+     * @note THIS FUNCTION IS IF YOU PLAN ON USING EMAIL AND PASSWORD FOR AUTHENTICATION
+     * OTHERWISE DO NOT USE THIS FUNCTION!
      * @Description This function is used to gather user avatars from an S3-compatible bucket
      * and align them with provided objects (e.g., posts, comments, profiles).
      * It generates presigned URLs for user images if they exist and are not placeholders or already URLs.

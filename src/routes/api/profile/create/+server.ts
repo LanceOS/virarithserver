@@ -1,5 +1,5 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { profile, type ProfileSchema } from '$lib/schemas/Profile.ts';
+import { profile, type ProfileSchema } from '$lib/server/schemas/Profile.ts';
 
 
 export const POST = async ({ request }): Promise<Response> => {

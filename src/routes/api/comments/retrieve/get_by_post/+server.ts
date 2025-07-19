@@ -1,9 +1,9 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { replyCountSubquery } from '$lib/subqueries/CommentQueries.query.ts';
-import { isCommentReportedSubquery } from '$lib/subqueries/CommentQueries.query.ts';
-import { isCommentLikedSubquery } from '$lib/subqueries/CommentQueries.query.ts';
+import { replyCountSubquery } from '$lib/server/subqueries/CommentQueries.query.ts';
+import { isCommentReportedSubquery } from '$lib/server/subqueries/CommentQueries.query.ts';
+import { isCommentLikedSubquery } from '$lib/server/subqueries/CommentQueries.query.ts';
 import { and, sql } from 'drizzle-orm';
 
 export const GET = async ({ request }): Promise<Response> => {

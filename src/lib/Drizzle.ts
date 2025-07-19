@@ -4,18 +4,18 @@ import { PRIVATE_POSTGRES_DB, PRIVATE_POSTGRES_PASSWORD, PRIVATE_POSTGRES_URL, P
 import { Pool } from 'pg';
 
 
-import * as comments from "./schemas/Comments.ts";
-import * as commentReply from "./schemas/CommentReply.ts";
-import * as posts from "./schemas/Posts.ts";
-import * as profile from "./schemas/Profile.ts";
-import * as reports from "./schemas/Topic.ts";
-import * as topic from "./schemas/Topic.ts"
-import * as relations from "./schemas/relations.ts"
-import * as authentication from "./schemas/authentication.ts"
-import * as notifications from "./schemas/Notifications.ts"
-import * as images from "./schemas/Images.ts"
-import * as likes from "./schemas/Likes.ts"
-import * as followers from "./schemas/Followers.ts"
+import * as comments from "./server/schemas/Comments.ts";
+import * as commentReply from "./server/schemas/CommentReply.ts";
+import * as posts from "./server/schemas/Posts.ts";
+import * as profile from "./server/schemas/Profile.ts";
+import * as reports from "./server/schemas/Topic.ts";
+import * as topic from "./server/schemas/Topic.ts"
+import * as relations from "./server/schemas/relations.ts"
+import * as authentication from "./server/schemas/authentication.ts"
+import * as notifications from "./server/schemas/Notifications.ts"
+import * as images from "./server/schemas/Images.ts"
+import * as likes from "./server/schemas/Likes.ts"
+import * as followers from "./server/schemas/Followers.ts"
 
 const databaseUrl = `postgresql://${PRIVATE_POSTGRES_USER}:${PRIVATE_POSTGRES_PASSWORD}@${PRIVATE_POSTGRES_URL}/${PRIVATE_POSTGRES_DB}`;
 

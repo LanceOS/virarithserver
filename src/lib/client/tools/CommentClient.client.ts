@@ -1,6 +1,6 @@
 import { PUBLIC_URL } from '$env/static/public';
 import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
-import type { CommentSchema } from '$lib/schemas/Comments.ts';
+import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 
 interface ICommentsParams {
 	userId: string;

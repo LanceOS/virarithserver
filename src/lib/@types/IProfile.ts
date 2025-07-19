@@ -1,5 +1,5 @@
-import type { UserSchema } from "$lib/schemas/authentication.ts";
-import type { ProfileSchema } from "$lib/schemas/Profile.ts";
+import type { UserSchema } from "$lib/server/schemas/authentication.ts";
+import type { ProfileSchema } from "$lib/server/schemas/Profile.ts";
 
 
 export interface IProfileWithUser extends ProfileSchema {

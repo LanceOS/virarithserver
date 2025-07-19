@@ -20,7 +20,6 @@ const AvatarService = {
 
       const objectPromises = objectArray.map(async (object) => {
         if (object.user.image && object.user.image !== 'placeholder') {
-          // Generate a presigned URL for the user's avatar, valid for 3600 seconds (1 hour)
           const userAvatarUrl = await minioClient.presignedGetObject(bucketName, object.user.image, 3600);
           return {
             ...object,
@@ -42,11 +41,10 @@ const AvatarService = {
         return resolvedObjects[0];
       }
 
-      // Otherwise, return the array of resolved objects
       return resolvedObjects;
     } catch (error) {
-      console.error("Error aligning user avatars:", error); // Use console.error for errors
-      throw new Error("Failed to align user avatars", { cause: error }); // Use cause for better error chaining
+      console.error("Error aligning user avatars:", error); 
+      throw new Error("Failed to align user avatars", { cause: error }); 
     }
   }
 };

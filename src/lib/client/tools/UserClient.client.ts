@@ -1,8 +1,8 @@
 import { PUBLIC_URL } from '$env/static/public';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
-import type { UserSchema } from '$lib/schemas/authentication.ts';
-import type { CommentReplySchema } from '$lib/schemas/CommentReply.ts';
-import type { CommentSchema } from '$lib/schemas/Comments.ts';
+import type { UserSchema } from '$lib/server/schemas/authentication.ts';
+import type { CommentReplySchema } from '$lib/server/schemas/CommentReply.ts';
+import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 
 interface IFollow {
 	receiverId: string;
@@ -86,8 +86,8 @@ export const UserClient = {
 				body: JSON.stringify(body) // Note: Body in DELETE might not be supported everywhere
 			});
 			return true;
-		} catch (error) {
-			throw new Error(error as string);
+		} catch (error: any) {
+			throw new Error(error.message);
 		}
 	},
 

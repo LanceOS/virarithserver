@@ -1,10 +1,10 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
-import ImageService from '$lib/server/ImageServer.server.ts';
-import PostService from '$lib/server/PostServer.server.ts';
-import S3Service from '$lib/server/S3Server.server.ts';
-import type { TopicSchema } from '$lib/schemas/Topic.ts';
-import CategoryClient from '$lib/client/CategoryClient.client.ts';
+import ImageService from '$lib/server/tools/ImageServer.server.ts';
+import PostServer from '$lib/server/tools/PostServer.server.ts';
+import S3Service from '$lib/server/tools/S3Server.server.ts';
+import type { TopicSchema } from '$lib/server/schemas/Topic.ts';
+import CategoryClient from '$lib/client/tools/CategoryClient.client.ts';
 import type { PageServerLoad } from './$types.js';
 
 
@@ -66,7 +66,7 @@ export const actions: Actions = {
 
             const updatedPost = { ...JSON.parse(data.get("post") as string), userId: session.user.id };
             console.log(updatedPost)
-            await PostService.updatePost(updatedPost)
+            await PostServer.updatePost(updatedPost)
 
             if (!updatedPost) {
                 return fail(400, { success: false, message: "missing form data" })

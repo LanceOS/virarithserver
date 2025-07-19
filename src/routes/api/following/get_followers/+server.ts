@@ -1,5 +1,5 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { followers } from '$lib/schemas/Followers.ts';
+import { followers } from '$lib/server/schemas/Followers.ts';
 import { eq } from 'drizzle-orm';
 
 

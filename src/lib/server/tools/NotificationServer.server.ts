@@ -1,5 +1,5 @@
 import { DrizzleDB } from "$lib/Drizzle.ts";
-import { notifications, type NotificationSchema } from "$lib/schemas/Notifications.ts";
+import { notifications, type NotificationSchema } from "$lib/server/schemas/Notifications.ts";
 import { and, eq } from "drizzle-orm";
 
 
@@ -41,7 +41,6 @@ const NotificationService = {
         }
         catch (error) {
             console.error(`Failed to create new notification for object: ${JSON.stringify(object)}. Error:`, error);
-            // Re-throwing a new Error with a cause for better debugging
             throw new Error(`Failed to create new notification.`, { cause: error });
         }
     },
@@ -55,7 +54,6 @@ const NotificationService = {
      */
     removeUserNotification: async (object: INotification): Promise<boolean> => {
         try {
-            // Using Drizzle's `and` and `eq` to specify multiple conditions for deletion
             await DrizzleDB.delete(notifications)
                 .where(and(
                     eq(notifications.objectId, object.objectId),

@@ -1,4 +1,4 @@
-import type { UserSchema } from "$lib/schemas/authentication.ts";
+import type { UserSchema } from "$lib/server/schemas/authentication.ts";
 
 export interface SerializedComment {
     id: string;
@@ -10,8 +10,8 @@ export interface SerializedComment {
     isEdited: boolean | null;
     isDeleted: boolean | null;
     postId: string;
-    likeCount: number;
-    isLiked: boolean;
+    likeCount?: number;
+    isLiked?: boolean;
     replyCount?: number;
     user: UserSchema
 }

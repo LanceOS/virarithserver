@@ -1,9 +1,9 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { user } from '$lib/schemas/authentication.ts';
-import { commentReply } from '$lib/schemas/CommentReply.ts';
-import { comments } from '$lib/schemas/Comments.ts';
-import { posts } from '$lib/schemas/Posts.ts';
-import { reports, type ReportSchema } from '$lib/schemas/Reports.ts';
+import { user } from '$lib/server/schemas/authentication.ts';
+import { commentReply } from '$lib/server/schemas/CommentReply.ts';
+import { comments } from '$lib/server/schemas/Comments.ts';
+import { posts } from '$lib/server/schemas/Posts.ts';
+import { reports, type ReportSchema } from '$lib/server/schemas/Reports.ts';
 import { and, eq } from 'drizzle-orm';
 
 const AdministrativeService = {
@@ -22,7 +22,6 @@ const AdministrativeService = {
         if (diffMonths >= 24) {
             // 2 years or more
             points += 15;
-            // Small scaling for every year beyond 2 years
             const yearsBeyondTwo = Math.floor(diffMonths / 12) - 2;
             if (yearsBeyondTwo > 0) {
                 points += yearsBeyondTwo * 1;
@@ -65,10 +64,13 @@ const AdministrativeService = {
             let newScore: number;
             let newReport: ReportSchema;
 
+            const REQUIRED_REPORT_POINTS = 0;
+
             if (existingReports.length > 0) {
                 // Calculate the sum of all existing scores plus the new reportPoints
                 const totalExistingScore = existingReports.reduce((sum, report) => sum + (report.score || 0), 0);
                 newScore = totalExistingScore + reportPoints;
+                
 
                 newReport = {
                     userId: data.reporterUserId,
@@ -77,15 +79,18 @@ const AdministrativeService = {
                     score: newScore
                 };
 
-                if (newScore >= 50) {
+                if (newScore > REQUIRED_REPORT_POINTS) {
                     if (data.objectType === 'posts') {
-                        await DrizzleDB.update(posts).set({ isFlagged: true, isDeleted: true }).where(eq(posts.id, data.objectId));
+                        await DrizzleDB.update(posts).set({ isFlagged: true, isDeleted: true }).where(eq(posts.id, data.objectId)).execute();
                     } else if (data.objectType === 'comment') {
-                        await DrizzleDB.update(comments).set({ isFlagged: true, isDeleted: true }).where(eq(comments.id, data.objectId));
+                        await DrizzleDB.update(comments).set({ isFlagged: true, isDeleted: true }).where(eq(comments.id, data.objectId)).execute();
                     } else if (data.objectType === 'commentReply') {
-                        await DrizzleDB.update(commentReply).set({ isFlagged: true, isDeleted: true }).where(eq(commentReply.id, data.objectId));
+                        await DrizzleDB.update(commentReply).set({ isFlagged: true, isDeleted: true }).where(eq(commentReply.id, data.objectId)).execute();
                     }
                 }
+
+                console.debug(newReport)
+
                 await DrizzleDB.insert(reports).values(newReport); // Always insert the new report
             } else {
                 // No existing reports, so the new score is just the report points

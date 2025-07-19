@@ -3,8 +3,8 @@ import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import ImageService from '$lib/server/ImageServer.server.ts';
-import { isPostLikedSubquery, isPostReportedSubquery } from '$lib/subqueries/PostsQueries.query.ts';
+import ImageService from '$lib/server/tools/ImageServer.server.ts';
+import { isPostLikedSubquery, isPostReportedSubquery } from '$lib/server/subqueries/PostsQueries.query.ts';
 import { and, sql } from 'drizzle-orm';
 
 export const GET = async ({ request }): Promise<Response> => {

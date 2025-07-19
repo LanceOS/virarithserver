@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
-	import UserClient from '$lib/client/UserClient.client.ts';
+	import UserClient from '$lib/client/tools/UserClient.client.ts';
 
 	const deleteUser = async () => {
 		try {

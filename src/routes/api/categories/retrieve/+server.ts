@@ -1,5 +1,5 @@
 import { DrizzleDB } from '$lib/Drizzle.ts'
-import { topic } from '$lib/schemas/Topic.ts'
+import { topic } from '$lib/server/schemas/Topic.ts'
 import { desc } from 'drizzle-orm'
 
 

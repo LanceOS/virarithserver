@@ -2,11 +2,11 @@ import { DrizzleDB } from '$lib/Drizzle.ts';
 import { and } from 'drizzle-orm';
 import { sql } from 'drizzle-orm';
 import { auth } from '$lib/auth.ts';
-import ImageService from '$lib/server/ImageServer.server.ts';
+import ImageService from '$lib/server/tools/ImageServer.server.ts';
 import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
-import { isPostLikedSubquery, isPostReportedSubquery } from '$lib/subqueries/PostsQueries.query.ts';
+import { isPostLikedSubquery, isPostReportedSubquery } from '$lib/server/subqueries/PostsQueries.query.ts';
 
 export const GET = async ({ request }): Promise<Response> => {
 	try {

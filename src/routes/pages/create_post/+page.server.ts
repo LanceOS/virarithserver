@@ -1,11 +1,11 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/auth.ts';
-import type { PostSchema } from '$lib/schemas/Posts.ts';
-import S3Service from '$lib/server/S3Server.server.ts';
-import PostService from '$lib/server/PostServer.server.ts';
+import type { PostSchema } from '$lib/server/schemas/Posts.ts';
+import S3Service from '$lib/server/tools/S3Server.server.ts';
+import PostServer from '$lib/server/tools/PostServer.server.ts';
 import type { PageServerLoad } from './$types.js';
-import CategoryClient from '$lib/client/CategoryClient.client.ts';
-import type { TopicSchema } from '$lib/schemas/Topic.ts';
+import CategoryClient from '$lib/client/tools/CategoryClient.client.ts';
+import type { TopicSchema } from '$lib/server/schemas/Topic.ts';
 
 
 
@@ -74,7 +74,7 @@ export const actions: Actions = {
         userId: session.user.id
       }
 
-      const postData = await PostService.createPost(post);
+      const postData = await PostServer.createPost(post);
 
       let validFiles: File[] = [];
       let imageIds: string[] = [];

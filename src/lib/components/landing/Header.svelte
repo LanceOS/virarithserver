@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client.ts';
-	import type { UserSchema } from '$lib/schemas/authentication.ts';
+	import type { UserSchema } from '$lib/server/schemas/authentication.ts';
 	import Icon from '@iconify/svelte';
 
 	const session = authClient.useSession();

@@ -4,10 +4,10 @@
 	import CommentFeed from '$lib/components/comments/CommentFeed.svelte';
 	import CreateComment from '$lib/components/comments/CreateComment.svelte';
 	import Header from '$lib/components/landing/Header.svelte';
-	import CommentClient from '$lib/client/CommentClient.client.ts';
+	import CommentClient from '$lib/client/tools/CommentClient.client.ts';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
-	import PostClient from '$lib/client/PostClient.client.ts';
+	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import LikeButton from '$lib/components/actions/LikeButton.svelte';
 	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
 	import { page } from '$app/state';

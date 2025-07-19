@@ -1,4 +1,4 @@
-import type { UserSchema } from "$lib/schemas/authentication.ts";
+import type { UserSchema } from "$lib/server/schemas/authentication.ts";
 import type { ImageWithUrl } from "./IImage.ts";
 
 export interface NewPost {

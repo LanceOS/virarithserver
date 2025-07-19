@@ -1,5 +1,5 @@
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { profile, type ProfileSchema } from '$lib/schemas/Profile.ts';
+import { profile, type ProfileSchema } from '$lib/server/schemas/Profile.ts';
 import Generalizer from '$lib/serializers/Generalizer.ts';
 import { and, eq } from 'drizzle-orm';
 

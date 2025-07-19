@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { authClient, useSession } from '$lib/auth-client.ts';
+	import { authClient } from '$lib/auth-client.ts';
 	import Header from '$lib/components/landing/Header.svelte';
 	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
-	import CategoryClient from '$lib/client/CategoryClient.client.ts';
-	import PostClient from '$lib/client/PostClient.client.ts';
+	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import TitleInput from '$lib/components/forms/TitleInput.svelte';

@@ -1,7 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
 import { and, eq } from 'drizzle-orm';
-import { comments } from '$lib/schemas/Comments.ts'
+import { comments } from '$lib/server/schemas/Comments.ts'
 
 export const PUT = async ({ request }) => {
     try {

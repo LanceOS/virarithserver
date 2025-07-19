@@ -1,7 +1,7 @@
 import { auth } from '$lib/auth.ts';
 import { DrizzleDB } from '$lib/Drizzle.ts';
-import { followers } from '$lib/schemas/Followers.ts';
-import NotificationService from '$lib/server/NotificationServer.server.ts';
+import { followers } from '$lib/server/schemas/Followers.ts';
+import NotificationService from '$lib/server/tools/NotificationServer.server.ts';
 import { eq } from 'drizzle-orm';
 import { and } from 'drizzle-orm';
 

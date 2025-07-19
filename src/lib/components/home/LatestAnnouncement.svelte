@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
-    import PostClient from '$lib/client/PostClient.client.ts';
+    import PostClient from '$lib/client/tools/PostClient.client.ts';
     import Icon from '@iconify/svelte';
     import { onMount } from 'svelte';
     import LikeButton from '../actions/LikeButton.svelte';
