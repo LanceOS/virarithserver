@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { IPagination } from '$lib/@types/IPagination.ts';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
-	import Pagination from '$lib/components/forum/Pagination.svelte';
-	import Header from '$lib/components/landing/Header.svelte';
+	import Pagination from '$lib/client/components/forum/Pagination.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
 	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 	import { onMount } from 'svelte';
-	import ReportedPostFeed from '$lib/components/report/ReportedPostFeed.svelte';
-	import ReportedCommentFeed from '$lib/components/report/ReportedCommentFeed.svelte';
+	import ReportedPostFeed from '$lib/client/components/report/ReportedPostFeed.svelte';
+	import ReportedCommentFeed from '$lib/client/components/report/ReportedCommentFeed.svelte';
 
 	let posts: PostWithImage[] | undefined = $state();
 	let comments: CommentSchema[] | undefined = $state();

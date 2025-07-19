@@ -1,23 +1,23 @@
 <script lang="ts">
-	import Header from '$lib/components/landing/Header.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
 	import Icon from '@iconify/svelte';
-	import CommentFeed from '$lib/components/comments/CommentFeed.svelte';
+	import CommentFeed from '$lib/client/components/comments/CommentFeed.svelte';
 	import type { UserSchema } from '$lib/server/schemas/authentication.ts';
 	import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
-	import ProfileAvatar from '$lib/components/profile/ProfileAvatar.svelte';
-	import ProfileInfo from '$lib/components/profile/ProfileInfo.svelte';
+	import ProfileAvatar from '$lib/client/components/profile/ProfileAvatar.svelte';
+	import ProfileInfo from '$lib/client/components/profile/ProfileInfo.svelte';
 	import { authClient } from '$lib/auth-client.ts';
 	import { onMount } from 'svelte';
-	import Pagination from '$lib/components/forum/Pagination.svelte';
+	import Pagination from '$lib/client/components/forum/Pagination.svelte';
 	import { page } from '$app/state';
 	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
 	import ProfileClient from '$lib/client/tools/ProfileClient.client.ts';
 	import CommentClient from '$lib/client/tools/CommentClient.client.ts';
 	import type { IProfileWithUser } from '$lib/@types/IProfile.ts';
-	import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
-	import RoleCard from '$lib/components/cards/RoleCard.svelte';
-	import FollowButton from '$lib/components/actions/FollowButton.svelte';
+	import ForumFeed from '$lib/client/components/forum/ForumFeed.svelte';
+	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
+	import FollowButton from '$lib/client/components/actions/FollowButton.svelte';
 
 	const userPage = page.params.user;
 

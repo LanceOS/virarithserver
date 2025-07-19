@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Header from '$lib/components/landing/Header.svelte';
-	import Hero from '$lib/components/home/Hero.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
+	import Hero from '$lib/client/components/home/Hero.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types.js';
-	import Footer from '$lib/components/landing/Footer.svelte';
-	import RoleCard from '$lib/components/cards/RoleCard.svelte';
+	import Footer from '$lib/client/components/landing/Footer.svelte';
+	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
 	import { PUBLIC_MC_SERVER_IP } from '$env/static/public';
 
 	const { data } = $props<{ data: PageData }>();

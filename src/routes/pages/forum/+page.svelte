@@ -1,11 +1,11 @@
 <script lang="ts">
     import type { IPagination, PostWithImage } from '$lib/@types/IPostSerializer.ts';
     import { authClient } from '$lib/auth-client.ts';
-    import CategoryFilter from '$lib/components/forms/CategoryFilter.svelte';
-    import Filter from '$lib/components/forum/Filter.svelte';
-    import ForumFeed from '$lib/components/forum/ForumFeed.svelte';
-    import Pagination from '$lib/components/forum/Pagination.svelte';
-    import Header from '$lib/components/landing/Header.svelte';
+    import CategoryFilter from '$lib/client/components/forms/CategoryFilter.svelte';
+    import Filter from '$lib/client/components/forum/Filter.svelte';
+    import ForumFeed from '$lib/client/components/forum/ForumFeed.svelte';
+    import Pagination from '$lib/client/components/forum/Pagination.svelte';
+    import Header from '$lib/client/components/landing/Header.svelte';
     import PostClient from '$lib/client/tools/PostClient.client.ts';
     import CategoryClient from '$lib/client/tools/CategoryClient.client.ts';
     import { onMount } from 'svelte';

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client.ts';
-	import UserActions from '$lib/components/actions/UserActions.svelte';
-	import RoleCard from '$lib/components/cards/RoleCard.svelte';
-	import Header from '$lib/components/landing/Header.svelte';
-	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
-	import ProfileAvatar from '$lib/components/profile/ProfileAvatar.svelte';
+	import UserActions from '$lib/client/components/actions/UserActions.svelte';
+	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
+	import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
+	import ProfileAvatar from '$lib/client/components/profile/ProfileAvatar.svelte';
 	import { type UserSchema } from '$lib/server/schemas/authentication.ts';
 	import UserClient from '$lib/client/tools/UserClient.client.ts';
 

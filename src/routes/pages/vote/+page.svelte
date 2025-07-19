@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_MC_SERVER_IP } from '$env/static/public';
-    import Footer from '$lib/components/landing/Footer.svelte';
-    import Header from '$lib/components/landing/Header.svelte';
+    import Footer from '$lib/client/components/landing/Footer.svelte';
+    import Header from '$lib/client/components/landing/Header.svelte';
     import Icon from '@iconify/svelte';
 
     const voteSites = [

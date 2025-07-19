@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
-	import Header from '$lib/components/landing/Header.svelte';
-	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
+	import ImagePreview from '$lib/client/components/forms/ImagePreview.svelte';
 	import PostClient from '$lib/client/tools/PostClient.client.ts';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import TitleInput from '$lib/components/forms/TitleInput.svelte';
-	import ContentInput from '$lib/components/forms/ContentInput.svelte';
-	import CategorySelect from '$lib/components/forms/CategorySelect.svelte';
-	import ImageInput from '$lib/components/forms/ImageInput.svelte';
+	import TitleInput from '$lib/client/components/forms/TitleInput.svelte';
+	import ContentInput from '$lib/client/components/forms/ContentInput.svelte';
+	import CategorySelect from '$lib/client/components/forms/CategorySelect.svelte';
+	import ImageInput from '$lib/client/components/forms/ImageInput.svelte';
 	import Icon from '@iconify/svelte';
 	import type { ImageWithUrl } from '$lib/@types/IImage.ts';
 	import type { PageData } from './$types.js';

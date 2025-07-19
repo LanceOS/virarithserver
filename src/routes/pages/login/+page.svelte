@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { authClient } from '$lib/auth-client.ts';
-    import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
-    import SuccessModal from '$lib/components/popups/SuccessModal.svelte';
+    import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
+    import SuccessModal from '$lib/client/components/popups/SuccessModal.svelte';
 
     import Icon from '@iconify/svelte';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Footer from '$lib/components/landing/Footer.svelte';
-    import Header from '$lib/components/landing/Header.svelte';
+	import Footer from '$lib/client/components/landing/Footer.svelte';
+    import Header from '$lib/client/components/landing/Header.svelte';
     import data from '$lib/data/TermsOfService.json' with { type: 'json' };
 
     const termsOfService = data.termsOfService;

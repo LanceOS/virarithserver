@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client.ts';
-	import CommentFeed from '$lib/components/comments/CommentFeed.svelte';
-	import CreateComment from '$lib/components/comments/CreateComment.svelte';
-	import Header from '$lib/components/landing/Header.svelte';
+	import CommentFeed from '$lib/client/components/comments/CommentFeed.svelte';
+	import CreateComment from '$lib/client/components/comments/CreateComment.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
 	import CommentClient from '$lib/client/tools/CommentClient.client.ts';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 	import PostClient from '$lib/client/tools/PostClient.client.ts';
-	import LikeButton from '$lib/components/actions/LikeButton.svelte';
-	import ErrorModal from '$lib/components/popups/ErrorModal.svelte';
+	import LikeButton from '$lib/client/components/actions/LikeButton.svelte';
+	import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
 	import { page } from '$app/state';
-	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
+	import ImagePreview from '$lib/client/components/forms/ImagePreview.svelte';
 	import type { PostWithImage } from '$lib/@types/IPostSerializer.ts';
 	import type { SerializedComment } from '$lib/@types/ICommentSerializer.ts';
-	import CardHeader from '$lib/components/cards/CardHeader.svelte';
+	import CardHeader from '$lib/client/components/cards/CardHeader.svelte';
 
 	const session = authClient.useSession();
 	const postId = page.params.post;

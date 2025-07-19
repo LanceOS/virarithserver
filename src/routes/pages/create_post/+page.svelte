@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Header from '$lib/components/landing/Header.svelte';
-	import ImagePreview from '$lib/components/forms/ImagePreview.svelte';
+	import Header from '$lib/client/components/landing/Header.svelte';
+	import ImagePreview from '$lib/client/components/forms/ImagePreview.svelte';
 	import { onMount } from 'svelte';
-	import ContentInput from '$lib/components/forms/ContentInput.svelte';
+	import ContentInput from '$lib/client/components/forms/ContentInput.svelte';
 	import Icon from '@iconify/svelte';
-	import TitleInput from '$lib/components/forms/TitleInput.svelte';
-	import CategorySelect from '$lib/components/forms/CategorySelect.svelte';
-	import ImageInput from '$lib/components/forms/ImageInput.svelte';
+	import TitleInput from '$lib/client/components/forms/TitleInput.svelte';
+	import CategorySelect from '$lib/client/components/forms/CategorySelect.svelte';
+	import ImageInput from '$lib/client/components/forms/ImageInput.svelte';
 	import type { PageData } from './$types.js';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
