@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CommentSchema } from '$lib/server/schemas/Comments.ts';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let { comments } = $props<{
 		comments: CommentSchema[] | undefined;
@@ -13,13 +14,51 @@
 			day: 'numeric'
 		});
 	}
+
+	const archiveComment = async (comment: CommentSchema) => {
+		const data = {
+			objectId: comment.id,
+			objectType: comment.type
+		};
+
+		try {
+			await fetch('/admin/reported_feed/archive', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+		} catch (error: any) {
+			toast.push(error.message);
+		}
+	};
+
+	const reinstateComment = async (comment: CommentSchema) => {
+		const data = {
+			objectId: comment.id,
+			objectType: comment.type
+		};
+
+		try {
+			await fetch('/admin/reported_feed/reinstate', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+		} catch (error: any) {
+			toast.push(error.message);
+		}
+	};
 </script>
 
 {#if comments}
 	{#each comments as comment, index (comment.id)}
 		<article class="sm:card-setup flex flex-col gap-6">
 			<header class="flex flex-col gap-4">
-				<div class="flex gap-2 items-center">
+				<div class="flex items-center gap-2">
 					{#if comment.user?.image}
 						<div class="user-avatar flex-shrink-0">
 							<img
@@ -47,12 +86,16 @@
 						</time>
 					</div>
 				</div>
-                {@html comment.content.length > 50 ? comment.content.slice(0, 350) + '…' : comment.content}
+				{@html comment.content.length > 50 ? comment.content.slice(0, 350) + '…' : comment.content}
 			</header>
 
 			<div class="flex items-center gap-12">
-				<button type="button" class="btn-small">Reinstate</button>
-				<button type="button" class="btn-delete">Archive</button>
+				<button type="button" class="btn-small" onclick={() => reinstateComment(comment)}
+					>Reinstate</button
+				>
+				<button type="button" class="btn-delete" onclick={() => archiveComment(comment)}
+					>Archive</button
+				>
 			</div>
 		</article>
 		{#if index !== comments.length - 1}

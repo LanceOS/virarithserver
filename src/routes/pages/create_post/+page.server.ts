@@ -5,7 +5,7 @@ import S3Service from '$lib/server/tools/S3Server.server.ts';
 import PostServer from '$lib/server/tools/PostServer.server.ts';
 import type { PageServerLoad } from './$types.js';
 import CategoryClient from '$lib/client/tools/CategoryClient.client.ts';
-import type { TopicSchema } from '$lib/server/schemas/Topic.ts';
+import type { CategorySchema } from '$lib/server/schemas/Category.ts';
 
 
 
@@ -20,20 +20,20 @@ export const load: PageServerLoad = async ({ request }) => {
 
     const user = session.user;
 
-    const response: TopicSchema[] = await CategoryClient.getCategories();
+    const response: CategorySchema[] = await CategoryClient.getCategories();
     const filteredCategories: string[] = [];
 
     for (let i = 0; i < response.length; i++) {
-      const topic = response[i].topic.trim().toLowerCase();
+      const category = response[i].category.trim().toLowerCase();
 
-      if (user.role === 'user' && (topic === 'updates' || topic === 'announcements')) {
+      if (user.role === 'user' && (category === 'updates' || category === 'announcements')) {
         continue;
       }
-      if (topic === 'all') {
+      if (category === 'all') {
         continue;
       }
 
-      filteredCategories.push(response[i].topic);
+      filteredCategories.push(response[i].category);
     }
 
     return {

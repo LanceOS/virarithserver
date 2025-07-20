@@ -57,11 +57,11 @@
 		{#each categoryList as category}
 			<button
 				type="button"
-				onclick={() => changeCategory(category.topic)}
-				class={getButtonClass(category.topic)}
+				onclick={() => changeCategory(category.category)}
+				class={getButtonClass(category.category)}
 			>
 				<Icon icon="mdi:minecraft" class="text-xl" />
-				<span class="truncate">{category.topic.toUpperCase()}</span>
+				<span class="truncate">{category.category.toUpperCase()}</span>
 			</button>
 		{/each}
 	{/if}

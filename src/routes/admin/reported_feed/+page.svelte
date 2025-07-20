@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import ReportedPostFeed from '$lib/client/components/report/ReportedPostFeed.svelte';
 	import ReportedCommentFeed from '$lib/client/components/report/ReportedCommentFeed.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	let posts: PostWithImage[] | undefined = $state();
 	let comments: CommentSchema[] | undefined = $state();
@@ -14,6 +15,8 @@
 	let pagination: IPagination | undefined = $state();
 	let postPagination: IPagination | undefined = $state();
 	let commentPagination: IPagination | undefined = $state();
+
+	let usernameInput: string = $state('');
 
 	let orderBy: string = $state('desc');
 	let isPaginationLoading: boolean = $state(false);
@@ -25,12 +28,15 @@
 	const fetchData = async (type: 'posts' | 'comments', page: number) => {
 		isPaginationLoading = true;
 		try {
-			const response = await fetch(`/admin/reported_feed/${type}?page=${page}&orderBy=${orderBy}`, {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' }
-			});
+			const response = await fetch(
+				`/admin/reported_feed/${type}?page=${page}&orderBy=${orderBy}&username=${usernameInput || ''}`,
+				{
+					method: 'GET',
+					headers: { 'Content-Type': 'application/json' }
+				}
+			);
 
-			if (!response.ok) {
+			if (response.status !== 200) {
 				throw new Error(`Failed to fetch ${type}`);
 			}
 
@@ -45,8 +51,8 @@
 				commentPagination = data.pagination;
 				pagination = commentPagination;
 			}
-		} catch (error) {
-			console.error(`Error loading ${type}:`, error);
+		} catch (error: any) {
+			toast.push(`Error loading ${type}`);
 			if (type === 'posts') {
 				posts = [];
 			} else {
@@ -91,17 +97,22 @@
 		}
 	};
 
+	const getByName = async () => {
+		await fetchData(activeTab, 1)
+		console.log("data")
+	}
+
 	onMount(async () => {
 		await fetchData(activeTab, 1);
 	});
 </script>
 
 <Header />
-<main class="mx-auto max-w-7xl space-y-4 px-4">
+<main class="mx-auto max-w-7xl space-y-4 px-4 pb-16">
 	<section class="card-setup space-y-4">
 		<h1 class="text-2xl">Search post or comments by username.</h1>
-		<input type="text" class="input" />
-		<button type="button" class="btn-small">Search</button>
+		<input type="text" class="input" bind:value={usernameInput}/>
+		<button type="button" class="btn-small" onclick={getByName}>Search</button>
 	</section>
 
 	<div>

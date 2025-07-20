@@ -141,12 +141,6 @@
                     <Icon icon="svg-spinners:blocks-shuffle-3" class="pagination-spinner-icon text-4xl" style="color: var(--color-primary);" />
                     <p class="text-base" style="color: var(--color-muted);">Loading forum posts...</p>
                 </section>
-            {:else if errorLog}
-                <section class="card-setup flex flex-col items-center justify-center gap-4 p-8 text-center min-h-64">
-                    <Icon icon="material-symbols:error-outline" class="text-5xl" style="color: var(--color-error);" />
-                    <p class="text-base font-medium" style="color: var(--color-error);">{errorLog}</p>
-                    <button class="btn-small" onclick={retryLoading}>Try Again</button>
-                </section>
             {:else if posts && posts.length > 0}
                 <div class="mb-4 flex items-center justify-end">
                     <Filter {changeOrder} />

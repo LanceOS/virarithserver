@@ -1,13 +1,13 @@
 import { DrizzleDB } from '$lib/Drizzle.ts'
-import { topic } from '$lib/server/schemas/Topic.ts'
+import { category } from '$lib/server/schemas/Category.ts'
 import { desc } from 'drizzle-orm'
 
 
 export const GET = async ({ request }) => {
     try {
-        const response = await DrizzleDB.query.topic.findMany({
-            where: (topic, { eq }) => eq(topic.isDeleted, false),
-            orderBy: desc(topic.updatedAt)
+        const response = await DrizzleDB.query.category.findMany({
+            where: (category, { eq }) => eq(category.isDeleted, false),
+            orderBy: desc(category.updatedAt)
         })
 
         return new Response(JSON.stringify(response), {

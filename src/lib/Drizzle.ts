@@ -8,8 +8,8 @@ import * as comments from "./server/schemas/Comments.ts";
 import * as commentReply from "./server/schemas/CommentReply.ts";
 import * as posts from "./server/schemas/Posts.ts";
 import * as profile from "./server/schemas/Profile.ts";
-import * as reports from "./server/schemas/Topic.ts";
-import * as topic from "./server/schemas/Topic.ts"
+import * as reports from "./server/schemas/Category.ts";
+import * as topic from "./server/schemas/Category.ts"
 import * as relations from "./server/schemas/relations.ts"
 import * as authentication from "./server/schemas/authentication.ts"
 import * as notifications from "./server/schemas/Notifications.ts"

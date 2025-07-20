@@ -3,10 +3,10 @@
 	import UserActions from '$lib/client/components/actions/UserActions.svelte';
 	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
 	import Header from '$lib/client/components/landing/Header.svelte';
-	import ErrorModal from '$lib/client/components/popups/ErrorModal.svelte';
 	import ProfileAvatar from '$lib/client/components/profile/ProfileAvatar.svelte';
 	import { type UserSchema } from '$lib/server/schemas/authentication.ts';
 	import UserClient from '$lib/client/tools/UserClient.client.ts';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const session = authClient.useSession();
 	const currentUser = $session.data?.user || undefined;
@@ -20,13 +20,11 @@
 	let warning: string = $state('');
 	let warningError: string = $state('');
 
-	let errorLog: string = $state('');
 
 	let banAction: boolean = $state(false);
 	let roleAction: boolean = $state(false);
 
 	const searchUser = async () => {
-		errorLog = '';
 		searchedUser = undefined;
 		banAction = false;
 		roleAction = false;
@@ -38,24 +36,23 @@
 					searchedUser = response;
 					selectedRole = response.role;
 				} else {
-					errorLog = 'User not found.';
+					toast.push('User not found.');
 				}
 			} else {
-				errorLog = 'Must provide a name!';
+				toast.push('Must provide a name!');
 			}
 		} catch (error: any) {
-			errorLog = error.message;
+			toast.push(error.message);
 		}
 	};
 
 	const updateUserRole = async () => {
-		errorLog = '';
 		if (!searchedUser) {
-			errorLog = 'No user selected to update.';
+			toast.push('No user selected to update.');
 			return;
 		}
 		if (selectedRole === searchedUser.role) {
-			errorLog = 'The selected role is already the current role.';
+			toast.push('The selected role is already the current role.');
 			banAction = false;
 			roleAction = false;
 			return;
@@ -71,18 +68,17 @@
 				body: formData
 			});
 			searchedUser.role = selectedRole;
-			errorLog = `Successfully updated role for ${searchedUser.name} to ${selectedRole}.`;
+			toast.push(`Successfully updated role for ${searchedUser.name} to ${selectedRole}.`);
 			banAction = false;
 			roleAction = false;
 		} catch (error: any) {
-			errorLog = `Failed to update role: ${error.message}`;
+			toast.push(`Failed to update role: ${error.message}`);
 		}
 	};
 
 	const banUser = async () => {
-		errorLog = '';
 		if (!searchedUser) {
-			errorLog = 'No user selected to ban.';
+			toast.push('No user selected to ban.');
 			return;
 		}
 
@@ -92,7 +88,7 @@
 			searchedUser = undefined;
 			nameInput = '';
 		} catch (error: any) {
-			errorLog = `Failed to ban user: ${error.message}`;
+			toast.push(`Failed to ban user: ${error.message}`);
 		}
 	};
 
@@ -139,9 +135,6 @@
 	});
 </script>
 
-{#if errorLog}
-	<ErrorModal {errorLog} />
-{/if}
 {#if roleAction}
 	<UserActions {warning} {cancelAction} />
 {/if}

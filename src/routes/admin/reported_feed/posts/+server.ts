@@ -22,7 +22,10 @@ export const GET = async ({ request }): Promise<Response> => {
 		});
 
 		if (!session?.user || session.user.role === 'user') {
-			return new Response('User must be logged in or an administrator to see reported posts.');
+			return new Response('User must be logged in or an administrator to see reported posts.', {
+				status: 403,
+				statusText: "UNAUTHORIZED"
+			});
 		}
 
 		const page = Number(pageParam);

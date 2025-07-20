@@ -8,6 +8,8 @@
 		posts: PostWithImage[] | undefined;
 	}>();
 
+	let loading: boolean = $state(false)
+
 	function formatDate(dateString: Date) {
 		const date = new Date(dateString);
 		return date.toLocaleDateString('en-US', {
@@ -17,21 +19,65 @@
 		});
 	}
 
-	const archivePost = async () => {
-		try {
+	const archivePost = async (post: PostWithImage) => {
+		const data = {
+			objectId: post.id,
+			objectType: post.type
+		};
+			
+		loading = true;
 
+		try {
+			await fetch('/admin/reported_feed/archive', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+
+			window.location.reload();
+		} catch (error: any) {
+			toast.push(error.message);
 		}
-		catch(error: any) {
-			toast.push(error.message)
+		finally {
+			loading = false;
 		}
-	}
+	};
+
+	const reinstatePost = async (post: PostWithImage) => {
+		const data = {
+			objectId: post.id,
+			objectType: post.type
+		};
+
+		loading = true;
+
+		try {
+			await fetch('/admin/reported_feed/reinstate', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+
+			window.location.reload();
+		} catch (error: any) {
+			toast.push(error.message);
+		}
+		finally {
+			loading = false;
+		}
+	};
 </script>
 
+<div class="flex flex-col gap-6">
 {#if posts}
 	{#each posts as post, index (post.id)}
 		<article class="sm:card-setup flex flex-col gap-6">
 			<header class="flex flex-col gap-4">
-				<div class="flex gap-2 items-center">
+				<div class="flex items-center gap-2">
 					{#if post.user?.image}
 						<div class="user-avatar flex-shrink-0">
 							<img
@@ -59,7 +105,7 @@
 						</time>
 					</div>
 				</div>
-				
+
 				<button
 					class="flex cursor-pointer flex-col gap-1 text-left"
 					onclick={() => goto(`/pages/posts/${post.id}`)}
@@ -81,8 +127,10 @@
 			</header>
 
 			<div class="flex items-center gap-12">
-				<button type="button" class="btn-small">Reinstate</button>
-				<button type="button" class="btn-delete">Archive</button>
+				<button type="button" class="btn-small" onclick={() => reinstatePost(post)} disabled={loading}
+					>Reinstate</button
+				>
+				<button type="button" class="btn-delete" onclick={() => archivePost(post)} disabled={loading}>Archive</button>
 			</div>
 		</article>
 		{#if index !== posts.length - 1}
@@ -90,3 +138,4 @@
 		{/if}
 	{/each}
 {/if}
+</div>
