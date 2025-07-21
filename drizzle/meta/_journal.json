@@ -414,6 +414,13 @@
       "when": 1753030523025,
       "tag": "0058_secret_warpath",
       "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1753052910617,
+      "tag": "0059_great_silhouette",
+      "breakpoints": true
     }
   ]
 }

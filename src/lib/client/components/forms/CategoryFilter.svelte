@@ -39,10 +39,6 @@
 </script>
 
 <nav class="flex flex-col gap-1" aria-label="Categories">
-	<button type="button" onclick={() => changeCategory('all')} class={getButtonClass('all')}>
-		<Icon icon="mdi:minecraft" class="text-xl" /> <span>ALL</span>
-	</button>
-
 	{#if $session.data?.user}
 		<button
 			type="button"

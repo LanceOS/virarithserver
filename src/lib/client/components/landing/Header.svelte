@@ -42,7 +42,7 @@
 <header class="bg-base px-4 py-4">
 	<div class="mx-auto flex w-full max-w-7xl items-center justify-end">
 		<nav class="hidden items-center gap-6 md:flex">
-			{#if user?.role === "admin" || user?.role === "founder" || user?.role === "developer"}
+			{#if user?.role === "admin" || user?.role === "founder" || user?.role === "developer" || user?.role === "moderator"}
 				<a
 					type="button"
 					aria-label="Admin Dashboard"

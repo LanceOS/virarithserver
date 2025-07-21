@@ -162,7 +162,7 @@
 				<div
 					class="actions-menu-container absolute top-full right-0 z-50 mt-2 w-48 overflow-hidden"
 				>
-					{#if user && user.id === data.user.id}
+					{#if user && user.id === data.user.id || user.role !== "user"}
 						{#if data.isEdited === false}
 							<button
 								onclick={() => goto(`/pages/edit_post/${data?.id}`)}

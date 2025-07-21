@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client.ts';
-	import UserActions from '$lib/client/components/actions/UserActions.svelte';
+	// The 'UserActions' component is no longer needed here as we've created specific modals.
+	// import UserActions from '$lib/client/components/actions/UserActions.svelte';
 	import RoleCard from '$lib/client/components/cards/RoleCard.svelte';
 	import Header from '$lib/client/components/landing/Header.svelte';
 	import ProfileAvatar from '$lib/client/components/profile/ProfileAvatar.svelte';
 	import { type UserSchema } from '$lib/server/schemas/authentication.ts';
 	import UserClient from '$lib/client/tools/UserClient.client.ts';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	const session = authClient.useSession();
 	const currentUser = $session.data?.user || undefined;
@@ -20,14 +23,16 @@
 	let warning: string = $state('');
 	let warningError: string = $state('');
 
-
 	let banAction: boolean = $state(false);
 	let roleAction: boolean = $state(false);
+
+	let banReason: string = $state('');
 
 	const searchUser = async () => {
 		searchedUser = undefined;
 		banAction = false;
 		roleAction = false;
+		warningError = '';
 
 		try {
 			if (nameInput) {
@@ -53,23 +58,29 @@
 		}
 		if (selectedRole === searchedUser.role) {
 			toast.push('The selected role is already the current role.');
-			banAction = false;
 			roleAction = false;
 			return;
 		}
 
-		const formData = new FormData();
-		formData.append('userId', searchedUser.id);
-		formData.append('newRole', selectedRole);
+		const userToChange = {
+			id: searchedUser.id,
+			newRole: selectedRole
+		};
 
 		try {
-			await fetch('?/updateUser', {
+			const response = await fetch('/admin/interface/update_role', {
 				method: 'PUT',
-				body: formData
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(userToChange)
 			});
+
+			if (response.status !== 200) {
+				throw new Error('');
+			}
 			searchedUser.role = selectedRole;
 			toast.push(`Successfully updated role for ${searchedUser.name} to ${selectedRole}.`);
-			banAction = false;
 			roleAction = false;
 		} catch (error: any) {
 			toast.push(`Failed to update role: ${error.message}`);
@@ -81,12 +92,39 @@
 			toast.push('No user selected to ban.');
 			return;
 		}
+		if (!banReason.trim()) {
+			toast.push('A reason for the ban is required.');
+			return;
+		}
+
+		const userToBan = {
+			id: searchedUser.id,
+			email: searchedUser.email,
+			reason: banReason
+		};
 
 		try {
-			banAction = false;
-			roleAction = false;
+			const response = await fetch('/admin/interface/ban_user', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(userToBan)
+			});
+
+			if (!response.ok) {
+				const errorResult = await response
+					.json()
+					.catch(() => ({ message: 'An unknown error occurred.' }));
+				throw new Error(errorResult.message);
+			}
+
+			toast.push(`Successfully banned ${searchedUser.name}.`);
+
 			searchedUser = undefined;
 			nameInput = '';
+			banAction = false;
+			banReason = '';
 		} catch (error: any) {
 			toast.push(`Failed to ban user: ${error.message}`);
 		}
@@ -96,6 +134,7 @@
 		banAction = false;
 		roleAction = false;
 		warning = '';
+		banReason = '';
 	};
 
 	$effect(() => {
@@ -104,11 +143,10 @@
 				warningError = `Only founders can edit other founders!`;
 				warning = '';
 				banAction = false;
-                roleAction = false;
+				roleAction = false;
 				return;
 			} else {
-				warning = `You are about to ban a user's account. This will result in the permanent and irreversible deletion
-                of all content created by this user. THIS CANNOT BE UNDONE!`;
+				warning = `You are about to ban this user's account. This will result in the permanent and irreversible deletion of all content created by this user. THIS CANNOT BE UNDONE!`;
 				return;
 			}
 		}
@@ -119,31 +157,75 @@
 			if (searchedUser?.role === 'founder' && currentUser?.role !== 'founder') {
 				warningError = `Only founders can edit other founders!`;
 				warning = '';
-                banAction = false;
+				banAction = false;
 				roleAction = false;
 				return;
 			} else if (selectedRole !== 'user' && searchedUser?.role === 'user') {
-				warning = `You are about to give the selected user an administrative role. This will allow them to edit contents
-                of the site such as other users profiles and `;
+				warning = `You are about to give the selected user an administrative role. This will allow them to edit site content and manage other users.`;
 				return;
 			} else if (searchedUser?.role !== 'user') {
-				warning = `You are about the change the role of an administrative user. Are you sure you want to change them from ${searchedUser?.role}
-                to ${selectedRole}.`;
+				warning = `You are about the change the role of an administrative user from ${searchedUser?.role} to ${selectedRole}. Are you sure?`;
 				return;
 			}
+		}
+	});
+
+	onMount(() => {
+		const user = $session?.data?.user;
+		if (!user || user.role === 'user') {
+			goto('/');
 		}
 	});
 </script>
 
 {#if roleAction}
-	<UserActions {warning} {cancelAction} />
+	<div class="bg-opacity-60 fixed inset-0 z-50 flex items-center justify-center bg-black">
+		<div class="card-setup max-w-lg space-y-4 p-6">
+			<h3 class="text-xl font-bold">Confirm Role Change</h3>
+			<p class="text-base-content/80">{warning}</p>
+			<div class="flex justify-end gap-4 pt-2">
+				<button type="button" class="btn-small-active" onclick={cancelAction}>Cancel</button>
+				<button type="button" class="btn-small" onclick={updateUserRole}>Confirm Update</button>
+			</div>
+		</div>
+	</div>
 {/if}
+
 {#if banAction}
-	<UserActions {warning} {cancelAction} />
+	<div class="bg-opacity-60 fixed inset-0 z-50 flex items-center justify-center bg-black">
+		<div class="card-setup max-w-lg space-y-4 p-6">
+			<h3 class="text-error text-xl font-bold">Confirm Ban</h3>
+			<p class="text-base-content/80">{warning}</p>
+
+			<div class="form-control w-full">
+				<label for="ban-reason" class="label">
+					<span class="label-text font-semibold">Reason for Ban (Required)</span>
+				</label>
+				<input
+					id="ban-reason"
+					type="text"
+					placeholder="Enter reason..."
+					bind:value={banReason}
+					class="input w-full"
+				/>
+			</div>
+
+			<div class="flex justify-end gap-4 pt-2">
+				<button type="button" class="btn-small-active" onclick={cancelAction}>Cancel</button>
+				<button type="button" class="btn-delete" onclick={banUser} disabled={!banReason.trim()}>
+					Confirm Ban
+				</button>
+			</div>
+		</div>
+	</div>
 {/if}
+
 <Header />
-<main class="bg-base min-h-screen px-4 py-16">
-	<div class="card-setup mx-auto flex max-w-7xl flex-col gap-8">
+<main class="bg-base mx-auto min-h-screen max-w-7xl px-4 py-16 space-y-4">
+	<section>
+		<button type="button" class="btn-nav" onclick={() => goto("/admin/reported_feed")}>Report Feed</button>
+	</section>
+	<div class="card-setup flex flex-col gap-8">
 		<div class="space-y-4">
 			<h1 class="text-3xl font-bold">Admin User Management</h1>
 			<p>
@@ -159,6 +241,7 @@
 				bind:value={nameInput}
 				class="input w-full"
 				aria-label="Search users"
+				onkeydown={(e) => e.key === 'Enter' && searchUser()}
 			/>
 			<button type="button" class="btn-small" onclick={searchUser}>Search</button>
 		</div>
@@ -189,7 +272,12 @@
 									<option value={roleOption}>{roleOption}</option>
 								{/each}
 							</select>
-							<button type="button" class="btn-small" onclick={() => (roleAction = true)}>
+							<button
+								type="button"
+								class="btn-small"
+								onclick={() => (roleAction = true)}
+								disabled={selectedRole === searchedUser.role}
+							>
 								Update Role
 							</button>
 						</div>
@@ -199,7 +287,6 @@
 								Ban User
 							</button>
 						</div>
-						<div></div>
 					</div>
 				</div>
 			</div>
