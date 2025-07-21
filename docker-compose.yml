@@ -1,32 +1,4 @@
 services:
-  # virarith_app:
-  #   image: node:22-alpine
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - ./build:/app
-  #     - ./package.json:/app/package.json
-  #   command: sh -c "npm install && node index.js"
-  #   working_dir: /app
-  #   depends_on:
-  #     - postgres
-  #     - minio
-  #   environment:
-  #     BETTER_AUTH_URL: ${PUBLIC_BETTER_AUTH_URL}
-
-  #     PRIVATE_MINIO_ENDPOINT: ${PRIVATE_MINIO_ENDPOINT}
-  #     PUBLIC_MINIO_ENDPOINT: ${PUBLIC_MINIO_ENDPOINT}
-  #     PRIVATE_MINIO_PORT: ${PRIVATE_MINIO_PORT}
-
-  #     PRIVATE_BUCKET_ACCESS_KEY: ${PRIVATE_BUCKET_ACCESS_KEY}
-  #     PRIVATE_BUCKET_SECRET_KEY: ${PRIVATE_BUCKET_SECRET_KEY}
-
-  #     PRIVATE_POSTGRES_USER: ${PRIVATE_POSTGRES_USER}
-  #     PRIVATE_POSTGRES_PASSWORD: ${PRIVATE_POSTGRES_PASSWORD}
-  #     PRIVATE_POSTGRES_URL: ${PRIVATE_POSTGRES_URL} # This is 'postgres:5432'
-  #     PRIVATE_POSTGRES_DB: ${PRIVATE_POSTGRES_DB}
-  #   networks:
-  #     - virarith
   pgadmin:
     image: dpage/pgadmin4
     ports:
