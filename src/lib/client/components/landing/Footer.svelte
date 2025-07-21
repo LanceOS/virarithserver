@@ -5,7 +5,7 @@
 		{ name: 'Vote', href: '/pages/vote' }
 	];
 
-	const legalLinks = [{ name: 'Terms of Service', href: '/pages/legal' }];
+	const legalLinks = [{ name: 'Terms of Service', href: '/pages/legal/tos' }, { name: 'Privacy Policy', href: '/pages/legal/privacy' }];
 
 	const socialLinks = [
 		{ name: 'Discord', href: 'https://discord.gg/EHeUmvuV', icon: 'ic:baseline-discord' }
